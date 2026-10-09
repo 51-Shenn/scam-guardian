@@ -21,6 +21,7 @@ Display uses Hedvig Letters Serif; body uses Hedvig Letters Sans. No Mango imita
 - Android actions use Expo UI's universal native Button and Host. Text entry has native and web presentations with identical behavior.
 - Hedvig font packages include their OFL notices. The sample builder embeds the bundled fonts; their license is included alongside the samples.
 - The canal-lock figure uses the Hairline skill's unchanged engine and bench. Its standalone bench supports both themes; Scam Guardian links to its light theme. The application itself is light-only.
+- Hairline rules: 1, 2, 4, 6, 8 and 9. The tour visits the upper, middle and lower chambers, then returns to rest. Static, frame, read-out, console and visual checks passed; see `docs/validation.md` for the restrained-motion note. User feedback on the Play lap is still welcome.
 - Three.js appears only in a decorative `.web.tsx` island. It limits DPR and frame rate, sleeps offscreen/hidden, honors reduced motion, disposes resources, and degrades to a static background if WebGL fails. Android uses bundled static SVG line fields and grids with the same palette and meaning; `scripts/build-native-art.mjs` reproduces these assets without network access or a render loop.
 
 ## Sample scope

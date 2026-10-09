@@ -61,7 +61,7 @@ export default function Wallet() {
     if (invalid) { setError(invalid); setStep('amount'); return; }
     setBalance((current) => current - Number(amount)); setStep('success'); setDeadline(null);
   }
-  return <ScrollView className="flex-1 bg-slate-50" keyboardShouldPersistTaps="handled" contentInsetAdjustmentBehavior="automatic">
+  return <ScrollView key={step} className="flex-1 bg-slate-50" keyboardShouldPersistTaps="handled" contentInsetAdjustmentBehavior="automatic">
     <View className="mx-auto w-full max-w-6xl gap-7 px-6 py-8">
       <View className="flex-row flex-wrap items-center justify-between gap-4">
         <Text className="font-display text-2xl text-slate-900">Scam Guardian</Text>
