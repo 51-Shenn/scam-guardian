@@ -4,4 +4,6 @@ export interface ActionProps {
   secondary?: boolean;
   disabled?: boolean;
   large?: boolean;
+  /** Compact size that hugs its label, for the nav and inline actions. */
+  small?: boolean;
 }
