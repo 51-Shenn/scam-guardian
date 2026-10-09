@@ -51,6 +51,7 @@
 | `src/components/guardian/wordmark.tsx` | Shield and name, used in both navs |
 | `src/components/guardian/lock-figure.tsx`, `.web.tsx` | Canal-lock figure |
 | `src/components/guardian/reveal.tsx`, `.web.tsx` | Scroll reveal |
+| `src/components/guardian/inert.tsx`, `.web.tsx` | Makes the tap-through preview a picture: no input, hidden from assistive technology |
 | `src/components/guardian/action.*` | Landing buttons (existing pair, restyled) |
 | `src/screens/landing.tsx`, `src/screens/wallet.tsx` | Screen composition |
 | `scripts/build-native-art.mjs` | Generates `assets/guardian/current.svg` |
@@ -1887,8 +1888,32 @@ git commit -m "feat: rebuild the wallet screen on the shared session and frame"
 
 **Files:**
 - Modify: `src/screens/landing.tsx` (full replacement)
+- Create: `src/components/guardian/inert.tsx`, `inert.web.tsx`
 
 - [ ] **Step 1: Replace the screen**
+
+The narrow preview must not nest buttons inside a button, so the frame sits in an inert wrapper with one press target over it.
+
+<!-- file: src/components/guardian/inert.tsx -->
+```tsx
+import type { ReactNode } from 'react';
+import { View } from 'react-native';
+
+/** Shows its children as a picture: no touches reach them and assistive technology skips them. */
+export function Inert({ children }: { children: ReactNode }) {
+  return <View aria-hidden style={{ pointerEvents: 'none' }}>{children}</View>;
+}
+```
+
+<!-- file: src/components/guardian/inert.web.tsx -->
+```tsx
+import type { ReactNode } from 'react';
+
+/** Shows its children as a picture: the inert attribute removes them from pointer, keyboard and assistive technology. */
+export function Inert({ children }: { children: ReactNode }) {
+  return <div inert aria-hidden="true" style={{ display: 'flex', flexDirection: 'column' }}>{children}</div>;
+}
+```
 
 <!-- file: src/screens/landing.tsx -->
 ```tsx
@@ -1899,6 +1924,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Action } from '@/components/guardian/action';
 import { DemoConsole } from '@/components/guardian/demo-console';
 import { FlowArt } from '@/components/guardian/flow-art';
+import { Inert } from '@/components/guardian/inert';
 import { LOCK_HINT, LockFigure } from '@/components/guardian/lock-figure';
 import { PhoneFrame } from '@/components/guardian/phone-frame';
 import { Reveal } from '@/components/guardian/reveal';
@@ -1959,7 +1985,7 @@ export default function Landing() {
 
         <View className="pb-12 pt-7 wide:flex-row wide:items-center wide:gap-16 wide:pt-0" style={wide && viewport ? { minHeight: viewport.height - 72 } : undefined}>
           <View className="wide:flex-1 wide:pb-10">
-            <Text accessibilityRole="header" className="max-w-[640px] font-display text-[44px] leading-[46px] tracking-[-1.5px] text-ink wide:text-[62px] wide:leading-[64px] wide:tracking-[-2.2px] xwide:text-[78px] xwide:leading-[80px] xwide:tracking-[-2.7px]">A pause before the money moves.</Text>
+            <Text accessibilityRole="header" className="max-w-[640px] font-display [text-wrap:balance] text-[44px] leading-[46px] tracking-[-1.5px] text-ink wide:text-[62px] wide:leading-[64px] wide:tracking-[-2.2px] xwide:text-[78px] xwide:leading-[80px] xwide:tracking-[-2.7px]">A pause before the money moves.</Text>
             <Text className="mt-6 max-w-[420px] font-body text-[17px] leading-[27px] text-soft wide:text-[19px] wide:leading-[30px]">Scam Guardian helps when a transfer gets confusing, and makes room to think when someone else may be directing it.</Text>
             <View className="mt-8 flex-row flex-wrap gap-3">
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action label="Try the wallet" onPress={openDemo} /></View>
@@ -1968,14 +1994,16 @@ export default function Landing() {
             {!overlap && <DemoConsole compact={!wide} className="mt-8 wide:max-w-[320px]" />}
           </View>
 
+          {/* The console comes after the phone so it paints over the frame's edge. */}
           {viewport && wide && <View style={{ paddingLeft: overlap ? 236 : 0 }}>
-            {overlap && <DemoConsole className="absolute bottom-[7%] left-0 z-10 w-[264px]" />}
             {phone}
+            {overlap && <DemoConsole className="absolute bottom-[7%] left-0 w-[264px]" />}
           </View>}
-          {viewport && !wide && <Pressable accessibilityRole="button" accessibilityLabel="Open the wallet demo full screen" onPress={openDemo}
-            className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">
-            <View style={{ pointerEvents: 'none' }}>{phone}</View>
-          </Pressable>}
+          {/* Narrow web and Android: the frame is a picture of the wallet, with one press target over it. */}
+          {viewport && !wide && <View className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">
+            <Inert>{phone}</Inert>
+            <Pressable accessibilityRole="button" accessibilityLabel="Open the wallet demo full screen" onPress={openDemo} className="absolute inset-0" />
+          </View>}
         </View>
       </View>
     </View>
