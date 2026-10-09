@@ -24,6 +24,7 @@ Checked on 9 October 2026 after rebuilding the landing page and wallet as direct
 - Keyboard: Tab reaches Transfer, Enter operates it, digits and Backspace edit the amount, focused controls show an outline. Passed at 1440.
 - Art: the canvas changed about 131,000 pixels in 600 ms normally and about 13,000 during a pause. Under emulated reduced motion it changed 0.
 - Layout compared by eye against `design/v2/current.html` at 1440, 1024 and 412.
+- Lock figure, found after the round above: a mouse wheel over the figure scrolled the Hairline page inside its frame by 91 to 164 pixels and showed its slider and its theme and play buttons, and the three controls could take keyboard focus. After the fix, at 1440, 1024 and 412: no bench control, label or note is displayed, the frame cannot scroll, a wheel over the figure scrolls the page, nothing inside the frame takes focus, and the gates still answer the pointer.
 
 **Android, Pixel_10_Pro_XL emulator (x86_64), debug build loading JavaScript from Metro**
 
@@ -45,6 +46,7 @@ Checked on 9 October 2026 after rebuilding the landing page and wallet as direct
 - Browsers other than Chrome.
 - The standalone release build. The APK is a debug build that needs Metro.
 - Android at widths of 860dp and above (tablets, landscape), where the framed layout would apply.
+- The re-captured Android lock still (the drawing alone, 1276 x 1020, shown at 5:4). The image was checked by eye and the Android export passed, but it was not looked at on the emulator.
 
 - `npm run lint`: passed.
 - `npm run typecheck`: passed.
