@@ -41,4 +41,4 @@ The product page and demo render at desktop width, narrow web width, and native 
 
 Lint, TypeScript, domain tests, Android/web exports, browser checks and a local Android debug APK build have passed. Native emulator checks cover the main transfer and guidance flow. See [verification details](validation.md) for the exact coverage and emulator limitation. Physical-device verification remains later work. Never present export success as a device test.
 
-NativeWind's pinned v5 RC pair is documented against this SDK: [installation](https://www.nativewind.dev/v5/getting-started/installation). beUI is DOM-oriented: [official source](https://github.com/starc007/ui-components). Three.js is decorative only and falls back when WebGL is unavailable.
+NativeWind's pinned v5 RC pair is documented against this SDK: [installation](https://www.nativewind.dev/v5/getting-started/installation). beUI is DOM-oriented: [official source](https://github.com/starc007/ui-components). The page art is a 2D canvas and needs no WebGL.
