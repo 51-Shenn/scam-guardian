@@ -1,5 +1,23 @@
 This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
 
+## Scam Guardian project rules
+
+- Always commit completed changes with Conventional Commit messages: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, or `chore:`. Keep commits focused. Never push or merge without authorization.
+- Target Android AND web together in every feature and change. Consider desktop web, narrow web, Android safe areas, touch targets, keyboard access, text scaling, layouts, and styles together. A web-only implementation is incomplete unless it has a corresponding native presentation or an explicitly documented platform capability boundary.
+- Use React Native with Expo SDK 57 and Expo Router. The user's Expo requirement supersedes the research brief's Kotlin application plan. iOS is outside the current scope.
+- Light theme only, including when the device/browser prefers dark. No dark-theme toggle.
+- Use Tailwind CSS 4 with the pinned NativeWind 5 RC / react-native-css RC pair. Keep RC versions exact and validate both target exports after styling changes.
+- Use beUI's licensed, official React DOM source for suitable web controls. Keep DOM, Motion, Three.js, and browser APIs in `.web.tsx` components. Provide native equivalents with the same public props and behavior. Shared business logic must not depend on either presentation.
+- Use Hedvig Letters Serif for display typography and a readable sans face for forms and long text. Bundle font assets. Do not silently substitute another font for Mango Grotesque if later requested.
+- Product pages may use restrained particles, technical grids, flowing forms, and the selected Hairline canal-lock illustration. Keep transfer controls calm and readable. Honor reduced motion and pause graphics when hidden/offscreen. Three.js is optional and must earn its cost.
+- Apply the Taste skill to marketing surfaces; use native and accessible form patterns for the wallet. User requirements override skill defaults (especially light-only theme and Expo/Tailwind).
+- The current deliverable is BOTH a product page and an interactive mock-wallet demo. Signals and family alerts are explicitly simulated. Do not imply a browser can observe phone calls, that WhatsApp detection is implemented, or that a second phone received a local preview.
+- Classify Normal, Struggling, and Coached separately. Struggling users receive guidance rather than suspicion. Explain interventions in plain language. Preserve the user's ability to proceed after a cool-down.
+- Collect no call audio, caller identity, clipboard contents, or raw cross-app activity. Monitoring belongs only to an opted-in transfer session. Never put account numbers, names, or amounts into model inputs or family alerts. Do not add analytics to the transfer flow.
+- Do not invent trained model weights, validation results, probabilities, user testimonials, banking integrations, or security guarantees. Keep demo rules, future model work, and measured results distinct.
+- Before completing code changes, run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run export:platforms` (Android AND web). Report device/emulator tests honestly; Metro exports are not APK builds or device tests.
+- Read `CONTEXT.md` for domain terminology and `docs/implementation-plan.md` for scope, confirmed decisions, and unanswered questions. Ask one material clarification at a time while continuing independent work.
+
 ## Expo has changed — do not trust your training data
 
 Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:

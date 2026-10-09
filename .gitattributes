@@ -1,0 +1,3 @@
+# Preserve whitespace in the original upstream font notices and beUI source.
+design/Hedvig-Letters-*-OFL.txt whitespace=-blank-at-eol
+src/components/beui/base.web.tsx whitespace=-blank-at-eof

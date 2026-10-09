@@ -1,0 +1,3 @@
+// beUI motion tokens, MIT. See docs/vendor/beui-LICENSE.txt.
+export const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+export const SPRING_PRESS = { type: 'spring', stiffness: 500, damping: 30, mass: 0.6 } as const;
