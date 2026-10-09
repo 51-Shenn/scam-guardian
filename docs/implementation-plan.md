@@ -7,13 +7,13 @@ Source: [Dormathon 2026 Scam Guardian Research Brief](https://docs.google.com/do
 - Build BOTH a product landing page and an interactive mock-wallet demo.
 - Expo/React Native replaces the proposed Kotlin application; Android and web progress together. iOS is out of scope.
 - Light theme, Tailwind CSS, technical grids/particles, flowing forms, and Hedvig Letters Serif (with Hedvig Letters Sans for readable controls).
-- The user selected Fluid Guardian after reviewing samples. Signal Grid and Human Ledger remain comparison studies.
+- The user selected direction A, "Current", from the v2 studies on 9 October 2026. Spec: `docs/superpowers/specs/2026-10-09-current-redesign-design.md`.
 - Hairline metaphor: canal locks whose gates answer the pointer, showing a pause before passage.
 - Use labelled demo signals and a local family-alert preview first. Real Android integration and second-phone delivery are later work, explicitly agreed by the user.
 
 ## Current slice
 
-Product page with working links to the wallet, privacy explanation, responsive desktop/mobile layout, and optional decorative Three.js art. Android receives a lightweight companion visual without requiring WebGL. The transfer experience is shared: Home, Choose recipient, Enter amount, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 30-second cool-down, cancellation, and a clearly labelled family-alert preview. No real money moves.
+Product page with a live wallet in a phone frame, a demo console, privacy explanation and the canal-lock figure. On desktop web the wallet is interactive in the frame; on narrow web and Android the frame is a preview that opens the wallet full screen. The transfer experience is shared: Home, Choose recipient, Enter amount on a keypad, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 30-second cool-down, cancellation, and a clearly labelled family-alert preview. No real money moves.
 
 Demo rules illustrate the brief's hard-rule example: call active + new recipient + (paste flag OR amount greater than 3x usual) pauses a coached transfer. Back presses/help taps enable simple mode. A call and new recipient without the hard-rule combination demonstrate medium risk. No trained probabilities are shown.
 
@@ -41,4 +41,4 @@ The product page and demo render at desktop width, narrow web width, and native 
 
 Lint, TypeScript, domain tests, Android/web exports, browser checks and a local Android debug APK build have passed. Native emulator checks cover the main transfer and guidance flow. See [verification details](validation.md) for the exact coverage and emulator limitation. Physical-device verification remains later work. Never present export success as a device test.
 
-NativeWind's pinned v5 RC pair is documented against this SDK: [installation](https://www.nativewind.dev/v5/getting-started/installation). beUI is DOM-oriented: [official source](https://github.com/starc007/ui-components). Three.js is decorative only and falls back when WebGL is unavailable.
+NativeWind's pinned v5 RC pair is documented against this SDK: [installation](https://www.nativewind.dev/v5/getting-started/installation). beUI is DOM-oriented: [official source](https://github.com/starc007/ui-components). The page art is a 2D canvas and needs no WebGL.

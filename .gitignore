@@ -41,3 +41,6 @@ example
 # generated native folders
 /ios
 /android
+
+# Mango Grotesque came from an unofficial mirror for the design study. Replace with the designer's files and licence before tracking.
+design/v2/fonts/MangoGrotesque-*

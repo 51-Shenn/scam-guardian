@@ -14,16 +14,13 @@ npm run android
 
 Android builds require Android Studio's SDK and Java 21, plus a running emulator or connected device. `npm run android` generates the ignored native project through Expo and compiles it. The app identifier is `com.scamguardian.app` for local development; confirm ownership before a store release.
 
-## Design samples
+## Design
 
-Open `design/index.html` directly to compare Fluid Guardian, Signal Grid and Human Ledger. Each sample bundles typography, adapts to narrow screens, and includes an interactive preview. The user selected Fluid Guardian as the primary direction.
+The app follows direction A, "Current". The approved study is `design/v2/current.html`; `design/v2/index.html` shows it beside the two directions that were not chosen. Serve the folder with `node scripts/preview.mjs design 4321` and open `http://127.0.0.1:4321/v2/`.
 
-The Hairline canal-lock figure is `design/hairline-locks.html?theme=light&play=1`. Its gates open around the pointer, illustrating room to pause before passage. Rebuild it with the Hairline skill's unchanged engine after editing `design/locks.js`.
+The Hairline canal-lock figure is `design/hairline-locks.html?theme=light&play=1`. Rebuild it with the Hairline skill's unchanged engine after editing `design/locks.js`, then copy it to `public/hairline-locks.html`.
 
-```sh
-npm run samples
-node scripts/preview.mjs design 4174
-```
+The static Android art is generated: `node scripts/build-native-art.mjs` writes `assets/guardian/current.svg`.
 
 ## Verify and preview the application
 
