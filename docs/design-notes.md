@@ -17,6 +17,7 @@ Display uses Hedvig Letters Serif; body uses Hedvig Letters Sans. No Mango imita
 ## Source and licensing
 
 - The actual web action wraps the official beUI base button from `starc007/ui-components`, retrieved 9 October 2026. Source: https://github.com/starc007/ui-components/blob/main/components/motion/button/base.tsx. Original button source stays in `src/components/beui/base.web.tsx`; MIT notice is retained in `docs/vendor/beui-LICENSE.txt`. Supporting motion tokens are taken from the official documentation; the hover capability hook uses an SSR-safe subscription.
+- The web switch is the official beUI source, unmodified, from commit `9deb728` of `starc007/ui-components` (`components/motion/switch.tsx`), kept in `src/components/beui/switch.web.tsx` under the same MIT notice.
 - The standalone HTML samples use native browser controls and compiled Tailwind; they are design studies, not claims that beUI ships a framework-free library.
 - Android actions use Expo UI's universal native Button and Host. Text entry has native and web presentations with identical behavior.
 - Hedvig font packages include their OFL notices. The sample builder embeds the bundled fonts; their license is included alongside the samples.
