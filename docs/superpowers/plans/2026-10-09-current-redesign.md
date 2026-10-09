@@ -495,9 +495,10 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .flow-art::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(20, 71, 230, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 71, 230, .075) 1px, transparent 1px); background-size: 44px 44px; background-position: center top; mask-image: radial-gradient(ellipse 75% 85% at 68% 45%, #000 0%, transparent 78%); }
 .flow-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; mask-image: linear-gradient(90deg, rgba(0, 0, 0, .28) 0%, rgba(0, 0, 0, .28) 30%, #000 62%); }
 
-/* Canal-lock figure (web). The Hairline page is cropped to its plate: 16px side padding, 24px top padding. */
+/* Canal-lock figure (web). The Hairline page is cropped to its plate: 16px side padding, 24px top padding.
+   The iframe stays shorter than the page inside it, so that page top-aligns instead of centring. */
 .lock-figure { position: relative; width: 100%; max-width: 640px; aspect-ratio: 5 / 4; overflow: hidden; border-radius: 24px; background: #fff; box-shadow: 0 0 0 1px #d3dcec; }
-.lock-figure iframe { position: absolute; left: -16px; top: -24px; width: calc(100% + 32px); height: 620px; border: 0; }
+.lock-figure iframe { position: absolute; left: -16px; top: -24px; width: calc(100% + 32px); height: calc(100% + 60px); border: 0; }
 
 /* Scroll reveal (web). The class is added after mount, so content is visible without JavaScript. */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
