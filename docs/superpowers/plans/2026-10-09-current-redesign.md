@@ -1529,7 +1529,7 @@ const angle = (x, y) => Math.sin(x * ZOOM * 0.0026) * 1.05 + Math.cos(y * ZOOM *
 let shapes = '';
 for (let x = 0; x <= WIDTH; x += 44) shapes += `<path d="M${x} 0V${HEIGHT}" opacity=".07"/>`;
 for (let y = 0; y <= HEIGHT; y += 44) shapes += `<path d="M0 ${y}H${WIDTH}" opacity=".07"/>`;
-for (let line = 0; line < 150; line++) {
+for (let line = 0; line < 110; line++) {
   let x = random() * WIDTH, y = random() * HEIGHT;
   const points = [];
   for (let step = 0; step < 70; step++) {
@@ -1538,7 +1538,7 @@ for (let line = 0; line < 150; line++) {
     x += (0.85 + Math.cos(direction) * 0.75) * 2.4;
     y += Math.sin(direction) * 1.25 * 2.4;
   }
-  shapes += `<polyline points="${points.join(' ')}" opacity="${(0.12 + random() * 0.2).toFixed(2)}" stroke-linecap="round"/>`;
+  shapes += `<polyline points="${points.join(' ')}" opacity="${(0.07 + random() * 0.13).toFixed(2)}" stroke-linecap="round"/>`;
 }
 await mkdir('assets/guardian', { recursive: true });
 await writeFile('assets/guardian/current.svg', `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}"><g fill="none" stroke="${ACCENT}" stroke-width="1">${shapes}</g></svg>`);
@@ -1548,7 +1548,7 @@ console.log('Wrote assets/guardian/current.svg');
 - [ ] **Step 4: Generate the asset**
 
 Run: `node scripts/build-native-art.mjs`
-Expected: prints `Wrote assets/guardian/current.svg`. The file exists and is about 135 KB.
+Expected: prints `Wrote assets/guardian/current.svg`. The file exists and is about 100 KB.
 
 - [ ] **Step 5: Native art**
 
@@ -1657,7 +1657,7 @@ export function Wordmark({ onPress }: { onPress: () => void }) {
 
 - [ ] **Step 3: Restyle the landing buttons**
 
-Pill shape, cobalt, and a `small` size for the nav and the "Play it" buttons.
+Pill shape, cobalt, and a `small` size for the nav and the "Play it" buttons. On Android the button is a plain pressable: a Material button derives its own tone from a seed colour and cannot show the exact accent.
 
 <!-- file: src/components/guardian/action.types.ts -->
 ```ts
@@ -1686,20 +1686,18 @@ export function Action({ label, onPress, secondary, disabled, large, small }: Ac
 
 <!-- file: src/components/guardian/action.tsx -->
 ```tsx
-import { Button, Host, Text } from '@expo/ui';
-import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers';
+import { Pressable, Text } from 'react-native';
 import type { ActionProps } from './action.types';
 
+// A plain pressable rather than a Material button: Material derives its own tone from a seed colour,
+// so it cannot show the exact cobalt accent the web button uses.
 export function Action({ label, onPress, secondary, disabled, large, small }: ActionProps) {
-  const height = small ? 44 : large ? 64 : 52;
-  return (
-    <Host matchContents={small ? true : { vertical: true }} colorScheme="light" seedColor="#1447E6" style={small ? { minHeight: height } : { width: '100%', minHeight: height }}>
-      <Button label={label} onPress={onPress} disabled={disabled}
-        modifiers={small ? [] : [fillMaxWidth()]} variant={secondary ? 'outlined' : 'filled'} style={{ height, paddingHorizontal: small ? 16 : 20 }}>
-        <Text textStyle={{ fontSize: large ? 20 : small ? 15 : 16 }}>{label}</Text>
-      </Button>
-    </Host>
-  );
+  const size = small ? 'h-11 px-[18px]' : large ? 'h-16 px-7' : 'h-[52px] px-[26px]';
+  const text = small ? 'text-[15px]' : large ? 'text-lg' : 'text-base';
+  return <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
+    className={`items-center justify-center rounded-full active:scale-[0.97] active:opacity-90 ${size} ${secondary ? 'border border-border bg-white/70' : 'bg-accent'} ${disabled ? 'opacity-50' : ''}`}>
+    <Text className={`font-body ${text} ${secondary ? 'text-ink' : 'text-white'}`}>{label}</Text>
+  </Pressable>;
 }
 ```
 
