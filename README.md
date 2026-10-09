@@ -16,7 +16,7 @@ Android builds require Android Studio's SDK and Java 21, plus a running emulator
 
 ## Design
 
-The app follows direction A, "Current". The approved study is `design/v2/current.html`; `design/v2/index.html` shows it beside the two directions that were not chosen. Serve the folder with `node scripts/preview.mjs design 4321` and open `http://127.0.0.1:4321/v2/`.
+The app follows direction A, "Current". The HTML studies it was chosen from were removed once the app was built; they remain in git history under `design/v2/`.
 
 The Hairline canal-lock figure is `design/hairline-locks.html?theme=light&play=1`. Rebuild it with the Hairline skill's unchanged engine after editing `design/locks.js`, then copy it to `public/hairline-locks.html`.
 
@@ -51,7 +51,7 @@ Help works immediately. Invalid amounts cannot proceed. Back navigation preserve
 - `src/screens/`: responsive shared Android/web screens.
 - `src/components/guardian/`: web beUI controls, native Expo UI controls and platform art.
 - `src/domain/`: deterministic risk rules, validation and tests.
-- `design/`: offline HTML studies and the Hairline artifact.
+- `design/`: the Hairline artifact and its source.
 - `docs/implementation-plan.md`: research source, scope, remaining decisions and later integration work.
 - `AGENTS.md` and `CLAUDE.md`: project instructions, including Conventional Commits.
 
