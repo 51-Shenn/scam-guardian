@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<link rel="icon" href="data:,">
+<title>Current / Scam Guardian direction A</title>
+<link rel="stylesheet" href="vendor/phosphor.css">
+<link rel="stylesheet" href="vendor/phosphor-fill.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Direction A, "Current": a stream of particles over a faint survey grid. Hedvig Letters Serif leads.
+   Shape rule: 14px controls, 24px surfaces, pill buttons. One accent: cobalt. */
+:root { --page: #f4f7fc; --ink: #0c1a33; --muted: #4d5b74; --line: #d3dcec; --accent: #1447e6; --surface: #ffffff; }
+body { background: var(--page); color: var(--ink); }
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.nav { position: relative; z-index: 3; height: 72px; display: flex; align-items: center; gap: 36px; }
+.mark { display: flex; align-items: center; gap: 9px; font-family: var(--serif); font-size: 23px; letter-spacing: -.01em; text-decoration: none; margin-right: auto; }
+.mark i { color: var(--accent); font-size: 26px; }
+.nav a.link { text-decoration: none; font-size: 15px; color: var(--muted); transition: color .2s; }
+.nav a.link:hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; height: 52px; padding: 0 26px; border-radius: 26px; background: var(--accent); color: #fff; font-size: 16px; text-decoration: none; white-space: nowrap; transition: transform .18s var(--ease-press), box-shadow .3s; box-shadow: 0 10px 24px -12px rgba(20, 71, 230, .7); }
+.btn:hover { box-shadow: 0 16px 30px -12px rgba(20, 71, 230, .75); }
+.btn:active { transform: scale(.97); }
+.btn i { transition: transform .3s var(--ease-out); }
+.btn:hover i { transform: translateX(3px); }
+.btn.small { height: 42px; padding: 0 18px; font-size: 15px; box-shadow: none; }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px #b8c4d9; }
+.btn.ghost:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+
+.hero { position: relative; overflow: clip; }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(20, 71, 230, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 71, 230, .075) 1px, transparent 1px); background-size: 44px 44px; background-position: center top; mask-image: radial-gradient(ellipse 75% 85% at 68% 45%, #000 0%, transparent 78%); }
+canvas.art { position: absolute; inset: 0; width: 100%; height: 100%; mask-image: linear-gradient(90deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.28) 30%, #000 62%); }
+.hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 64px; min-height: calc(100dvh - 72px); padding-bottom: 48px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, min(5.3vw, 9.6vh), 82px); line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; max-width: 11ch; }
+.lede { margin-top: 26px; max-width: 34ch; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: var(--muted); }
+.cta-row { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 12px; }
+.stage { position: relative; padding-left: 236px; }
+
+.console { width: 286px; padding: 16px; border-radius: 24px; background: rgba(255, 255, 255, .86); backdrop-filter: blur(14px) saturate(1.4); box-shadow: 0 0 0 1px rgba(12, 26, 51, .08), 0 30px 50px -28px rgba(12, 26, 51, .35); }
+.console h2 { font-size: 13px; font-weight: 400; color: var(--muted); margin-bottom: 10px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.seg button { height: 40px; border-radius: 14px; font-size: 14px; background: #edf1f8; color: var(--ink); transition: background .2s, color .2s, transform .16s var(--ease-press); }
+.seg button:active { transform: scale(.96); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.readout { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.ro-label, .ro-note { font-size: 12px; color: var(--muted); }
+.ro-class { font-family: var(--serif); font-size: 27px; line-height: 1.15; letter-spacing: -.02em; margin: 2px 0 6px; }
+.readout[data-state="coached"] .ro-class { color: #8a4b00; }
+.readout[data-state="struggling"] .ro-class { color: var(--accent); }
+.ro-reasons { list-style: none; margin: 0 0 10px; padding: 0; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+.ro-signals { margin: 0 0 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-radius: 12px; overflow: hidden; }
+.ro-signals div { background: #fff; padding: 6px 9px; }
+.ro-signals dt { font-size: 11px; color: var(--muted); }
+.ro-signals dd { margin: 0; font-size: 12.5px; }
+@media (min-width: 1180px) { .console { position: absolute; z-index: 2; left: 0; bottom: 7%; width: 264px; } .copy { padding-bottom: 4vh; } }
+
+section.block { padding: 120px 0; }
+h2.display { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 4vw, 58px); line-height: 1.05; letter-spacing: -.03em; max-width: 16ch; }
+.block > .wrap > p.intro { margin-top: 20px; max-width: 52ch; font-size: 18px; line-height: 1.6; color: var(--muted); }
+.cases { margin-top: 56px; }
+.case { display: grid; grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1.25fr) auto; gap: 32px; align-items: center; padding: 30px 20px; margin: 0 -20px; border-radius: 24px; transition: background .3s; }
+.case + .case { box-shadow: 0 -1px 0 var(--line); }
+.case:hover { background: #fff; box-shadow: none; }
+.case:hover + .case { box-shadow: none; }
+.case .state { font-size: 15px; color: var(--accent); }
+.case h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 2.6vw, 38px); letter-spacing: -.02em; }
+.case p { color: var(--muted); line-height: 1.6; }
+
+.privacy { display: grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: auto auto; gap: 16px; margin-top: 56px; }
+.cell { border-radius: 24px; padding: 34px; }
+.cell h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -.02em; line-height: 1.15; }
+.cell p { margin-top: 12px; line-height: 1.6; }
+.cell.never { grid-row: span 2; background: #e9eefa; background-image: linear-gradient(rgba(20, 71, 230, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 71, 230, .07) 1px, transparent 1px); background-size: 44px 44px; display: flex; flex-direction: column; }
+.never ul { list-style: none; padding: 0; margin: auto 0 0; padding-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.never li { background: #fff; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 20px; font-size: 16px; }
+.never li i { font-size: 28px; color: var(--accent); }
+.cell.uses { background: #fff; color: var(--ink); }
+.cell.uses p, .cell.never > p { color: var(--muted); }
+.cell.contact { background: var(--accent); color: #fff; }
+.bubble { margin-top: 20px; background: #fff; color: var(--ink); border-radius: 14px 14px 14px 4px; padding: 14px 16px; font-size: 15px; line-height: 1.5; max-width: 34ch; }
+
+.drawn { display: grid; grid-template-columns: minmax(0, 1fr) 640px; gap: 56px; align-items: center; }
+.figure { width: 640px; max-width: 100%; height: 512px; overflow: hidden; position: relative; border-radius: 24px; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+.figure iframe { position: absolute; left: -130px; top: -24px; width: 900px; height: 620px; border: 0; }
+footer { padding: 56px 0 64px; border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+footer p { max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+@media (max-width: 1179px) { .stage { padding-left: 0; } .console { margin-top: 32px; } }
+@media (max-width: 859px) {
+  .wrap { padding: 0 20px; }
+  .nav { height: 64px; } .nav a.link { display: none; }
+  .hero-grid { display: block; min-height: 0; padding: 28px 0 0; }
+  h1 { font-size: clamp(40px, 12vw, 56px); }
+  .console { width: auto; } .ro-signals, .ro-note { display: none; }
+  .peek { height: 430px; margin: 36px -20px 0; padding-top: 16px; }
+  section.block { padding: 72px 0; }
+  .case { grid-template-columns: 1fr; gap: 10px; padding: 26px 20px; }
+  .case .btn { justify-self: start; margin-top: 8px; }
+  .privacy, .drawn { grid-template-columns: minmax(0, 1fr); }
+  .cell { padding: 26px; } .cell.never { grid-row: auto; }
+  .figure { height: 300px; } .figure iframe { transform: scale(.58); transform-origin: 130px 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .btn, .btn i, .case { transition: none; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <canvas class="art" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <header class="nav">
+      <a class="mark" href="#top"><i class="ph-fill ph-shield-check" aria-hidden="true"></i>Scam Guardian</a>
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#privacy">Privacy</a>
+      <button class="btn small" data-open-wallet>Try the wallet</button>
+    </header>
+    <main id="top" class="hero-grid">
+      <div class="copy">
+        <h1>A pause before the money moves.</h1>
+        <p class="lede">Scam Guardian helps when a transfer gets confusing, and makes room to think when someone else may be directing it.</p>
+        <div class="cta-row">
+          <button class="btn" data-open-wallet>Try the wallet<i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          <a class="btn ghost" href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="stage">
+        <aside class="console" aria-label="Demo controls">
+          <h2>Demo signal, simulated</h2>
+          <div class="seg">
+            <button data-scenario="normal">Normal</button><button data-scenario="struggling">Struggling</button>
+            <button data-scenario="medium">Coached</button><button data-scenario="coached">Coached, high</button>
+          </div>
+          <div class="readout" data-readout aria-live="polite"></div>
+        </aside>
+        <div class="peek">
+          <div class="device-fit">
+            <div class="device">
+              <i class="key action"></i><i class="key up"></i><i class="key down"></i><i class="key power"></i><i class="key camera"></i>
+              <div class="screen" data-chrome="light">
+                <div class="statusbar" aria-hidden="true"><span>9:41</span><span class="right"><i class="ph-fill ph-cell-signal-full"></i><i class="ph-fill ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span></div>
+                <div class="island"></div>
+                <div class="wallet" data-wallet></div>
+                <div class="home-indicator"></div>
+              </div>
+            </div>
+          </div>
+          <button class="open" data-open-wallet aria-label="Open the wallet demo full screen"></button>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <h2 class="display reveal">Three situations. Three different responses.</h2>
+    <p class="intro reveal" style="--i:1">Hesitation alone does not mean fraud. Guardian reads the context of one transfer and answers with help, or with time.</p>
+    <div class="cases">
+      <div class="case reveal"><span class="state">Normal</span><h3>Carry on</h3><p>A usual amount to a saved contact goes through with no interruption.</p><button class="btn ghost small" data-scenario="normal" data-open>Play it<i class="ph ph-arrow-up-right" aria-hidden="true"></i></button></div>
+      <div class="case reveal"><span class="state">Struggling</span><h3>A clearer path</h3><p>Repeated back steps or help taps switch the wallet to Simple mode: bigger controls, one instruction at a time. No accusation.</p><button class="btn ghost small" data-scenario="struggling" data-open>Play it<i class="ph ph-arrow-up-right" aria-hidden="true"></i></button></div>
+      <div class="case reveal"><span class="state">Coached</span><h3>Take a moment</h3><p>A call in progress plus a new recipient triggers a short pause. When it ends, the choice is still yours.</p><button class="btn ghost small" data-scenario="coached" data-open>Play it<i class="ph ph-arrow-up-right" aria-hidden="true"></i></button></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="privacy" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="display reveal">Your decision. Your privacy.</h2>
+    <div class="privacy">
+      <div class="cell never reveal"><h3>What Guardian never collects</h3><p>The design works from a summary of the transfer session, kept on the device.</p>
+        <ul><li><i class="ph ph-microphone-slash" aria-hidden="true"></i>Call audio</li><li><i class="ph ph-phone-slash" aria-hidden="true"></i>Caller identity</li><li><i class="ph ph-clipboard" aria-hidden="true"></i>Clipboard contents</li><li><i class="ph ph-app-window" aria-hidden="true"></i>Activity in other apps</li></ul></div>
+      <div class="cell uses reveal" style="--i:1"><h3>One transfer at a time</h3><p>Monitoring starts when you choose a recipient and ends when you confirm or cancel. Browsing your balance is outside it.</p></div>
+      <div class="cell contact reveal" style="--i:2"><h3>A trusted contact, on your terms</h3><div class="bubble">A transfer was paused. Please call your family member to check in.</div><p>No amount. No account details. You choose the person, with separate consent.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap drawn">
+    <div><h2 class="display reveal">The pause, drawn as a canal lock.</h2><p class="intro reveal" style="--i:1;margin-top:20px;max-width:44ch;font-size:18px;line-height:1.6;color:var(--muted)">A lock does not stop a boat. It holds it for a moment, then lets it through. Move your pointer across the gates.</p></div>
+    <div class="figure reveal"><iframe src="../hairline-locks.html?theme=light" title="Interactive line drawing of three canal locks" loading="lazy"></iframe></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Prototype for Dormathon 2026. Mock money, simulated call and paste signals, demonstration rules in place of a trained model, and a family alert that stays on this screen as a preview. Not connected to a bank.</p>
+    <a class="btn ghost small" href="index.html">All directions</a>
+  </div>
+</footer>
+
+<script src="wallet.js"></script>
+<script>
+// Flow-field particles. The stream slows while a transfer is paused, so the page art tells the same story as the wallet.
+(() => {
+  const canvas = document.querySelector('canvas.art'), ctx = canvas.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let w = 0, h = 0, parts = [], frame = 0, visible = true, speed = 1, target = 1, t = 0, mouse = null;
+  const angle = (x, y) => Math.sin(x * 0.0026 + t * 0.21) * 1.05 + Math.cos(y * 0.0052 - t * 0.16) * 1.1 + Math.sin((x - y) * 0.0017 + t * 0.1) * 0.55;
+  const spawn = (p, anywhere) => { p.x = anywhere ? Math.random() * w : -10; p.y = Math.random() * h; p.life = 160 + Math.random() * 320; p.age = 0; return p; };
+  function size() {
+    const dpr = Math.min(devicePixelRatio, 1.5), r = canvas.getBoundingClientRect();
+    w = r.width; h = r.height; canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    parts = Array.from({ length: Math.round(Math.min(760, w * h / 2000)) }, () => spawn({}, true));
+    if (reduce.matches) { for (let i = 0; i < 90; i++) step(true); } else resume();
+  }
+  function step(still) {
+    if (!still) { ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,.028)'; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = 'source-over'; }
+    ctx.lineWidth = 1.1; ctx.lineCap = 'round';
+    for (const p of parts) {
+      const a = angle(p.x, p.y);
+      let vx = (0.85 + Math.cos(a) * 0.75) * speed, vy = Math.sin(a) * 1.25 * speed;
+      if (mouse) { const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy; if (d2 < 22000) { const f = (1 - d2 / 22000) * 1.6; vx += (dx / Math.sqrt(d2 + 1)) * f; vy += (dy / Math.sqrt(d2 + 1)) * f; } }
+      const nx = p.x + vx * 1.25, ny = p.y + vy * 1.25, fade = Math.min(1, p.age / 30, (p.life - p.age) / 30);
+      ctx.strokeStyle = `rgba(20,71,230,${(still ? 0.05 : 0.2) * fade})`;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
+      p.x = nx; p.y = ny; p.age += 1;
+      if (p.age > p.life || nx > w + 10 || ny < -10 || ny > h + 10) spawn(p, still || Math.random() < 0.3);
+    }
+  }
+  function tick() {
+    if (!visible || document.hidden || reduce.matches) { frame = 0; return; }
+    speed += (target - speed) * 0.04; t += 0.016 * speed; step(false);
+    frame = requestAnimationFrame(tick);
+  }
+  function resume() { if (!frame && visible && !document.hidden && !reduce.matches) frame = requestAnimationFrame(tick); }
+  new ResizeObserver(size).observe(canvas);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; resume(); }).observe(canvas);
+  document.addEventListener('visibilitychange', resume);
+  canvas.parentElement.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  canvas.parentElement.addEventListener('pointerleave', () => { mouse = null; });
+  document.addEventListener('guardian:state', (e) => { target = e.detail.paused && e.detail.remaining ? 0.08 : 1; });
+})();
+const seen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); seen.unobserve(e.target); } }), { threshold: 0.2 });
+document.querySelectorAll('.reveal').forEach((el) => seen.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<link rel="icon" href="data:,">
+<title>Tide / Scam Guardian direction C</title>
+<link rel="stylesheet" href="vendor/phosphor.css">
+<link rel="stylesheet" href="vendor/phosphor-fill.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Direction C, "Tide": a slow fluid drawn as contour lines, with the phone rising out of it. Hedvig Letters Serif leads.
+   Shape rule: 28px surfaces, pill controls. One accent: deep teal. Frosted panels are a web approximation with a solid fallback. */
+:root { --page: #eef4f2; --ink: #0f2a2e; --muted: #48605f; --line: #cfdcd9; --accent: #0a6e73; --glass: rgba(255, 255, 255, .66); }
+body { background: var(--page); color: var(--ink); }
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.glass { background: var(--glass); backdrop-filter: blur(18px) saturate(1.5); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .7), inset 0 1px 0 #fff, 0 30px 60px -34px rgba(15, 42, 46, .45); border-radius: 28px; }
+@media (prefers-reduced-transparency: reduce) { .glass { background: #fff; backdrop-filter: none; } }
+
+.nav { position: relative; z-index: 3; height: 76px; display: flex; align-items: center; gap: 34px; }
+.mark { display: flex; align-items: center; gap: 9px; font-family: var(--serif); font-size: 23px; letter-spacing: -.01em; text-decoration: none; margin-right: auto; }
+.mark i { color: var(--accent); font-size: 26px; }
+.nav a.link { text-decoration: none; font-size: 15px; color: var(--muted); transition: color .2s; }
+.nav a.link:hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; height: 54px; padding: 0 28px; border-radius: 27px; background: var(--ink); color: #fff; font-size: 16px; text-decoration: none; white-space: nowrap; transition: transform .18s var(--ease-press), background .25s; }
+.btn:hover { background: var(--accent); }
+.btn:active { transform: scale(.97); }
+.btn.small { height: 42px; padding: 0 18px; font-size: 15px; }
+.btn.ghost { background: var(--glass); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(15, 42, 46, .22); }
+.btn.ghost:hover { background: #fff; }
+
+.hero { position: relative; overflow: clip; background: radial-gradient(90% 60% at 50% 55%, #d6e9e6 0%, transparent 70%); }
+canvas.art { position: absolute; inset: 0; width: 100%; height: 100%; mask-image: linear-gradient(#000 0%, #000 78%, transparent 100%); }
+.hero .wrap { position: relative; z-index: 1; }
+.head { text-align: center; padding: 5vh 0 44px; display: flex; flex-direction: column; align-items: center; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(42px, min(6.2vw, 10.5vh), 96px); line-height: 1; letter-spacing: -.04em; text-wrap: balance; max-width: 15ch; }
+.lede { margin-top: 22px; max-width: 46ch; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: var(--muted); }
+.cta-row { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.pool { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 36px; align-items: start; padding-bottom: 90px; }
+.side { padding: 22px; width: 100%; max-width: 310px; }
+.side.left { justify-self: end; margin-top: 150px; }
+.side.right { margin-top: 56px; }
+.side h2 { font-size: 13px; font-weight: 400; color: var(--muted); margin-bottom: 12px; }
+.seg { display: grid; gap: 6px; }
+.seg button { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 8px 18px; border-radius: 26px; font-size: 15px; text-align: left; background: rgba(255, 255, 255, .7); transition: background .25s, color .25s, transform .16s var(--ease-press); }
+.seg button small { font-size: 12.5px; color: var(--muted); text-align: right; transition: color .25s; }
+.seg button:active { transform: scale(.97); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.seg button[aria-pressed="true"] small { color: #b9d3d1; }
+.side p.hint { margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.ro-label, .ro-note { font-size: 13px; color: var(--muted); }
+.ro-class { font-family: var(--serif); font-size: 34px; line-height: 1.08; letter-spacing: -.025em; margin: 4px 0 10px; }
+.readout[data-state="coached"] .ro-class { color: #8a4b00; }
+.readout[data-state="struggling"] .ro-class { color: var(--accent); }
+.ro-reasons { list-style: none; margin: 0 0 14px; padding: 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); min-height: 4.5em; }
+.ro-signals { margin: 0 0 12px; display: grid; gap: 6px; }
+.ro-signals div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 14px; border-radius: 18px; background: rgba(255, 255, 255, .7); font-size: 13.5px; }
+.ro-signals dt { color: var(--muted); }
+.ro-signals dd { margin: 0; }
+
+section.block { padding: 110px 0; }
+h2.display { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 4.2vw, 62px); line-height: 1.04; letter-spacing: -.035em; max-width: 17ch; }
+.intro { margin-top: 20px; max-width: 50ch; font-size: 18px; line-height: 1.6; color: var(--muted); }
+.tabs { margin-top: 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: stretch; }
+.tablist { display: grid; align-content: center; }
+.tablist button { text-align: left; padding: 18px 0; font-family: var(--serif); font-size: clamp(34px, 4.6vw, 68px); letter-spacing: -.035em; line-height: 1; color: #9fb4b1; transition: color .35s, transform .5s var(--ease-out); }
+.tablist button small { display: block; font-family: var(--sans); font-size: 15px; letter-spacing: 0; margin-bottom: 8px; color: inherit; }
+.tablist button:hover { color: var(--muted); }
+.tablist button[aria-selected="true"] { color: var(--ink); transform: translateX(14px); }
+.tabpanel { position: relative; min-height: 400px; border-radius: 28px; padding: 40px; background: linear-gradient(155deg, #0c6f74 0%, #0f2a2e 100%); color: #fff; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; }
+.tabpanel::before { content: ""; position: absolute; inset: -40%; background: repeating-radial-gradient(circle at 70% 20%, transparent 0 22px, rgba(255, 255, 255, .09) 22px 23px); }
+.tabpanel > * { position: relative; }
+.tabpanel i.big { font-size: 46px; margin-bottom: auto; }
+.tabpanel p { font-size: clamp(19px, 1.8vw, 25px); line-height: 1.4; max-width: 30ch; text-wrap: pretty; }
+.tabpanel .btn { align-self: flex-start; background: #fff; color: var(--ink); }
+.tabpanel .swap { display: contents; }
+.tabpanel .swap > * { animation: swap .5s var(--ease-out); }
+@keyframes swap { from { opacity: 0; } }
+
+.privacy { margin-top: 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.drop { aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; font-size: 17px; padding: 20px; box-shadow: inset 0 0 0 1px var(--line); background: radial-gradient(circle at 30% 25%, #fff 0%, rgba(255, 255, 255, .2) 70%); }
+.drop i { font-size: 38px; color: var(--accent); }
+.facts { margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.facts h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; letter-spacing: -.02em; }
+.facts p { margin-top: 12px; line-height: 1.6; color: var(--muted); max-width: 46ch; }
+.bubble { margin-top: 16px; display: inline-block; background: #fff; border-radius: 20px 20px 20px 6px; padding: 14px 18px; font-size: 15px; line-height: 1.5; max-width: 36ch; box-shadow: 0 0 0 1px var(--line); }
+
+.drawn { display: grid; grid-template-columns: minmax(0, 1fr) 640px; gap: 56px; align-items: center; }
+.figure { width: 640px; max-width: 100%; height: 512px; overflow: hidden; position: relative; border-radius: 28px; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+.figure iframe { position: absolute; left: -130px; top: -24px; width: 900px; height: 620px; border: 0; }
+footer { padding: 56px 0 64px; border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+footer p { max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+@media (max-width: 1099px) { .pool { grid-template-columns: minmax(0, 1fr) auto; } .side.left { grid-column: 1; grid-row: 1; margin-top: 40px; justify-self: stretch; max-width: none; } .pool .stage { grid-column: 2; grid-row: 1 / span 2; } .side.right { grid-column: 1; grid-row: 2; margin-top: 0; max-width: none; } }
+@media (max-width: 859px) {
+  .wrap { padding: 0 20px; }
+  .nav { height: 64px; } .nav a.link { display: none; }
+  .head { text-align: left; align-items: flex-start; padding: 24px 0 28px; }
+  h1 { font-size: clamp(40px, 12.5vw, 58px); } .cta-row { justify-content: flex-start; }
+  .pool { display: flex; flex-direction: column; gap: 16px; padding-bottom: 56px; }
+  .side.left, .side.right { margin-top: 0; }
+  .ro-signals, .ro-note { display: none; } .ro-reasons { min-height: 0; margin: 0; }
+  .peek { height: 430px; padding-top: 14px; margin: 0 -20px; align-self: stretch; }
+  section.block { padding: 72px 0; }
+  .tabs, .facts, .drawn { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .tablist button[aria-selected="true"] { transform: none; }
+  .tabpanel { min-height: 320px; padding: 28px; }
+  .privacy { grid-template-columns: 1fr 1fr; }
+  .figure { height: 300px; } .figure iframe { transform: scale(.58); transform-origin: 130px 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .btn, .tablist button, .seg button { transition: none; } .tabpanel .swap > * { animation: none; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <canvas class="art" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <header class="nav">
+      <a class="mark" href="#top"><i class="ph-fill ph-shield-check" aria-hidden="true"></i>Scam Guardian</a>
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#privacy">Privacy</a>
+      <button class="btn small" data-open-wallet>Try the wallet</button>
+    </header>
+    <main id="top">
+      <div class="head">
+        <h1>Room to think, before you send.</h1>
+        <p class="lede">Scam Guardian helps when a transfer gets confusing, and makes room to think when someone else may be directing it.</p>
+        <div class="cta-row">
+          <button class="btn" data-open-wallet>Try the wallet<i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+          <a class="btn ghost" href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="pool">
+        <aside class="side left glass" aria-label="Demo controls">
+          <h2>Demo signal, simulated</h2>
+          <div class="seg">
+            <button data-scenario="normal">Normal<small>Saved contact</small></button>
+            <button data-scenario="struggling">Struggling<small>Back and forth</small></button>
+            <button data-scenario="medium">Coached<small>Call, new recipient</small></button>
+            <button data-scenario="coached">Coached, high<small>Call, new, pasted</small></button>
+          </div>
+          <p class="hint">Pick one, then tap Transfer in the wallet. A browser cannot observe calls, so these are fixtures.</p>
+        </aside>
+        <div class="stage">
+          <div class="peek">
+            <div class="device-fit">
+              <div class="device">
+                <i class="key action"></i><i class="key up"></i><i class="key down"></i><i class="key power"></i><i class="key camera"></i>
+                <div class="screen" data-chrome="light">
+                  <div class="statusbar" aria-hidden="true"><span>9:41</span><span class="right"><i class="ph-fill ph-cell-signal-full"></i><i class="ph-fill ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span></div>
+                  <div class="island"></div>
+                  <div class="wallet" data-wallet></div>
+                  <div class="home-indicator"></div>
+                </div>
+              </div>
+            </div>
+            <button class="open" data-open-wallet aria-label="Open the wallet demo full screen"></button>
+          </div>
+        </div>
+        <aside class="side right glass"><div class="readout" data-readout aria-live="polite"></div></aside>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <h2 class="display reveal">Three situations. Three different responses.</h2>
+    <p class="intro reveal" style="--i:1">Hesitation alone does not mean fraud. Guardian reads the context of one transfer and answers with help, or with time.</p>
+    <div class="tabs reveal">
+      <div class="tablist" role="tablist" aria-label="Guardian responses">
+        <button role="tab" aria-selected="true" data-tab="normal"><small>Normal</small>Carry on</button>
+        <button role="tab" aria-selected="false" data-tab="struggling"><small>Struggling</small>A clearer path</button>
+        <button role="tab" aria-selected="false" data-tab="coached"><small>Coached</small>Take a moment</button>
+      </div>
+      <div class="tabpanel" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="privacy" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="display reveal">Your decision. Your privacy.</h2>
+    <p class="intro reveal" style="--i:1">Four things Guardian never collects.</p>
+    <div class="privacy">
+      <div class="drop reveal"><i class="ph ph-microphone-slash" aria-hidden="true"></i>Call audio</div>
+      <div class="drop reveal" style="--i:1"><i class="ph ph-phone-slash" aria-hidden="true"></i>Caller identity</div>
+      <div class="drop reveal" style="--i:2"><i class="ph ph-clipboard" aria-hidden="true"></i>Clipboard contents</div>
+      <div class="drop reveal" style="--i:3"><i class="ph ph-app-window" aria-hidden="true"></i>Activity in other apps</div>
+    </div>
+    <div class="facts">
+      <div class="reveal"><h3>One transfer at a time</h3><p>Monitoring starts when you choose a recipient and ends when you confirm or cancel. Browsing your balance is outside it.</p></div>
+      <div class="reveal" style="--i:1"><h3>A trusted contact, on your terms</h3><p>You choose the person, with separate consent. They are asked to call you. No amount, no account details.</p><div class="bubble">A transfer was paused. Please call your family member to check in.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap drawn">
+    <div><h2 class="display reveal">The pause, drawn as a canal lock.</h2><p class="intro reveal" style="--i:1;max-width:44ch">A lock does not stop a boat. It holds it for a moment, then lets it through. Move your pointer across the gates.</p></div>
+    <div class="figure reveal"><iframe src="../hairline-locks.html?theme=light" title="Interactive line drawing of three canal locks" loading="lazy"></iframe></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Prototype for Dormathon 2026. Mock money, simulated call and paste signals, demonstration rules in place of a trained model, and a family alert that stays on this screen as a preview. Not connected to a bank.</p>
+    <a class="btn ghost small" href="index.html">All directions</a>
+  </div>
+</footer>
+
+<script src="wallet.js"></script>
+<script>
+// Fluid contour lines in a WebGL2 fragment shader: domain-warped noise, drawn as isolines. The flow settles while a transfer is paused.
+// Without WebGL2 the hero keeps its static CSS wash.
+(() => {
+  const canvas = document.querySelector('canvas.art'), gl = canvas.getContext('webgl2', { antialias: false, alpha: true });
+  if (!gl) { canvas.remove(); return; }
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const vertex = `#version 300 es
+in vec2 p; void main() { gl_Position = vec4(p, 0., 1.); }`;
+  const fragment = `#version 300 es
+precision highp float;
+uniform vec2 uRes; uniform float uTime; uniform vec2 uMouse;
+out vec4 o;
+float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+float noise(vec2 p) { vec2 i = floor(p), f = fract(p); vec2 u = f * f * f * (f * (f * 6. - 15.) + 10.);
+  return mix(mix(hash(i), hash(i + vec2(1, 0)), u.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), u.x), u.y); }
+float fbm(vec2 p) { float a = .5, s = 0.; for (int i = 0; i < 3; i++) { s += a * noise(p); p = p * 2.03 + vec2(17.1, 9.2); a *= .5; } return s; }
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes.y, m = uMouse / uRes.y;
+  float pull = exp(-dot(uv - m, uv - m) * 9.);
+  vec2 p = uv * 1.25;
+  vec2 q = vec2(fbm(p + vec2(0., uTime * .05)), fbm(p + vec2(5.2, 1.3) - uTime * .04));
+  vec2 r = vec2(fbm(p + 2.1 * q + vec2(1.7, 9.2) + uTime * .03), fbm(p + 2.1 * q + vec2(8.3, 2.8) - uTime * .026));
+  float f = fbm(p + 2.3 * r) + pull * .07;
+  float bands = f * 15.;
+  float d = min(fract(bands), 1. - fract(bands));
+  float line = 1. - smoothstep(0., fwidth(bands) * 1.5, d);
+  float wash = smoothstep(.3, .78, f);
+  vec3 col = mix(vec3(.933, .957, .949), vec3(.74, .88, .87), wash);
+  col = mix(col, vec3(.04, .43, .45), line * (.2 + wash * .42));
+  o = vec4(col, 1.);
+}`;
+  const compile = (type, source) => { const s = gl.createShader(type); gl.shaderSource(s, source); gl.compileShader(s); return s; };
+  const program = gl.createProgram();
+  gl.attachShader(program, compile(gl.VERTEX_SHADER, vertex)); gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragment)); gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { canvas.remove(); return; }
+  gl.useProgram(program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const at = gl.getAttribLocation(program, 'p'); gl.enableVertexAttribArray(at); gl.vertexAttribPointer(at, 2, gl.FLOAT, false, 0, 0);
+  const uRes = gl.getUniformLocation(program, 'uRes'), uTime = gl.getUniformLocation(program, 'uTime'), uMouse = gl.getUniformLocation(program, 'uMouse');
+  let frame = 0, visible = true, t = 4, speed = 1, target = 1, last = 0, mouse = [-9999, -9999], scale = 1;
+  function draw() { gl.uniform2f(uRes, canvas.width, canvas.height); gl.uniform1f(uTime, t); gl.uniform2f(uMouse, mouse[0] * scale, canvas.height - mouse[1] * scale); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+  function size() { const r = canvas.getBoundingClientRect(); scale = Math.min(devicePixelRatio, 1.25); canvas.width = r.width * scale; canvas.height = r.height * scale; gl.viewport(0, 0, canvas.width, canvas.height); draw(); resume(); }
+  function tick(now) {
+    if (!visible || document.hidden || reduce.matches) { frame = 0; return; }
+    if (now - last > 32) { speed += (target - speed) * 0.06; t += 0.032 * speed; draw(); last = now; }
+    frame = requestAnimationFrame(tick);
+  }
+  function resume() { if (!frame && visible && !document.hidden && !reduce.matches) frame = requestAnimationFrame(tick); }
+  new ResizeObserver(size).observe(canvas);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; resume(); }).observe(canvas);
+  document.addEventListener('visibilitychange', resume);
+  canvas.parentElement.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mouse = [e.clientX - r.left, e.clientY - r.top]; if (reduce.matches) draw(); });
+  document.addEventListener('guardian:state', (e) => { target = e.detail.paused && e.detail.remaining ? 0.06 : 1; });
+})();
+// Response tabs
+(() => {
+  const copy = {
+    normal: ['arrow-right', 'A usual amount to a saved contact goes through with no interruption.'],
+    struggling: ['lifebuoy', 'Repeated back steps or help taps switch the wallet to Simple mode: bigger controls, one instruction at a time. No accusation.'],
+    coached: ['pause', 'A call in progress plus a new recipient triggers a short pause. When it ends, the choice is still yours.'],
+  };
+  const panel = document.querySelector('.tabpanel'), tabs = [...document.querySelectorAll('[data-tab]')];
+  function show(name) {
+    tabs.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+    panel.innerHTML = `<div class="swap"><i class="big ph ph-${copy[name][0]}" aria-hidden="true"></i><p>${copy[name][1]}</p><button class="btn small" data-scenario="${name}" data-open>Play it in the wallet</button></div>`;
+  }
+  tabs.forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+  show('normal');
+})();
+const seen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); seen.unobserve(e.target); } }), { threshold: 0.2 });
+document.querySelectorAll('.reveal').forEach((el) => seen.observe(el));
+</script>
+</body>
+</html>
