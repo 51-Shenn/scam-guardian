@@ -10,7 +10,7 @@ const angle = (x, y) => Math.sin(x * ZOOM * 0.0026) * 1.05 + Math.cos(y * ZOOM *
 let shapes = '';
 for (let x = 0; x <= WIDTH; x += 44) shapes += `<path d="M${x} 0V${HEIGHT}" opacity=".07"/>`;
 for (let y = 0; y <= HEIGHT; y += 44) shapes += `<path d="M0 ${y}H${WIDTH}" opacity=".07"/>`;
-for (let line = 0; line < 150; line++) {
+for (let line = 0; line < 110; line++) {
   let x = random() * WIDTH, y = random() * HEIGHT;
   const points = [];
   for (let step = 0; step < 70; step++) {
@@ -19,7 +19,7 @@ for (let line = 0; line < 150; line++) {
     x += (0.85 + Math.cos(direction) * 0.75) * 2.4;
     y += Math.sin(direction) * 1.25 * 2.4;
   }
-  shapes += `<polyline points="${points.join(' ')}" opacity="${(0.12 + random() * 0.2).toFixed(2)}" stroke-linecap="round"/>`;
+  shapes += `<polyline points="${points.join(' ')}" opacity="${(0.07 + random() * 0.13).toFixed(2)}" stroke-linecap="round"/>`;
 }
 await mkdir('assets/guardian', { recursive: true });
 await writeFile('assets/guardian/current.svg', `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}"><g fill="none" stroke="${ACCENT}" stroke-width="1">${shapes}</g></svg>`);
