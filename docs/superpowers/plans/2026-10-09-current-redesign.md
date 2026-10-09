@@ -1546,7 +1546,7 @@ console.log('Wrote assets/guardian/current.svg');
 - [ ] **Step 4: Generate the asset**
 
 Run: `node scripts/build-native-art.mjs`
-Expected: prints `Wrote assets/guardian/current.svg`. The file exists and is between 60 KB and 120 KB.
+Expected: prints `Wrote assets/guardian/current.svg`. The file exists and is about 135 KB.
 
 - [ ] **Step 5: Native art**
 
