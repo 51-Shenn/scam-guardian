@@ -1,49 +1,61 @@
 # Scam Guardian
 
-React Native app built with Expo SDK 57, React 19, TypeScript, and Expo Router. The project starts with Expo's default Home and Explore screens and supports Android, iOS, and web.
+A light-theme Expo application for Android and web, with a product landing page and an interactive mock wallet. No real money moves. Call and paste signals are simulated, classification uses demonstration rules, and family alerts remain local previews.
 
-## Getting started
+## Run
 
-Use Node.js 24 LTS and npm. Install the locked dependencies and start the development server:
+Use Node.js 24+ and npm:
 
 ```sh
 npm ci
-npm start
+npm run web
+npm run android
 ```
 
-Scan the QR code with a compatible version of [Expo Go](https://expo.dev/go), or use an emulator or development build.
+Android builds require Android Studio's SDK and Java 21, plus a running emulator or connected device. `npm run android` generates the ignored native project through Expo and compiles it. The app identifier is `com.scamguardian.app` for local development; confirm ownership before a store release.
+
+## Design samples
+
+Open `design/index.html` directly to compare Fluid Guardian, Signal Grid and Human Ledger. Each sample bundles typography, adapts to narrow screens, and includes an interactive preview. The user selected Fluid Guardian as the primary direction.
+
+The Hairline canal-lock figure is `design/hairline-locks.html?theme=light&play=1`. Its gates open around the pointer, illustrating room to pause before passage. Rebuild it with the Hairline skill's unchanged engine after editing `design/locks.js`.
 
 ```sh
-npm run android   # Requires a running Android emulator or connected device
-npm run ios       # Requires macOS and the iOS simulator
-npm run web       # Opens the web app
+npm run samples
+node scripts/preview.mjs design 4174
 ```
 
-On Windows, use a physical iPhone with Expo Go to test iOS.
-
-## Project layout
-
-- `src/app/`: Expo Router screens and layouts. Edit `src/app/index.tsx` to change the home screen.
-- `src/components/`: Shared components, including native and web tab implementations.
-- `src/hooks/`: Shared hooks.
-- `src/constants/`: Theme values.
-- `assets/`: Icons, splash screen, and images.
-- `app.json`: Expo app configuration.
-
-## Checks
+## Verify and preview the application
 
 ```sh
 npm run lint
 npm run typecheck
-npx expo install --check
-npx expo-doctor
-npx expo export --platform all
+npm test
+npm run export:platforms
+node scripts/preview.mjs
 ```
 
-Exported bundles are written to the ignored `dist/` directory. Exporting verifies bundling; native builds require the corresponding platform tools or EAS Build.
+The application preview runs at `http://127.0.0.1:4173`, with the wallet at `/demo`. Both Android and web bundles go into ignored `dist/`. These exports verify compilation, not APK assembly or device behavior.
 
-## Resetting the starter
+## Demo walkthrough
 
-Run `npm run reset-project` to replace the starter with a blank `src/app/`. Choose `Y` to preserve the existing source and reset script under the ignored `example/` directory.
+Enable Guardian on the wallet home screen. Family-alert consent is separate. Select a fixture, then start a transfer:
 
-See the [Expo documentation](https://docs.expo.dev/) and [Expo Router guide](https://docs.expo.dev/router/introduction/) for further development.
+- Normal: saved recipient, RM50, no interruption.
+- Struggling: step-by-step guidance and larger controls.
+- Coached / medium: simulated call and new recipient, 30-second pause.
+- Coached / high: additional paste metadata, 30-second pause and a local family-alert preview if consented.
+
+Help works immediately. Invalid amounts cannot proceed. Back navigation preserves the pause deadline. Cancellation ends monitoring. The uniform pause duration is provisional; it is not a calibrated risk policy.
+
+## Project map
+
+- `src/app/`: Expo Router landing and demo routes.
+- `src/screens/`: responsive shared Android/web screens.
+- `src/components/guardian/`: web beUI controls, native Expo UI controls and platform art.
+- `src/domain/`: deterministic risk rules, validation and tests.
+- `design/`: offline HTML studies and the Hairline artifact.
+- `docs/implementation-plan.md`: research source, scope, remaining decisions and later integration work.
+- `AGENTS.md` and `CLAUDE.md`: project instructions, including Conventional Commits.
+
+Tailwind 4 uses an exact NativeWind 5 RC / react-native-css RC pair for this SDK. Fonts are bundled Hedvig Letters Serif and Sans. Source and license notes are in `docs/design-notes.md`.
