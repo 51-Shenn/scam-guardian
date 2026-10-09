@@ -140,8 +140,8 @@ export default function Landing() {
 
     <View className={`${section} gap-8 pb-[72px] wide:flex-row wide:items-center wide:gap-14 wide:pb-[120px]`}>
       <Reveal className="wide:flex-1">
-        <Text accessibilityRole="header" className={h2}>The pause, drawn as a canal lock.</Text>
-        <Text className={intro}>A lock does not stop a boat. It holds it for a moment, then lets it through.{LOCK_HINT}</Text>
+        <Text accessibilityRole="header" className={h2}>A pause, never a block.</Text>
+        <Text className={intro}>If a transfer looks coached, Guardian holds it for 30 seconds. Then Continue unlocks and the choice is yours. A canal lock works the same way: it holds a boat, then lets it through.{LOCK_HINT}</Text>
       </Reveal>
       <View className="w-full wide:w-[640px]"><LockFigure /></View>
     </View>
