@@ -2,7 +2,7 @@
 
 Reading this as a light, technical product page for hackathon judges, paired with an accessible transfer flow for older Malaysians.
 
-The app follows direction A, "Current", chosen by the user on 9 October 2026 from three v2 studies (`design/v2/`). The earlier Fluid Guardian, Signal Grid and Human Ledger studies were retired.
+The app follows direction A, "Current", chosen by the user on 9 October 2026 from three v2 studies. The earlier Fluid Guardian, Signal Grid and Human Ledger studies were retired.
 
 Taste dials for the landing page: design variance 7, motion intensity 6, visual density 4. The wallet is product UI and is out of the Taste skill's scope; it follows native, accessible form patterns.
 
@@ -21,9 +21,8 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 - The actual web action wraps the official beUI base button from `starc007/ui-components`, retrieved 9 October 2026. Source: https://github.com/starc007/ui-components/blob/main/components/motion/button/base.tsx. Original button source stays in `src/components/beui/base.web.tsx`; MIT notice is retained in `docs/vendor/beui-LICENSE.txt`. Supporting motion tokens are taken from the official documentation; the hover capability hook uses an SSR-safe subscription.
 - The web switch is the official beUI source, unmodified, from commit `9deb728` of `starc007/ui-components` (`components/motion/switch.tsx`), kept in `src/components/beui/switch.web.tsx` under the same MIT notice.
-- The standalone v2 studies use native browser controls and hand-written CSS; they are design studies, not claims that beUI ships a framework-free library.
 - Android landing actions are plain React Native pressables styled to the same pill as the beUI web button. A Material button was tried and dropped: it derives its own tone from a seed colour and cannot show the exact cobalt accent. Inside the wallet, buttons and the amount keypad are shared React Native controls, identical on both platforms.
-- Hedvig font packages include their OFL notices. The v2 studies load copies from `design/v2/fonts`; the licence texts sit in `design/`.
+- Hedvig font packages include their OFL notices. The licence texts also sit in `design/`.
 - The canal-lock figure uses the Hairline skill's unchanged engine and bench. Its standalone bench supports both themes; Scam Guardian links to its light theme. The application itself is light-only. The app shows the drawing alone: on web the embedding component hides the bench's slider, buttons, labels and notes and stops the frame scrolling, and the Android still is captured without them.
 - Hairline rules: 1, 2, 4, 6, 8 and 9. The tour visits the upper, middle and lower chambers, then returns to rest. Static, frame, read-out, console and visual checks passed; see `docs/validation.md` for the restrained-motion note. User feedback on the Play lap is still welcome.
 - The page art is a 2D canvas in a `.web.tsx` island. It limits DPR, sleeps offscreen and in hidden tabs, honours reduced motion with one still frame, and cleans up its observers. Android uses a bundled static SVG of the same field; `scripts/build-native-art.mjs` reproduces it without network access or a render loop. Three.js was removed.
@@ -32,4 +31,4 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 ## Studies
 
-`design/v2/` holds the three self-contained v2 studies and their chooser. They share one vanilla-JS wallet whose rules mirror `src/domain/risk.ts`, with a 10-second pause for quick comparison. The app uses 30 seconds. The Signal study's Mango Grotesque files are not tracked.
+The three self-contained v2 studies (Current, Signal, Tide) and their chooser were removed once Current was built. They remain in git history under `design/v2/`. They shared one vanilla-JS wallet whose rules mirrored `src/domain/risk.ts`, with a 10-second pause for quick comparison. The app uses 30 seconds.
