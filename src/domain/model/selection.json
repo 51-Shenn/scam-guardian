@@ -1,0 +1,21 @@
+{
+  "id": "xgb_behavior_binary__lr_combined_binary",
+  "model_sha256": {
+    "lr_combined_binary": "959173dff2637856b3b5db314b60d6d01e4fd08037c6a5255eba62081335dde7",
+    "xgb_behavior_binary": "4f1afeec7f3b6eaf8762a5f46c37ae0eb107b0a8471b1e9508cbe8187763a564"
+  },
+  "no_request": "xgb_behavior_binary",
+  "request": "lr_combined_binary",
+  "selected_using": "validation only before test data/labels load; within 1pp best timely recall, lowest FIR then F1 and simplicity",
+  "targets": {
+    "benignWarningRate": 0.05,
+    "coachedRecall": 0.8,
+    "highRecall": 0.8,
+    "sessionF1": 0.8
+  },
+  "thresholds": {
+    "lr_combined_binary": 0.952430717666823,
+    "xgb_behavior_binary": 0.724197506904602
+  },
+  "validation_targets_met": true
+}
