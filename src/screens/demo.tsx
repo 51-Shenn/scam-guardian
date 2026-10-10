@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BankApp } from '@/components/bank/bank-app';
-import { PhoneCallIcon } from '@/components/bank/icons';
+import { AppWindowIcon, PhoneCallIcon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
 import { Action } from '@/components/guardian/action';
@@ -35,7 +35,7 @@ export default function DemoScreen() {
   const insets = useSafeAreaInsets();
   const { session, view, dispatch } = useSession();
   const [shown, setShown] = useState<ViewName>('bank');
-  const { step, sheet, call } = session;
+  const { step, sheet, call, away } = session;
 
   // Android back returns to the bank app, then walks the transfer backwards, before it leaves the screen.
   useEffect(() => {
@@ -53,6 +53,9 @@ export default function DemoScreen() {
   const toggleCall = () => dispatch({ type: 'toggleCall', now: Date.now() });
   const reset = () => { dispatch({ type: 'reset' }); setShown('bank'); };
   const callLabel = call ? 'End simulated call' : 'Start simulated call';
+  // A demo signal only: the bank app stays usable, and the device's real app state is recorded separately.
+  const toggleAway = () => dispatch({ type: 'toggleAway', now: Date.now() });
+  const awayLabel = away ? 'Return to bank app' : 'Simulate app switch';
   if (!viewport) return <View className="flex-1 bg-page" />;
 
   // Narrow web and Android: the device is the phone, so there is no frame. A switch at the top moves between the three views.
@@ -77,6 +80,13 @@ export default function DemoScreen() {
             <Text className="font-body text-sm text-white">End</Text>
           </Pressable>
         </View>}
+        {away && <View className="h-11 flex-row items-center gap-2 rounded-full bg-ink pl-4 pr-1.5">
+          <AppWindowIcon size={16} color="#f5c451" weight="fill" />
+          <Text className="flex-1 font-body text-sm text-white">In another app (simulated)</Text>
+          <Pressable accessibilityRole="button" accessibilityLabel="Return to bank app" onPress={toggleAway} className="h-8 justify-center rounded-full bg-white/20 px-3.5 active:opacity-70 focus-visible:outline-2 focus-visible:outline-white">
+            <Text className="font-body text-sm text-white">Return</Text>
+          </Pressable>
+        </View>}
       </View>
       <View className="flex-1 overflow-hidden rounded-t-[28px]">
         {shown === 'bank' && <BankApp top={12} bottom={bottom} onExit={leave} />}
@@ -85,6 +95,7 @@ export default function DemoScreen() {
             <View className="flex-1"><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
             <View><Action small secondary label="Reset demo" onPress={reset} /></View>
           </View>
+          <Action small secondary={!away} label={awayLabel} onPress={toggleAway} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -101,6 +112,7 @@ export default function DemoScreen() {
       <Wordmark onPress={() => router.replace('/')} />
       <View className="flex-row gap-2.5">
         <View><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
+        <View><Action small secondary={!away} label={awayLabel} onPress={toggleAway} /></View>
         <View><Action small secondary label="Reset demo" onPress={reset} /></View>
         <View><Action small secondary label="Product page" onPress={leave} /></View>
       </View>

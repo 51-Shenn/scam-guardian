@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { AI_REVIEW_REASON } from '@/domain/session';
 import { BankButton } from './button';
 import { ClipboardIcon, HandPalmIcon, MicrophoneSlashIcon, ShieldCheckIcon, type Icon } from './icons';
 import { B } from './palette';
@@ -37,15 +38,20 @@ export function ConsentSheet({ bottom }: { bottom: number }) {
 
 /** Shown once when a coached transfer reaches review. It asks; it does not accuse. */
 export function PauseSheet({ bottom }: { bottom: number }) {
-  const { view, dispatch } = useSession();
+  const { view, dispatch, guardian } = useSession();
+  const ai = view.origin === 'ai' || view.origin === 'combined';
+  const choose = (action: 'cancel' | 'open_check') => {
+    guardian.verify(action);
+    dispatch({ type: action === 'cancel' ? 'cancel' : 'closeSheet' });
+  };
   return <Sheet label="Take a moment" bottom={bottom}>
-    <Text accessibilityRole="header" className={title}>Is someone on the phone telling you to do this?</Text>
-    <Text className={body}>Take time to check with someone you trust. You can cancel now, or decide to continue after the pause.</Text>
+    <Text accessibilityRole="header" className={title}>{view.origin === 'ai' ? 'Pause and verify this payment' : 'Is someone on the phone telling you to do this?'}</Text>
+    <Text className={body}>{ai ? `${AI_REVIEW_REASON}. ` : ''}Take time to check with someone you trust. You can cancel now, or decide to continue after the pause.</Text>
     {view.alert && <View className="gap-1 rounded-[20px] bg-b-tint px-4 py-3.5">
       <Text className="font-body text-[15px] leading-5 text-[#6d0a1b]">Aina would be asked to call you now. The request carries no amount and no account details.</Text>
       <Text className="font-body text-[13px] text-[#6d0a1b]">Preview only. Nothing was sent to another device.</Text>
     </View>}
-    <BankButton label="Cancel this transfer" onPress={() => dispatch({ type: 'cancel' })} />
-    <BankButton variant="line" label="I want to review it myself" onPress={() => dispatch({ type: 'closeSheet' })} />
+    <BankButton label="Cancel this transfer" onPress={() => choose('cancel')} />
+    <BankButton variant="line" label="I want to review it myself" onPress={() => choose('open_check')} />
   </Sheet>;
 }

@@ -1,15 +1,19 @@
 import { ScrollView, Text, View } from 'react-native';
 import { Glass } from '@/components/glass/glass';
-import { DEMO_ACCOUNT, money, recipients } from '@/domain/session';
+import { groupDigits, money, recipients } from '@/domain/session';
 import { PauseRing } from './pause-ring';
 import { useSession } from './session';
 import { Guide, StepFooter, StepHeader } from './step-chrome';
 
 export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
-  const { session, view, dispatch } = useSession();
+  const { session, view, dispatch, guardian } = useSession();
   const size = view.simple ? 'text-[19px]' : 'text-base';
   const person = recipients[session.to];
-  const account: [string, string][] = person.fresh ? [['Account', DEMO_ACCOUNT]] : [];
+  const account: [string, string][] = person.fresh ? [['Account', groupDigits(session.account)]] : [];
+  const confirm = () => {
+    if (view.paused && !view.locked) guardian.verify('continue');
+    dispatch({ type: 'confirm', now: Date.now() });
+  };
   const rows: [string, string][] = [['To', person.name], ...account, ['Amount', money(session.amount)], ['Fee', 'RM 0.00'], ['From', 'Demo savings account']];
   return <View className="flex-1">
     <StepHeader title="Review" progress={3} top={top} />
@@ -27,6 +31,6 @@ export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
         <Text aria-live="polite" className="flex-1 font-body text-[17px] leading-[23px] text-[#4f2b00]">{view.locked ? 'A short pause before you decide.' : 'The pause has ended. The choice is yours.'}</Text>
       </View>}
     </ScrollView>
-    <StepFooter label={view.paused ? 'Continue with transfer' : 'Confirm transfer'} disabled={view.locked} onPress={() => dispatch({ type: 'confirm', now: Date.now() })} bottom={bottom} />
+    <StepFooter label={view.paused ? 'Continue with transfer' : 'Confirm transfer'} disabled={view.locked} onPress={confirm} bottom={bottom} />
   </View>;
 }
