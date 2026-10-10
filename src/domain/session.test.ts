@@ -26,7 +26,7 @@ test('a normal transfer completes without a pause', () => {
   const review = toReview(consented('normal'), '50', 1000);
   assert.deepEqual([review.step, review.deadline, review.sheet], ['review', null, null]);
   const done = run(review, { type: 'confirm', now: 1001 });
-  assert.deepEqual([done.step, done.balance], ['success', 2450]);
+  assert.deepEqual([done.step, done.balance], ['success', 12450]);
 });
 
 test('a coached transfer pauses for the full cool-down and cannot be confirmed early', () => {
@@ -37,7 +37,7 @@ test('a coached transfer pauses for the full cool-down and cannot be confirmed e
   assert.equal(derive(review, 1000).origin, 'rule');
   assert.equal(run(review, { type: 'confirm', now: 1000 + COOL_DOWN_MS - 1 }), review);
   const done = run(review, { type: 'confirm', now: 1000 + COOL_DOWN_MS });
-  assert.deepEqual([done.step, done.balance, done.deadline], ['success', 1300, null]);
+  assert.deepEqual([done.step, done.balance, done.deadline], ['success', 11300, null]);
 });
 
 test('the pause deadline survives back navigation and a recipient change', () => {
@@ -92,7 +92,7 @@ test('keypad entry keeps a valid amount shape', () => {
 });
 
 test('an invalid or missing amount stays on the amount step with a message', () => {
-  const over = run(consented('normal'), { type: 'next' }, { type: 'setAmount', amount: '9999' }, { type: 'review', now: 0 });
+  const over = run(consented('normal'), { type: 'next' }, { type: 'setAmount', amount: '99999' }, { type: 'review', now: 0 });
   assert.deepEqual([over.step, over.error], ['amount', 'This amount exceeds the demo balance.']);
   assert.equal(run(over, { type: 'key', key: 'del' }).error, null);
   assert.equal(run(consented('normal'), { type: 'next' }, { type: 'review', now: 0 }).step, 'amount');
