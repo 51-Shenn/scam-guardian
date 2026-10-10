@@ -16,14 +16,11 @@
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
 </p>
 
-## Pitch slides
+## Pitch deck
 
-<!-- Placeholder. When the deck is ready: put its link in place of "link to be added" below, and delete this comment.
-     To show the cover as well, add an image under the note: <p align="center"><a href="DECK_LINK"><img src="docs/slides-cover.png" alt="Pitch slides" width="720"></a></p> -->
+PDF: [ScamGuardianPitchDeck_ThreePeasInAPod_TaylorsUniversity](ThreePeasInAPod_Taylors.pdf)
 
-> [!IMPORTANT]
-> **Slide deck: link to be added.**
-> The slides for the four-minute pitch will be linked here. Until then, the spoken guide is in [docs/four-minute-pitch.md](docs/four-minute-pitch.md).
+## What Scam Guardian does
 
 Scam Guardian demonstrates help for a person finding the transfer hard and a verification pause for a person who may be following someone else's instructions. Display categories come from demonstration policy, not a validated three-class detector.
 
