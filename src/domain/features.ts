@@ -145,6 +145,30 @@ export function simulationAt(events: readonly DemoEvent[], cutoff: number): Simu
   return state as unknown as SimulationState;
 }
 
+/**
+ * Simulated time in another app up to a cutoff, from the external_switch button's events. Only intervals with a
+ * known start count: a switch never pressed gives null, not zero. Not a model input; the selected models ignore it.
+ */
+export function simulatedAwayMs(events: readonly DemoEvent[], cutoff: number): number | null {
+  let known = false;
+  let since: number | null = null;
+  let total = 0;
+  for (const e of events) {
+    if (e.event_t_ms > cutoff) break;
+    if (e.type !== 'simulated_context' || e.payload.signal !== 'external_switch') continue;
+    if (e.payload.state === 'away') {
+      known = true;
+      since ??= e.event_t_ms;
+    } else if (e.payload.state === 'returned') {
+      known = true;
+      if (since !== null) total += e.event_t_ms - since;
+      since = null;
+    }
+  }
+  if (since !== null) total += cutoff - since;
+  return known ? total : null;
+}
+
 /** Grid cutoffs not yet evaluated, up to now. A session that ends before the next grid point gets no further prediction. */
 export function dueCutoffs(lastEvaluated: number | null, now: number): number[] {
   const due: number[] = [];

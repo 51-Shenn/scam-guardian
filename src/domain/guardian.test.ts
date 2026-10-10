@@ -113,9 +113,9 @@ test('a call already on when the transfer starts is recorded from the start', as
 test('a simulated app switch is its own signal, never an observed app state or background time', async () => {
   const h = harness();
   await h.at(0, { type: 'transfer' }, { type: 'agree' });
-  await h.at(1000, { type: 'toggleAway' });
+  await h.at(1000, { type: 'toggleAway', now: 1000 });
   await h.at(3000, { type: 'next' });
-  await h.at(4000, { type: 'toggleAway' });
+  await h.at(4000, { type: 'toggleAway', now: 4000 });
   await h.at(5000);
   const id = h.guardian.sessionId!;
   const during = h.api.buildSnapshot({ session_id: id, prediction_id: 'a', feature_cutoff_ms: 0 });
@@ -129,7 +129,7 @@ test('a simulated app switch is its own signal, never an observed app state or b
 
 test('a switch already on when the transfer starts is recorded as away', async () => {
   const h = harness();
-  await h.at(0, { type: 'toggleAway' }, { type: 'transfer' }, { type: 'agree' });
+  await h.at(0, { type: 'toggleAway', now: 0 }, { type: 'transfer' }, { type: 'agree' });
   await h.at(5000);
   const envelope = h.api.buildSnapshot({ session_id: h.guardian.sessionId!, prediction_id: 'x', feature_cutoff_ms: 0 });
   assert.ok(envelope.ok);

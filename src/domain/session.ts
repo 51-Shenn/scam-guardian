@@ -63,6 +63,9 @@ export interface Session {
   call: boolean;
   /** Simulated switch to another app. A demo signal only: it is never an observed app state. */
   away: boolean;
+  /** When the current simulated switch began, and the away time already finished during this transfer. */
+  awaySince: number | null;
+  awayMs: number;
   help: number;
   back: number;
   deadline: number | null;
@@ -73,13 +76,13 @@ export interface Session {
 }
 export const initialSession: Session = {
   step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 2500,
-  amount: '', to: 'aina', account: '', entry: null, call: false, away: false, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
+  amount: '', to: 'aina', account: '', entry: null, call: false, away: false, awaySince: null, awayMs: 0, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
 };
 
 export type Action =
   | { type: 'scenario'; scenario: Scenario }
   | { type: 'transfer' } | { type: 'openConsent' } | { type: 'toggleFamily' } | { type: 'agree' } | { type: 'decline' } | { type: 'closeSheet' }
-  | { type: 'toggleCall'; now: number } | { type: 'toggleAway' } | { type: 'reset' }
+  | { type: 'toggleCall'; now: number } | { type: 'toggleAway'; now: number } | { type: 'reset' }
   | { type: 'pick'; to: RecipientId } | { type: 'account'; value: string; pasted: boolean } | { type: 'next' }
   | { type: 'key'; key: string } | { type: 'setAmount'; amount: string }
   | { type: 'review'; now: number } | { type: 'confirm'; now: number }
@@ -102,6 +105,8 @@ export interface Derived {
   remaining: number;
   fraction: number;
   alert: boolean;
+  /** Simulated time in another app during this transfer, including the current switch. */
+  awayMs: number;
 }
 
 const intervenes = (decision: Decision) => decision.response === 'hold' || decision.response === 'cooldown';
@@ -133,6 +138,7 @@ export function derive(session: Session, now: number): Derived {
     remaining: Math.ceil(left / 1000),
     fraction: left / COOL_DOWN_MS,
     alert: session.family && session.deadline !== null && decision.response === 'hold',
+    awayMs: session.awayMs + (session.away && session.awaySince !== null ? Math.max(0, now - session.awaySince) : 0),
   };
 }
 
@@ -141,7 +147,7 @@ const home = (session: Session): Session => ({ ...session, step: 'home', deadlin
 function start(session: Session): Session {
   const fixture = fixtures[session.scenario];
   return {
-    ...session, step: 'recipient', amount: '', to: fixture.to, account: '', entry: null, help: 0, back: 0, deadline: null, error: null, sheet: null,
+    ...session, step: 'recipient', amount: '', to: fixture.to, account: '', entry: null, help: 0, back: 0, deadline: null, error: null, sheet: null, awayMs: 0,
     pendingStart: false, ai: session.consent ? AI_WAITING : AI_OFF,
   };
 }
@@ -167,10 +173,12 @@ function enterAccount(session: Session, value: string, pasted: boolean): Session
 
 export function reduce(session: Session, action: Action): Session {
   switch (action.type) {
-    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call, away: false };
+    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call, away: false, awaySince: null, awayMs: 0 };
     case 'toggleCall': return hold({ ...session, call: !session.call }, action.now);
     // The person can keep using the bank app while the simulated switch says they are away.
-    case 'toggleAway': return { ...session, away: !session.away };
+    case 'toggleAway': return session.away
+      ? { ...session, away: false, awaySince: null, awayMs: session.awayMs + Math.max(0, action.now - (session.awaySince ?? action.now)) }
+      : { ...session, away: true, awaySince: action.now };
     case 'reset': return initialSession;
     case 'transfer': return session.asked ? start(session) : { ...session, sheet: 'consent', pendingStart: true };
     case 'openConsent': return { ...session, sheet: 'consent', pendingStart: false };

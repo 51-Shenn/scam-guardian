@@ -45,7 +45,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     baseDispatch(action);
   }, [guardian]);
 
-  const { step, deadline, sheet } = session;
+  const { step, deadline, sheet, away } = session;
   const monitored = guardian.sessionId !== null && (step === 'recipient' || step === 'amount' || step === 'review');
 
   // One timer for the whole app, running only while a pause is on screen.
@@ -58,6 +58,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }, 250);
     return () => clearInterval(timer);
   }, [step, deadline]);
+
+  // A clock for the read-out's away time, running only during a simulated switch.
+  useEffect(() => {
+    if (!away) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [away]);
 
   // The on-device model runs on its frozen five-second grid while a monitored transfer is open.
   useEffect(() => {

@@ -54,7 +54,7 @@ export default function DemoScreen() {
   const reset = () => { dispatch({ type: 'reset' }); setShown('bank'); };
   const callLabel = call ? 'End simulated call' : 'Start simulated call';
   // A demo signal only: the bank app stays usable, and the device's real app state is recorded separately.
-  const toggleAway = () => dispatch({ type: 'toggleAway' });
+  const toggleAway = () => dispatch({ type: 'toggleAway', now: Date.now() });
   const awayLabel = away ? 'Return to bank app' : 'Simulate app switch';
   if (!viewport) return <View className="flex-1 bg-page" />;
 

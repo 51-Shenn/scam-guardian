@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 import { augmentSession, featuresAt, generateSession, type ReferenceSession } from '../../reference/ai/prepare_contract_data.mjs';
 import type { DemoEvent } from './contract.ts';
-import { behaviourAt, dueCutoffs, NO_REQUEST, simulationAt, snapshotAt, SNAPSHOT_PERIOD_MS, type Availability } from './features.ts';
+import { behaviourAt, dueCutoffs, NO_REQUEST, simulatedAwayMs, simulationAt, snapshotAt, SNAPSHOT_PERIOD_MS, type Availability } from './features.ts';
 import { toContractEvents } from './reference-events.ts';
 
 const policy = JSON.parse(fs.readFileSync(new URL('../../reference/ai/contextual_policy_v2.json', import.meta.url), 'utf8'));
@@ -84,4 +84,14 @@ test('due cutoffs follow the frozen five-second grid', () => {
   assert.deepEqual(dueCutoffs(null, 12000), [0, 5000, 10000]);
   assert.deepEqual(dueCutoffs(10000, 14999), []);
   assert.deepEqual(dueCutoffs(10000, 20000), [15000, 20000]);
+});
+
+test('simulated away time counts only switches with a known start', () => {
+  const sw = (seq: number, t: number, state: string) => ev(seq, t, { type: 'simulated_context', source: 'simulation_button', payload: { signal: 'external_switch', state } });
+  assert.equal(simulatedAwayMs([start], 10000), null, 'never pressed: unknown, not zero');
+  const events = [start, sw(1, 2000, 'away'), sw(2, 5000, 'returned'), sw(3, 7000, 'away')];
+  assert.equal(simulatedAwayMs(events, 4000), 2000);
+  assert.equal(simulatedAwayMs(events, 6000), 3000);
+  assert.equal(simulatedAwayMs(events, 9000), 5000, 'an open switch runs to the cutoff');
+  assert.equal(simulatedAwayMs([start, sw(1, 3000, 'returned')], 9000), 0, 'a return with no known start adds nothing');
 });

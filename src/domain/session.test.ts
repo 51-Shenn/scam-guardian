@@ -175,11 +175,19 @@ test('a late AI answer after the transfer ended is dropped, and a clear answer n
 });
 
 test('the simulated app switch toggles without blocking or pausing the transfer', () => {
-  const amount = run(consented('normal'), { type: 'toggleAway' }, { type: 'next' });
+  const amount = run(consented('normal'), { type: 'toggleAway', now: 1000 }, { type: 'next' });
   assert.deepEqual([amount.away, amount.step], [true, 'amount']);
   assert.equal(derive(amount, 0).paused, false, 'it is collected, not used by the rules');
-  assert.equal(run(amount, { type: 'toggleAway' }).away, false);
+  assert.equal(run(amount, { type: 'toggleAway', now: 2000 }).away, false);
   assert.equal(run(amount, { type: 'scenario', scenario: 'coached' }).away, false, 'a new preset clears it');
+});
+
+test('away time adds up across switches and resets with each transfer', () => {
+  const twice = run(consented('normal'), { type: 'toggleAway', now: 1000 }, { type: 'toggleAway', now: 4000 }, { type: 'toggleAway', now: 6000 });
+  assert.equal(derive(twice, 6500).awayMs, 3500, 'three seconds done, half a second in progress');
+  const back = run(twice, { type: 'toggleAway', now: 8000 });
+  assert.deepEqual([back.awayMs, derive(back, 99000).awayMs], [5000, 5000]);
+  assert.equal(run(back, { type: 'cancel' }, { type: 'transfer' }).awayMs, 0);
 });
 
 test('account numbers read back in groups of four', () => {
