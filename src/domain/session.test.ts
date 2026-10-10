@@ -174,6 +174,14 @@ test('a late AI answer after the transfer ended is dropped, and a clear answer n
   assert.equal(derive(unmonitored, 0).paused, false, 'without consent an AI answer cannot pause');
 });
 
+test('the simulated app switch toggles without blocking or pausing the transfer', () => {
+  const amount = run(consented('normal'), { type: 'toggleAway' }, { type: 'next' });
+  assert.deepEqual([amount.away, amount.step], [true, 'amount']);
+  assert.equal(derive(amount, 0).paused, false, 'it is collected, not used by the rules');
+  assert.equal(run(amount, { type: 'toggleAway' }).away, false);
+  assert.equal(run(amount, { type: 'scenario', scenario: 'coached' }).away, false, 'a new preset clears it');
+});
+
 test('account numbers read back in groups of four', () => {
   assert.equal(groupDigits('123412341234'), '1234 1234 1234');
   assert.equal(groupDigits('1234567890'), '1234 5678 90');

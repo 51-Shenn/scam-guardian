@@ -61,6 +61,8 @@ export interface Session {
   account: string;
   entry: Entry | null;
   call: boolean;
+  /** Simulated switch to another app. A demo signal only: it is never an observed app state. */
+  away: boolean;
   help: number;
   back: number;
   deadline: number | null;
@@ -71,13 +73,13 @@ export interface Session {
 }
 export const initialSession: Session = {
   step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 2500,
-  amount: '', to: 'aina', account: '', entry: null, call: false, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
+  amount: '', to: 'aina', account: '', entry: null, call: false, away: false, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
 };
 
 export type Action =
   | { type: 'scenario'; scenario: Scenario }
   | { type: 'transfer' } | { type: 'openConsent' } | { type: 'toggleFamily' } | { type: 'agree' } | { type: 'decline' } | { type: 'closeSheet' }
-  | { type: 'toggleCall'; now: number } | { type: 'reset' }
+  | { type: 'toggleCall'; now: number } | { type: 'toggleAway' } | { type: 'reset' }
   | { type: 'pick'; to: RecipientId } | { type: 'account'; value: string; pasted: boolean } | { type: 'next' }
   | { type: 'key'; key: string } | { type: 'setAmount'; amount: string }
   | { type: 'review'; now: number } | { type: 'confirm'; now: number }
@@ -165,8 +167,10 @@ function enterAccount(session: Session, value: string, pasted: boolean): Session
 
 export function reduce(session: Session, action: Action): Session {
   switch (action.type) {
-    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call };
+    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call, away: false };
     case 'toggleCall': return hold({ ...session, call: !session.call }, action.now);
+    // The person can keep using the bank app while the simulated switch says they are away.
+    case 'toggleAway': return { ...session, away: !session.away };
     case 'reset': return initialSession;
     case 'transfer': return session.asked ? start(session) : { ...session, sheet: 'consent', pendingStart: true };
     case 'openConsent': return { ...session, sheet: 'consent', pendingStart: false };

@@ -72,7 +72,9 @@ export class Collector {
       this.resumed = false;
       // The call button may already be on from a preset, so its state is recorded at the start.
       const call = draft('simulated_context', 'simulation_button', { signal: 'call', state: next.call ? 'active' : 'inactive' });
-      return { start: true, drafts: [transactionDraft(next), call], end: null };
+      // A switch is known only once the button is used; one already away at the start is recorded as away.
+      const away = next.away ? [draft('simulated_context', 'simulation_button', { signal: 'external_switch', state: 'away' })] : [];
+      return { start: true, drafts: [transactionDraft(next), call, ...away], end: null };
     }
     if (!this.open) return none;
     // A person's action ends the window for a restoration focus; the model's own answers do not.
@@ -107,6 +109,8 @@ export class Collector {
         break;
       case 'help': drafts.push(draft('help', 'observed_ui', { step_id: prev.step })); break;
       case 'toggleCall': drafts.push(draft('simulated_context', 'simulation_button', { signal: 'call', state: next.call ? 'active' : 'inactive' })); break;
+      // Kept apart from observed app_state, and never counted as background time.
+      case 'toggleAway': drafts.push(draft('simulated_context', 'simulation_button', { signal: 'external_switch', state: next.away ? 'away' : 'returned' })); break;
       case 'confirm': if (next.step === 'success') return finish('confirmed', draft('confirm', 'observed_ui', {})); break;
       case 'cancel': return finish('cancelled', draft('cancel', 'observed_ui', {}));
       default: break;

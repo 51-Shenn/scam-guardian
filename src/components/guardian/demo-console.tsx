@@ -44,6 +44,7 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
   const chosen = monitoring ? decision.classification : null;
   const rows: [string, string][] = [
     ['Call', session.call ? 'Active (simulated)' : 'None'],
+    ['App switch', session.away ? 'Away (simulated)' : 'In bank app'],
     ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen'],
     ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered'],
     ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered'],

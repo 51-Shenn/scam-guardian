@@ -110,6 +110,32 @@ test('a call already on when the transfer starts is recorded from the start', as
   assert.equal(envelope.value.simulation_context.call, 'active');
 });
 
+test('a simulated app switch is its own signal, never an observed app state or background time', async () => {
+  const h = harness();
+  await h.at(0, { type: 'transfer' }, { type: 'agree' });
+  await h.at(1000, { type: 'toggleAway' });
+  await h.at(3000, { type: 'next' });
+  await h.at(4000, { type: 'toggleAway' });
+  await h.at(5000);
+  const id = h.guardian.sessionId!;
+  const during = h.api.buildSnapshot({ session_id: id, prediction_id: 'a', feature_cutoff_ms: 0 });
+  const after = h.api.buildSnapshot({ session_id: id, prediction_id: 'b', feature_cutoff_ms: 5000 });
+  assert.ok(during.ok && after.ok);
+  assert.equal(after.value.simulation_context.external_switch, 'returned');
+  assert.equal(during.value.simulation_context.external_switch, 'unknown', 'unknown until the button is used');
+  assert.equal(after.value.input.features.background_or_blur_ms, 0, 'simulated away time is not background time');
+  assert.equal(after.value.input.stage, 'amount', 'the bank app stays usable while away');
+});
+
+test('a switch already on when the transfer starts is recorded as away', async () => {
+  const h = harness();
+  await h.at(0, { type: 'toggleAway' }, { type: 'transfer' }, { type: 'agree' });
+  await h.at(5000);
+  const envelope = h.api.buildSnapshot({ session_id: h.guardian.sessionId!, prediction_id: 'x', feature_cutoff_ms: 0 });
+  assert.ok(envelope.ok);
+  assert.equal(envelope.value.simulation_context.external_switch, 'away');
+});
+
 test('focus after returning to the app, without a touch, is a restoration', async () => {
   const h = harness();
   await h.at(0, { type: 'transfer' }, { type: 'agree' }, { type: 'pick', to: 'fresh' });
