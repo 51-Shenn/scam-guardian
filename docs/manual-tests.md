@@ -30,7 +30,7 @@ Open [the app](/demo) on the same deployment as this manual. For a local preview
 | AI review | Frozen model output: review/no additional review. Score is uncalibrated and is not a scam probability. Waiting/Unavailable are separate states. The read-out says Checking payment while awaiting its first score and No warning currently after an unwarned assessment; neither means 100% safe. The score is drawn on a track against its review line, with the actual model ID and cutoff beside it once scoring succeeds. The Authored request control says whether the request is selected and not delivered yet, or delivered. |
 | Policy category and priority | Under the read-out's heading during a monitored transfer. The reason and next action are in the bank app's warning. Normal/Struggling/Coached display categories are policy outputs, not three learned model classes. |
 | Warning origin | Rule, AI or combined, shown as **Raised by …** beside the heading with the time the warning first appeared. Credit AI only if it actually contributed; a rule warning alone is not evidence of AI detection. |
-| Warning measurements | At Home the controls card shows false interventions and the median lead; **Pitch evidence → Live proof** shows them with the last transfer. Actual warning-display, review and confirmation timestamps, session outcomes and interruption counts. Display timestamp is a rendering proxy, not proof you read the warning. |
+| Warning measurements | At Home the controls card shows false interventions and the median lead; the export has the rest. Actual warning-display, review and confirmation timestamps, session outcomes and interruption counts. Display timestamp is a rendering proxy, not proof you read the warning. |
 
 ## Every selection for every case
 

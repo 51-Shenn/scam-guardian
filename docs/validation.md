@@ -1,5 +1,14 @@
 # Verification
 
+## Round icon buttons, and no Pitch evidence button — 11 October 2026
+
+The user sent a capture of the two icon-only buttons drawn as narrow slivers, and asked for them to be round and for Pitch evidence to go. I could not reproduce the slivers: in headless Edge they measured 42 by 42. Their size is now set inline with no shrinking, so neither a crowded row nor a stale stylesheet can narrow them. The Pitch evidence button is removed from both layouts of `/demo`. The page itself stays at `/evidence`; opened there it is a separate app run, so its Live proof chapter no longer shows the demo's counters. Those are on the controls card at Home and in the export.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Reset demo and Product page measured 42 by 42 at 1440x900, 900x800 and 866x700.
+- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed, run `run-1791653272450`. The script now opens `/evidence` at its own address and expects that run's counters to be empty.
+- Not checked: the user's own browser, where the slivers appeared; Android.
+
 ## Icons on the demo's top actions — 11 October 2026
 
 The user asked for icons on the action buttons at the top of `/demo`, and for the text to go where an icon states the action in full. Reset demo and Product page are now icon-only: a counter-clockwise arrow and a house, each with its name as the accessible name and, on web, the tooltip. The simulated call, the simulated app switch and Pitch evidence keep their words beside an icon: the two signals must say they are simulated, and no icon states "pitch evidence" by itself. The narrow layout's Guardian tab has the same buttons.

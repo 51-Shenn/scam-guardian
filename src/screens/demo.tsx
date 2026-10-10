@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BankApp } from '@/components/bank/bank-app';
-import { AppWindowIcon, ArrowCounterClockwiseIcon, ArrowUUpLeftIcon, HouseIcon, PhoneCallIcon, PhoneSlashIcon, PresentationChartIcon } from '@/components/bank/icons';
+import { AppWindowIcon, ArrowCounterClockwiseIcon, ArrowUUpLeftIcon, HouseIcon, PhoneCallIcon, PhoneSlashIcon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
 import { Action } from '@/components/guardian/action';
@@ -101,7 +101,6 @@ export default function DemoScreen() {
             <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
           </View>
           <Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} />
-          <Action small secondary icon={PresentationChartIcon} label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -119,7 +118,6 @@ export default function DemoScreen() {
       <View className="flex-row gap-2.5">
         <View><Action small secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
         <View><Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} /></View>
-        <View><Action small secondary icon={PresentationChartIcon} label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} /></View>
         {/* Reset and home are stated in full by their icons. The two signals keep their words, because they must say they are simulated. */}
         <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
         <View><Action small secondary icon={HouseIcon} iconOnly label="Product page" onPress={leave} /></View>

@@ -221,7 +221,9 @@ try {
     assert.equal(presenterReport.sessions[3].observedLeadMs, null);
     assert.equal(presenterReport.sessions[3].warningOrigin, 'ai');
     checks.push('Presenter flow opens the check guide then cancels; no confirmation lead is fabricated.');
-    await click('Pitch evidence');
+    // The demo no longer links to the evidence page. It is opened at its own address, which starts a separate app run.
+    await send('Page.navigate', { url: 'http://127.0.0.1:4184/evidence' });
+    await until(() => evaluate("document.body.innerText.includes('A decision before money leaves')"));
     const expectations = { Problem: 'A decision before money leaves', 'Model evidence': 'AI has not demonstrated superiority', Decision: 'Detect → categorize',
       Trust: 'An explanation tied to the computation', 'Live proof': 'Timing and burden you can inspect' };
     for (const [tab, expected] of Object.entries(expectations)) {
@@ -238,8 +240,8 @@ try {
     assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true);
     await shot('evidence-narrow.png');
     await click('Evidence Live proof', 'tab', true);
-    assert.equal(await evaluate("document.body.innerText.includes('1/2 legitimate sessions warned')"), true);
-    checks.push('Evidence keeps live run counters across navigation and fits narrow web without document overflow.');
+    assert.equal(await evaluate("document.body.innerText.includes('0/0 legitimate sessions warned')"), true);
+    checks.push('Evidence opened at its own address reports its own empty run and fits narrow web without document overflow.');
     await send('Page.navigate', { url: 'http://127.0.0.1:4184/pitch-manual.html' });
     await until(() => evaluate("document.body.innerText.includes('Four-minute Scam Guardian presentation')"));
     assert.equal(await evaluate("document.body.innerText.includes('Case A fields, all explicit') && document.body.innerText.includes('Case B fields, all explicit')"), true);

@@ -58,7 +58,7 @@ If a Vercel CLI is already installed and authorized, run `vercel` from the app r
 | Download metrics JSON | Browser saves a local file; session summaries contain no recipient/account/amount/message contents. Export before refresh. |
 | Unknown path | Returns a missing-page response; not a false successful payment page. |
 
-For live counters, navigate to evidence through the app's **Pitch evidence** button after ending a transfer. Opening another tab does not share the current run. HTTPS clipboard permissions/browser policies can affect the explicit Paste action; use dummy typing as the documented alternative. No call audio, remote app name or message is captured.
+The demo has no button to the evidence page since 11 October 2026; open `/evidence` at its own address. That is a separate app run, so the live counters are read on the demo's controls card at Home. HTTPS clipboard permissions/browser policies can affect the explicit Paste action; use dummy typing as the documented alternative. No call audio, remote app name or message is captured.
 
 ## Privacy and upload scope
 

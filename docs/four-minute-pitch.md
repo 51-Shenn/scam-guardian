@@ -4,7 +4,7 @@ Audience: Predictive Model Track judges. This is a working simulation prototype,
 
 ## Before entering the stage
 
-- On Vercel, open `/demo` and `/evidence` on the deployment's own HTTPS origin. For a local preview, serve the exported app with `node scripts/preview.mjs dist 4173` and open `http://127.0.0.1:4173/demo` and `http://127.0.0.1:4173/evidence`. For live counters navigate within the demo using **Pitch evidence**, rather than the separate tab; different tabs have different app-run memory.
+- On Vercel, open `/demo` and `/evidence` on the deployment's own HTTPS origin. For a local preview, serve the exported app with `node scripts/preview.mjs dist 4173` and open `http://127.0.0.1:4173/demo` and `http://127.0.0.1:4173/evidence`. Keep `/evidence` open in a second tab: the demo has no button to it. A second tab is a separate app run, so the live counters are on the demo itself, in the controls card at Home.
 - Use a desktop window about 1440 × 1000 or larger. Close unrelated tabs and enable the presentation display before rehearsal. Test the real venue screen; this is not a physical Android validation.
 - Reset once before the presentation; do not reload between cases. Reset restores controls but intentionally retains prior ended measurement sessions in this app run. Start a fresh tab if you need a new empty measurement report, and export older records first.
 - The Guardian console fits the window beside the phones; nothing in it scrolls. At Home its lower card holds the set-up: Scenario preset, Authored request, Evaluation label, **Prepare MT02 · AI warning test** and **Download metrics JSON**. A transfer locks that set-up, so during one the card states it in a line and keeps only **Deliver**. The read-out above shows the policy category and priority, the signals, the AI score against its review line and, after an AI review, the contribution bars.
@@ -83,7 +83,7 @@ If this session used XGB, say its numeric score is available but tree attributio
 
 ### 2:45–3:40 · Predictive rigor and measurable limits
 
-Open **Pitch evidence → Model evidence**. Show both evaluations, then **Live proof**. Pre-scroll the separate fallback tab if necessary, but do not expect that tab to share live counters.
+Switch to the `/evidence` tab and open **Model evidence**. Show both evaluations. For the live counters switch back to the demo: at Home the controls card shows false interventions and the median lead. The evidence tab is a separate app run and does not share them.
 
 Say:
 

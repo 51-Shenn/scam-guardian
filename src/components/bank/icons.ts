@@ -39,7 +39,6 @@ export { MicrophoneSlashIcon } from 'phosphor-react-native/src/icons/MicrophoneS
 export { PaperPlaneTiltIcon } from 'phosphor-react-native/src/icons/PaperPlaneTilt';
 export { PhoneCallIcon } from 'phosphor-react-native/src/icons/PhoneCall';
 export { PhoneSlashIcon } from 'phosphor-react-native/src/icons/PhoneSlash';
-export { PresentationChartIcon } from 'phosphor-react-native/src/icons/PresentationChart';
 export { PulseIcon } from 'phosphor-react-native/src/icons/Pulse';
 export { QrCodeIcon } from 'phosphor-react-native/src/icons/QrCode';
 export { ReceiptIcon } from 'phosphor-react-native/src/icons/Receipt';
