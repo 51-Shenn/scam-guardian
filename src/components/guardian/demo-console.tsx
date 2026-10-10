@@ -35,7 +35,7 @@ const responses: Record<Decision['response'], string> = {
 };
 const small = 'font-body text-[13px] text-soft';
 const seconds = (ms: number) => `${Math.floor(ms / 1000)} s`;
-const line = 'h-5 flex-row items-center justify-between gap-3';
+const line = 'h-[19px] flex-row items-center';
 
 const aiText: Record<AiView['status'], string> = {
   off: 'Off while Guardian is off.',
@@ -71,17 +71,25 @@ export function ReadOut({ dense, className = '' }: PanelProps) {
   const { session, view } = useSession();
   const { signals, decision, monitoring, active } = view;
   const chosen = monitoring ? decision.classification : null;
-  // The third entry is the class a signal points towards while it is present. The app switch has none: no rule and no model uses it.
-  const rows: [string, string, Tone][] = [
-    ['Call', session.call ? 'Active (simulated)' : 'None', session.call ? 'Coached' : undefined],
-    ['App switch', session.away ? `Away ${seconds(view.awayMs)} (simulated)` : view.awayMs ? `Back · ${seconds(view.awayMs)} away` : 'In bank app', undefined],
-    ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen', active && signals.newRecipient ? 'Coached' : undefined],
-    ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered', active && signals.pasted ? 'Coached' : undefined],
-    // Above three times the usual amount, the same line the hold rule draws.
-    ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered', active && signals.amountRatio > 3 ? 'Coached' : undefined],
-    ['Back steps', String(signals.backPresses), signals.backPresses > 0 ? 'Struggling' : undefined],
-    ['Help taps', String(signals.helpTaps), signals.helpTaps > 0 ? 'Struggling' : undefined],
+  // The signals in the three groups the design draws them from: where the person is, what the transfer is, and how they move through it.
+  // A row's third entry is the class the signal points towards while it is present. The app switch has none: no rule and no model uses it.
+  const groups: [string, [string, string, Tone][]][] = [
+    ['Situation', [
+      ['Call', session.call ? 'Active (simulated)' : 'None', session.call ? 'Coached' : undefined],
+      ['App switch', session.away ? `Away ${seconds(view.awayMs)} (simulated)` : view.awayMs ? `Back · ${seconds(view.awayMs)} away` : 'In bank app', undefined],
+    ]],
+    ['Transaction', [
+      ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen', active && signals.newRecipient ? 'Coached' : undefined],
+      ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered', active && signals.pasted ? 'Coached' : undefined],
+      // Above three times the usual amount, the same line the hold rule draws.
+      ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered', active && signals.amountRatio > 3 ? 'Coached' : undefined],
+    ]],
+    ['Behaviour', [
+      ['Back steps', String(signals.backPresses), signals.backPresses > 0 ? 'Struggling' : undefined],
+      ['Help taps', String(signals.helpTaps), signals.helpTaps > 0 ? 'Struggling' : undefined],
+    ]],
   ];
+  const rows = groups.flatMap(([, list]) => list);
   return <Glass radius={26} className={`${dense ? 'p-3.5' : 'p-4'} ${className}`}>
     <View aria-live="polite">
       <View className="flex-row items-baseline justify-between gap-2">
@@ -116,18 +124,17 @@ export function ReadOut({ dense, className = '' }: PanelProps) {
 
       <AiReview dense={dense} />
 
-      {/* Dense: one line per signal, and the two counts share the last line. Otherwise two tiles to a row. */}
+      {/* Dense: a table in three groups, each named down the left, with the values in one column. The two counts share a line. Otherwise two tiles to a row. */}
       {dense ? <View className="mt-3 rounded-xl bg-white/70 px-2.5 py-1">
-        {rows.slice(0, 5).map(([label, value, tone]) => <View key={label} className={line}>
-          <Text className="font-body text-xs text-soft">{label}</Text>
-          <Value tone={tone} size="text-[12.5px]">{value}</Value>
+        {groups.map(([group, list], index) => <View key={group} className={`flex-row ${index ? 'mt-0.5 border-t border-line pt-0.5' : ''}`}>
+          <Text className="w-[86px] font-body text-[10.5px] uppercase leading-[19px] tracking-[0.7px] text-soft">{group}</Text>
+          <View className={group === 'Behaviour' ? 'flex-1 flex-row' : 'flex-1'}>
+            {list.map(([label, value, tone]) => <View key={label} className={`${line} ${group === 'Behaviour' ? 'flex-1 gap-3' : ''}`}>
+              <Text className={`font-body text-xs text-soft ${group === 'Behaviour' ? '' : 'w-[112px]'}`}>{label}</Text>
+              <Value tone={tone} size="text-[12.5px]">{value}</Value>
+            </View>)}
+          </View>
         </View>)}
-        <View className="flex-row gap-5">
-          {rows.slice(5).map(([label, value, tone]) => <View key={label} className={`flex-1 ${line}`}>
-            <Text className="font-body text-xs text-soft">{label}</Text>
-            <Value tone={tone} size="text-[12.5px]">{value}</Value>
-          </View>)}
-        </View>
       </View> : <View className="mt-3.5 flex-row flex-wrap gap-1.5">
         {rows.map(([label, value, tone]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
           <Text className="font-body text-[11.5px] text-soft">{label}</Text>

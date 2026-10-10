@@ -1,5 +1,14 @@
 # Verification
 
+## Signals as a grouped table
+
+Checked on 10 October 2026. On the wide demo stage the signals are a table in three groups named down the left, Situation, Transaction and Behaviour, with the values in one column next to their labels. The two counts share the Behaviour line. The phone-width layout keeps its tiles.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, panel height against 796 available: 714 idle, 754 Coached on the recipient step, 794 in a Coached, high hold with a model score. That last one has 2 to spare.
+- No overflow at 1920x1000, 1366x700, 1280x720, 1024x768 or 412x900. No console errors. The hold was checked by eye on a capture.
+- Not verified: the longest value, "Away 12 s (simulated)", in the table; Android.
+
 ## Colour in the read-out
 
 Checked on 10 October 2026. The read-out and presets were black and grey on white. They now use pine, indigo and bronze for the three classes: the class bars keep a pale wash when not chosen, a signal that points towards a class is marked with a dot and that class's text shade, the AI review has a rule in its state's tone, and each preset has a dot. A first pass with brighter green, blue and amber fills was replaced the same day.
