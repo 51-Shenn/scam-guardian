@@ -35,7 +35,7 @@ const responses: Record<Decision['response'], string> = {
 };
 const small = 'font-body text-[13px] text-soft';
 const seconds = (ms: number) => `${Math.floor(ms / 1000)} s`;
-const line = 'h-[19px] flex-row items-center';
+const line = 'h-5 flex-row items-center';
 
 const aiText: Record<AiView['status'], string> = {
   off: 'Off while Guardian is off.',
@@ -124,13 +124,13 @@ export function ReadOut({ dense, className = '' }: PanelProps) {
 
       <AiReview dense={dense} />
 
-      {/* Dense: a table in three groups, each named down the left, with the values in one column. The two counts share a line. Otherwise two tiles to a row. */}
-      {dense ? <View className="mt-3 rounded-xl bg-white/70 px-2.5 py-1">
-        {groups.map(([group, list], index) => <View key={group} className={`flex-row ${index ? 'mt-0.5 border-t border-line pt-0.5' : ''}`}>
-          <Text className="w-[86px] font-body text-[10.5px] uppercase leading-[19px] tracking-[0.7px] text-soft">{group}</Text>
-          <View className={group === 'Behaviour' ? 'flex-1 flex-row' : 'flex-1'}>
-            {list.map(([label, value, tone]) => <View key={label} className={`${line} ${group === 'Behaviour' ? 'flex-1 gap-3' : ''}`}>
-              <Text className={`font-body text-xs text-soft ${group === 'Behaviour' ? '' : 'w-[112px]'}`}>{label}</Text>
+      {/* Dense: a table on one grid. The group is named down the left, then every label and every value starts on the same line as the ones above it. Otherwise two tiles to a row. */}
+      {dense ? <View className="mt-3 rounded-xl bg-white/70 px-3 py-1">
+        {groups.map(([group, list], index) => <View key={group} className={`flex-row ${index ? 'mt-[3px] border-t border-line pt-[3px]' : ''}`}>
+          <Text className="w-[100px] font-body text-[10.5px] uppercase leading-5 tracking-[0.7px] text-soft">{group}</Text>
+          <View className="flex-1">
+            {list.map(([label, value, tone]) => <View key={label} className={line}>
+              <Text className="w-[116px] font-body text-xs text-soft">{label}</Text>
               <Value tone={tone} size="text-[12.5px]">{value}</Value>
             </View>)}
           </View>
