@@ -1,0 +1,442 @@
+{
+  "audit": {
+    "fresh_profiles": 120,
+    "missing_and_quiet_cases_included": true,
+    "phase1_corrected_export_audit_sha256": "db43dd174b2995038435dfd2e2f29405852ff91860fdc74258c8ad5a7480a753",
+    "quiet_pair_max_score_delta": 0,
+    "same_author_same_semantic_families": true,
+    "selected_before_test_sha256": "c7bbb91e250ed3e79eff427146754d870a92dd9a254d0adfe37b6e599622d9d6",
+    "test_profiles": 60
+  },
+  "controls": [
+    {
+      "model": "lr_behavior_binary",
+      "test": {
+        "benign_sessions": 720,
+        "binary_session_confusion_tn_fp_fn_tp": [
+          [
+            647,
+            73
+          ],
+          [
+            259,
+            461
+          ]
+        ],
+        "coached_recall": 0.6402777777777777,
+        "coached_sessions": 720,
+        "correct_detections": 461,
+        "false_intervention_rate": 0.10138888888888889,
+        "false_warnings": 73,
+        "families": {
+          "bank_deception": {
+            "benign": 60,
+            "benign_warned": 4,
+            "coached": 60,
+            "correct": 50,
+            "premature": 0
+          },
+          "detail_mismatch": {
+            "benign": 60,
+            "benign_warned": 5,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "familiar_coached": {
+            "benign": 60,
+            "benign_warned": 12,
+            "coached": 60,
+            "correct": 30,
+            "premature": 0
+          },
+          "new_ordinary": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 52,
+            "premature": 0
+          },
+          "quiet_identical": {
+            "benign": 60,
+            "benign_warned": 5,
+            "coached": 60,
+            "correct": 5,
+            "premature": 0
+          },
+          "remote_access": {
+            "benign": 60,
+            "benign_warned": 12,
+            "coached": 60,
+            "correct": 30,
+            "premature": 0
+          },
+          "rent_change": {
+            "benign": 60,
+            "benign_warned": 12,
+            "coached": 60,
+            "correct": 27,
+            "premature": 0
+          },
+          "request_missing": {
+            "benign": 60,
+            "benign_warned": 6,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "safe_account": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 52,
+            "premature": 0
+          },
+          "secrecy": {
+            "benign": 60,
+            "benign_warned": 6,
+            "coached": 60,
+            "correct": 33,
+            "premature": 0
+          },
+          "urgent_invoice": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 28,
+            "premature": 0
+          },
+          "warning_bypass": {
+            "benign": 60,
+            "benign_warned": 5,
+            "coached": 60,
+            "correct": 52,
+            "premature": 0
+          }
+        },
+        "high_correct": 308,
+        "high_recall": 0.8555555555555555,
+        "high_sessions": 360,
+        "lead_ms": {
+          "count": 461,
+          "iqr": [
+            4074.0,
+            8726.0
+          ],
+          "median": 5426.0,
+          "range": [
+            36,
+            15837
+          ]
+        },
+        "missed_or_premature": 259,
+        "premature": 0,
+        "session_f1": 0.7352472089314195,
+        "timely_warning_f1": 0.7352472089314195
+      },
+      "threshold": 0.795992223412068
+    },
+    {
+      "model": "xgb_behavior_binary",
+      "test": {
+        "benign_sessions": 720,
+        "binary_session_confusion_tn_fp_fn_tp": [
+          [
+            683,
+            37
+          ],
+          [
+            173,
+            547
+          ]
+        ],
+        "coached_recall": 0.7597222222222222,
+        "coached_sessions": 720,
+        "correct_detections": 547,
+        "false_intervention_rate": 0.05138888888888889,
+        "false_warnings": 37,
+        "families": {
+          "bank_deception": {
+            "benign": 60,
+            "benign_warned": 1,
+            "coached": 60,
+            "correct": 52,
+            "premature": 0
+          },
+          "detail_mismatch": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 48,
+            "premature": 0
+          },
+          "familiar_coached": {
+            "benign": 60,
+            "benign_warned": 7,
+            "coached": 60,
+            "correct": 49,
+            "premature": 0
+          },
+          "new_ordinary": {
+            "benign": 60,
+            "benign_warned": 1,
+            "coached": 60,
+            "correct": 49,
+            "premature": 0
+          },
+          "quiet_identical": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 2,
+            "premature": 0
+          },
+          "remote_access": {
+            "benign": 60,
+            "benign_warned": 7,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "rent_change": {
+            "benign": 60,
+            "benign_warned": 7,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "request_missing": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 47,
+            "premature": 0
+          },
+          "safe_account": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "secrecy": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 51,
+            "premature": 0
+          },
+          "urgent_invoice": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 47,
+            "premature": 0
+          },
+          "warning_bypass": {
+            "benign": 60,
+            "benign_warned": 2,
+            "coached": 60,
+            "correct": 49,
+            "premature": 0
+          }
+        },
+        "high_correct": 296,
+        "high_recall": 0.8222222222222222,
+        "high_sessions": 360,
+        "lead_ms": {
+          "count": 547,
+          "iqr": [
+            3856.0,
+            14257.0
+          ],
+          "median": 7181.0,
+          "range": [
+            36,
+            42134
+          ]
+        },
+        "missed_or_premature": 173,
+        "premature": 0,
+        "session_f1": 0.838957055214724,
+        "timely_warning_f1": 0.838957055214724
+      },
+      "threshold": 0.724197506904602
+    }
+  ],
+  "notice": "SIMULATED profiles, requests, verification receipts, behavior and intent. Frozen EXP012 weights, fresh availability-policy validation/test. Request wording/family and generator reused; no independent-author or real-world effectiveness claim.",
+  "resources_scope": "frozen weight evaluation; no new fit; local WSL CPU preprocessing/classifier, not phone or UI",
+  "runtime": {
+    "machine": "x86_64",
+    "numpy": "2.1.3",
+    "platform": "linux",
+    "python": "3.12.14",
+    "scikit-learn": "1.7.2",
+    "threadpoolctl": "3.6.0",
+    "threads": 1,
+    "xgboost": "3.3.0"
+  },
+  "score_meaning": "uncalibrated learned review score; decision comparison to validation-set threshold, not scam probability",
+  "selected": {
+    "benign_sessions": 720,
+    "binary_session_confusion_tn_fp_fn_tp": [
+      [
+        718,
+        2
+      ],
+      [
+        73,
+        647
+      ]
+    ],
+    "cluster_bootstrap_95": {
+      "fir": [
+        0.0,
+        0.006944444444444444
+      ],
+      "recall": [
+        0.889548611111111,
+        0.9069444444444444
+      ],
+      "scope": "synthetic-profile cluster resampling only, not human-population uncertainty",
+      "session_f1": [
+        0.9398826979472141,
+        0.9498181818181818
+      ]
+    },
+    "coached_recall": 0.8986111111111111,
+    "coached_sessions": 720,
+    "correct_detections": 647,
+    "false_intervention_rate": 0.002777777777777778,
+    "false_warnings": 2,
+    "families": {
+      "bank_deception": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "detail_mismatch": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "familiar_coached": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "new_ordinary": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "quiet_identical": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 0,
+        "premature": 0
+      },
+      "remote_access": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "rent_change": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "request_missing": {
+        "benign": 60,
+        "benign_warned": 2,
+        "coached": 60,
+        "correct": 47,
+        "premature": 0
+      },
+      "safe_account": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "secrecy": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "urgent_invoice": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      },
+      "warning_bypass": {
+        "benign": 60,
+        "benign_warned": 0,
+        "coached": 60,
+        "correct": 60,
+        "premature": 0
+      }
+    },
+    "high_correct": 347,
+    "high_recall": 0.9638888888888889,
+    "high_sessions": 360,
+    "lead_ms": {
+      "count": 647,
+      "iqr": [
+        17071.5,
+        35963.0
+      ],
+      "median": 24507.0,
+      "range": [
+        1423,
+        64216
+      ]
+    },
+    "missed_or_premature": 73,
+    "missing_request_benign_warning_rate": 0.03333333333333333,
+    "premature": 0,
+    "session_f1": 0.9452154857560263,
+    "targets_met": true,
+    "timely_warning_f1": 0.9452154857560263
+  },
+  "selection": {
+    "id": "xgb_behavior_binary__lr_combined_binary",
+    "model_sha256": {
+      "lr_combined_binary": "959173dff2637856b3b5db314b60d6d01e4fd08037c6a5255eba62081335dde7",
+      "xgb_behavior_binary": "4f1afeec7f3b6eaf8762a5f46c37ae0eb107b0a8471b1e9508cbe8187763a564"
+    },
+    "no_request": "xgb_behavior_binary",
+    "request": "lr_combined_binary",
+    "selected_using": "validation only before test data/labels load; within 1pp best timely recall, lowest FIR then F1 and simplicity",
+    "targets": {
+      "benignWarningRate": 0.05,
+      "coachedRecall": 0.8,
+      "highRecall": 0.8,
+      "sessionF1": 0.8
+    },
+    "thresholds": {
+      "lr_combined_binary": 0.952430717666823,
+      "xgb_behavior_binary": 0.724197506904602
+    },
+    "validation_targets_met": true
+  },
+  "test_sessions": 1440
+}

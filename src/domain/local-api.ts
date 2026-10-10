@@ -4,6 +4,7 @@ import type {
   SnapshotEnvelope, SnapshotRequest, TimelineEntry,
 } from './contract.ts';
 import { simulationAt, snapshotAt, SNAPSHOT_PERIOD_MS, type Availability } from './features.ts';
+import { explainLinear, type LinearExplanation } from './explanation.ts';
 
 export const SCHEMA_VERSION = 'tg-expo-demo-events-v1';
 export const CONTRACT_VERSION = 'tg-expo-demo-handoff-v1';
@@ -27,6 +28,8 @@ export interface LocalDemoApiOptions {
 export interface LocalGuardianApi extends LocalDemoApi {
   sessionTime(session_id: string): number | null;
   review(session_id: string): ReviewState | null;
+  /** Local operator explanation only; does not alter the production prediction contract. */
+  explanation(session_id: string, cutoff: number): LinearExplanation | null;
 }
 
 type Code = ApiError['code'];
@@ -40,6 +43,7 @@ interface SessionRecord {
   readonly byCutoff: Map<number, PredictionReply>;
   readonly decided: Set<string>;
   readonly displayed: Set<string>;
+  readonly explanations: Map<number, LinearExplanation | null>;
   review: ReviewState | null;
   closed: boolean;
   queue: Promise<unknown>;
@@ -185,6 +189,7 @@ export function createLocalDemoApi(options: LocalDemoApiOptions): LocalGuardianA
     };
     s.predictions.set(request.prediction_id, { cutoff: request.feature_cutoff_ms, reply });
     s.byCutoff.set(request.feature_cutoff_ms, reply);
+    s.explanations.set(request.feature_cutoff_ms, explainLinear(result.modelId, loaded.bundle.models[result.modelId], snapshot.value.input, result.threshold));
     return reply;
   }
 
@@ -218,13 +223,16 @@ export function createLocalDemoApi(options: LocalDemoApiOptions): LocalGuardianA
     review(session_id) {
       return sessions.get(session_id)?.review ?? null;
     },
+    explanation(session_id, cutoff) {
+      return sessions.get(session_id)?.explanations.get(cutoff) ?? null;
+    },
 
     startSession(metadata) {
       const problem = metadataProblem(metadata);
       if (problem) return fail(problem.code, problem.path);
       if (sessions.has(metadata.session_id)) return fail('SESSION_MISMATCH', 'session_id');
       sessions.set(metadata.session_id, {
-        metadata, origin: options.clock(), events: [], timeline: [], predictions: new Map(), byCutoff: new Map(),
+        metadata, origin: options.clock(), events: [], timeline: [], predictions: new Map(), byCutoff: new Map(), explanations: new Map(),
         decided: new Set(), displayed: new Set(), review: null, closed: false, queue: Promise.resolve(),
       });
       for (const [id, s] of sessions) if (sessions.size > MAX_SESSIONS && s.closed) sessions.delete(id);

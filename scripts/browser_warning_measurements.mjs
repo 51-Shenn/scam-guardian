@@ -6,7 +6,8 @@ import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const base = path.join(root, 'data/processed/warning-measurements-v1/browser');
+const pitch = process.argv.includes('--pitch');
+const base = path.join(root, pitch ? 'data/processed/pitch-evidence-v1/browser' : 'data/processed/warning-measurements-v1/browser');
 const out = path.join(base, `run-${Date.now()}`);
 const profile = path.join(out, 'edge-profile');
 fs.mkdirSync(profile, { recursive: true });
@@ -21,7 +22,7 @@ async function until(fn, timeout = 15000) {
   while (Date.now() - start < timeout) { const result = await fn(); if (result) return result; await delay(100); }
   throw new Error('Browser acceptance condition timed out.');
 }
-let socket, sessionId, next = 0;
+let socket, sessionId, next = 0, presenterReport = null;
 const pending = new Map(), errors = [], checks = [];
 function send(method, params = {}, session = sessionId) {
   const id = ++next;
@@ -37,11 +38,11 @@ async function evaluate(expression) {
   return reply.result.value;
 }
 async function click(text, role = 'button', aria = false) {
-  const selector = `[role="${role}"]`;
+  const selector = role === 'button' ? 'button, [role="button"]' : `[role="${role}"]`;
   const match = aria ? `e.getAttribute('aria-label')===${JSON.stringify(text)}`
     : role === 'radio' ? `!e.hasAttribute('aria-label') && e.textContent.trim().startsWith(${JSON.stringify(text)})`
       : `e.textContent.trim()===${JSON.stringify(text)}`;
-  const expression = `(()=>{const e=[...document.querySelectorAll(${JSON.stringify(selector)})].find(e=>${match}); if(!e) throw Error('Missing control '+${JSON.stringify(text)}); if(e.getAttribute('aria-disabled')==='true') throw Error('Disabled control'); e.scrollIntoView({block:'nearest'}); const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`;
+  const expression = `(()=>{const e=[...document.querySelectorAll(${JSON.stringify(selector)})].find(e=>${match}); if(!e) throw Error('Missing control '+${JSON.stringify(text)}); if(e.disabled || e.getAttribute('aria-disabled')==='true') throw Error('Disabled control'); e.scrollIntoView({block:'nearest'}); const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`;
   const point = await evaluate(expression);
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, ...point });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, ...point });
@@ -100,8 +101,19 @@ try {
   await click('Recipient New recipient', 'radio', true);
   await click('Deliver authored request');
   await until(() => evaluate("document.body.innerText.includes('The transaction rules did not request a pause') && !document.body.innerText.includes('first shown warning Not measured')"));
+  if (pitch) {
+    await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired') && document.body.innerText.includes('Reconstructed score')"));
+    assert.equal(await evaluate("document.body.innerText.includes('Warning bypass instructions') && document.body.innerText.includes('Priority: Check before confirmation')"), true);
+    checks.push('Actual first-positive LR contributions and policy category/priority reach the UI.');
+  }
   await shot('ai-early-warning.png');
   await typeAccount(); await click('Next'); await click('5'); await click('0'); await click('Review');
+  if (pitch) {
+    await click('Open independent-check guide');
+    assert.equal(await evaluate("document.body.innerText.includes('Use a contact number you already know') && document.body.innerText.includes('does not call anyone or certify a recipient')"), true);
+    await shot('independent-check-guide.png');
+    checks.push('Independent-check guidance opens without claiming real verification or contact.');
+  }
   await click('I want to review it myself');
   await delay(15500);
   await click('Continue with transfer');
@@ -134,7 +146,7 @@ try {
   assert.ok(coached.firstWarningMs < coached.reviewEnteredMs);
   assert.ok(coached.observedLeadMs >= 15000, 'Live lead includes the enforced pause.');
   assert.ok(!fs.readFileSync(exported, 'utf8').includes('123412341234'));
-  const recompute = spawnSync(process.execPath, [path.join(root, 'scripts/evaluate_warning_sessions.mjs'), exported], { cwd: root, encoding: 'utf8' });
+  const recompute = spawnSync(process.execPath, [path.join(root, 'scripts/evaluate_warning_sessions.mjs'), exported, ...(pitch ? [out] : [])], { cwd: root, encoding: 'utf8' });
   assert.equal(recompute.status, 0, recompute.stderr);
   checks.push('Real browser download is content-free and independently recomputes from session timestamps.');
   await shot('metrics-desktop.png');
@@ -147,7 +159,60 @@ try {
   await shot('metrics-narrow.png');
   assert.equal(errors.length, 0, JSON.stringify(errors));
   checks.push('Narrow web Guardian tab exposes the same metrics without JavaScript exceptions.');
-  fs.writeFileSync(path.join(out, 'acceptance.json'), JSON.stringify({ simulationOnly: true, platform: 'headless Edge web; not Android device', checks, sessionReport: report, errors }, null, 2) + '\n');
+  if (pitch) {
+    // The presenter flow ends with cancellation, not an invented confirmation lead.
+    await send('Emulation.clearDeviceMetricsOverride');
+    await until(() => evaluate("[...document.querySelectorAll('[role=\"button\"]')].some(e=>e.textContent.trim()==='Done')"));
+    await click('Done');
+    await click('Normal', 'radio'); await click('Authored request coached', 'radio', true);
+    await click('Evaluation label Coached-high', 'radio', true); await click('Transfer');
+    await click('Recipient New recipient', 'radio', true); await click('Deliver authored request');
+    await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired')"));
+    await typeAccount(); await click('Next'); await click('5'); await click('0'); await click('Review');
+    await click('Open independent-check guide'); await click('Cancel this transfer');
+    await until(() => evaluate("document.body.innerText.includes('Last: Coached-high · cancelled')"));
+    const presenterDir = path.join(out, 'presenter');
+    fs.mkdirSync(presenterDir, { recursive: true });
+    await send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: presenterDir }, null);
+    await click('Download metrics JSON');
+    const presenterFile = path.join(presenterDir, 'scam-guardian-warning-metrics.json');
+    await until(() => fs.existsSync(presenterFile));
+    presenterReport = JSON.parse(fs.readFileSync(presenterFile, 'utf8'));
+    const presenterRecompute = spawnSync(process.execPath, [path.join(root, 'scripts/evaluate_warning_sessions.mjs'), presenterFile, presenterDir], { cwd: root, encoding: 'utf8' });
+    assert.equal(presenterRecompute.status, 0, presenterRecompute.stderr);
+    assert.equal(presenterReport.sessions.length, 4);
+    assert.equal(presenterReport.sessions[3].outcome, 'cancelled');
+    assert.equal(presenterReport.sessions[3].confirmationMs, null);
+    assert.equal(presenterReport.sessions[3].observedLeadMs, null);
+    assert.equal(presenterReport.sessions[3].warningOrigin, 'ai');
+    checks.push('Presenter flow opens the check guide then cancels; no confirmation lead is fabricated.');
+    await click('Pitch evidence');
+    const expectations = { Problem: 'A decision before money leaves', 'Model evidence': 'AI has not demonstrated superiority', Decision: 'Detect → categorize',
+      Trust: 'An explanation tied to the computation', 'Live proof': 'Timing and burden you can inspect' };
+    for (const [tab, expected] of Object.entries(expectations)) {
+      await click(`Evidence ${tab}`, 'tab', true);
+      assert.equal(await evaluate(`document.body.innerText.includes(${JSON.stringify(expected)})`), true);
+      await shot(`evidence-${tab.toLowerCase().replaceAll(' ', '-')}.png`);
+      checks.push(`Evidence chapter ${tab} renders its required claim and boundary.`);
+    }
+    await click('Evidence Model evidence', 'tab', true);
+    assert.equal(await evaluate("document.body.innerText.includes('6/16 (37.5%)') && document.body.innerText.includes('8/16 (50.0%)') && document.body.innerText.includes('0/60 detected')"), true);
+    checks.push('Evidence retains challenge failures, stronger simple comparator and original quiet misses.');
+    await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: false });
+    await delay(500);
+    assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true);
+    await shot('evidence-narrow.png');
+    await click('Evidence Live proof', 'tab', true);
+    assert.equal(await evaluate("document.body.innerText.includes('1/2 legitimate sessions warned')"), true);
+    checks.push('Evidence keeps live run counters across navigation and fits narrow web without document overflow.');
+    await send('Page.navigate', { url: 'http://127.0.0.1:4184/pitch-manual.html' });
+    await until(() => evaluate("document.body.innerText.includes('Four-minute Scam Guardian presentation')"));
+    assert.equal(await evaluate("document.body.innerText.includes('Case A fields, all explicit') && document.body.innerText.includes('Case B fields, all explicit')"), true);
+    await shot('manual-narrow.png');
+    checks.push('Local presenter manual loads complete case fields and spoken timing on narrow web.');
+    assert.equal(errors.length, 0, JSON.stringify(errors));
+  }
+  fs.writeFileSync(path.join(out, 'acceptance.json'), JSON.stringify({ simulationOnly: true, platform: 'headless Edge web; not Android device', checks, sessionReport: report, presenterReport, errors }, null, 2) + '\n');
   fs.copyFileSync(path.join(out, 'acceptance.json'), path.join(base, 'acceptance.json'));
   fs.copyFileSync(exported, path.join(base, 'scam-guardian-warning-metrics.json'));
   console.log(`${checks.length} browser acceptance checks passed. Evidence: ${out}`);

@@ -1,0 +1,81 @@
+{
+  "version": "warning-measurement-v1",
+  "simulationOnly": true,
+  "personalizationUsed": false,
+  "policy": "contextual-availability-policy-v2",
+  "scope": "displayed rule + AI warnings",
+  "retention": {
+    "retainedSessions": 3,
+    "evictedSessions": 0,
+    "storage": "app-run memory; export before reload"
+  },
+  "definitions": {
+    "falseInterventionRate": "Annotated Normal/Struggling confirmed or cancelled sessions with >=1 displayed warning / all such sessions.",
+    "observedLeadMs": "Actual confirmation time minus first displayed warning time; includes cool-down and user response delays.",
+    "unbiasedShadowLeadMs": "Not measured by this live run. Requires a separate uninterrupted matched reference.",
+    "warningToReviewMs": "First review-entry time minus first warning time, only when the warning precedes review."
+  },
+  "summary": {
+    "legitimateSessions": 2,
+    "falseInterventionSessions": 1,
+    "falseInterventionRate": 0.5,
+    "coachedSessions": 1,
+    "coachedWithWarning": 1,
+    "confirmedCoachedSessions": 1,
+    "confirmedCoachedWithoutWarning": 0,
+    "earlyWarnedConfirmedCoachedSessions": 1,
+    "observedLeadSampleCount": 1,
+    "medianObservedLeadMs": 19723,
+    "medianWarningToReviewMs": 2212,
+    "abandonedSessions": 0,
+    "unlabelledSessions": 0,
+    "sessionsWithoutSuccessfulPrediction": 0
+  },
+  "sessions": [
+    {
+      "sessionId": "s-mv2f4qhf-lhz6tfx7",
+      "label": "Normal",
+      "labelSource": "operator_annotated_simulation",
+      "outcome": "cancelled",
+      "firstPositiveMs": null,
+      "firstWarningMs": 53,
+      "warningOrigin": "rule",
+      "reviewEnteredMs": null,
+      "confirmationMs": null,
+      "endedMs": 1056,
+      "successfulPredictions": 1,
+      "unavailablePredictions": 0,
+      "observedLeadMs": null
+    },
+    {
+      "sessionId": "s-mv2f4t2z-few58n24",
+      "label": "Coached-high",
+      "labelSource": "operator_annotated_simulation",
+      "outcome": "confirmed",
+      "firstPositiveMs": 5007.100000023842,
+      "firstWarningMs": 5018,
+      "warningOrigin": "ai",
+      "reviewEnteredMs": 7230,
+      "confirmationMs": 24741,
+      "endedMs": 24741,
+      "successfulPredictions": 5,
+      "unavailablePredictions": 0,
+      "observedLeadMs": 19723
+    },
+    {
+      "sessionId": "s-mv2f5edh-p1xtbee9",
+      "label": "Normal",
+      "labelSource": "operator_annotated_simulation",
+      "outcome": "confirmed",
+      "firstPositiveMs": null,
+      "firstWarningMs": null,
+      "warningOrigin": null,
+      "reviewEnteredMs": 8352,
+      "confirmationMs": 8923,
+      "endedMs": 8923,
+      "successfulPredictions": 2,
+      "unavailablePredictions": 0,
+      "observedLeadMs": null
+    }
+  ]
+}

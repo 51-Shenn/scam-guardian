@@ -35,7 +35,9 @@ Use the existing demo route and find **Warning measurements · simulated** in Gu
 | 5: reset/exclusion | Any preset; label Unlabelled. | Transfer → Agree if asked → choose another preset before ending. Abandoned count increases; FIR denominator does not. |
 | 6: hidden app | Preset Coached; label Coached-medium; call active. | Before Transfer, use simulated app switch to cover bank app; start transfer via the demo controls if available, otherwise switch away during recipient. Return before continuing. Check first warning is recorded only when the warning is rendered in the visible bank app. Simulated away time is not native app background time. |
 
-## Three-minute Predictive Model Track presentation
+## Earlier three-minute Predictive Model Track presentation
+
+The current four-minute presentation is [four-minute-pitch.md](four-minute-pitch.md), with a local web manual at `/pitch-manual.html` and a shared evidence page at `/evidence`. The shorter sequence below remains a historical alternative. Current evidence includes the harder authored challenge and its failures; do not rely only on the original aggregate simulation result.
 
 This follows the supplied five-criterion rubric. It demonstrates AI contribution separately from simulated rules; it is not a claim of competition points or real-world protection.
 

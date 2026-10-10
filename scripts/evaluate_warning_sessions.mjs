@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve, relative, isAbsolute } from 'node:path';
 import { measurementReport, MEASUREMENT_VERSION } from '../src/domain/measurement.ts';
 
 const inputPath = process.argv[2];
-if (!inputPath) throw new Error('Usage: node scripts/evaluate_warning_sessions.mjs <exported-json>');
+if (!inputPath) throw new Error('Usage: node scripts/evaluate_warning_sessions.mjs <exported-json> [output-directory-within-data/processed]');
 const bytes = readFileSync(inputPath);
 const input = JSON.parse(bytes);
 assert.equal(input.version, MEASUREMENT_VERSION);
@@ -38,7 +38,10 @@ for (const s of input.sessions) {
 const recomputed = measurementReport(input.sessions, input.retention.evictedSessions);
 assert.deepEqual(input.summary, recomputed.summary, 'The saved summary must match the underlying session measurements.');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const outputDir = resolve(root, 'data/processed/warning-measurements-v1');
+const processed = resolve(root, 'data/processed');
+const outputDir = process.argv[3] ? resolve(process.argv[3]) : resolve(processed, 'warning-measurements-v1');
+const within = relative(processed, outputDir);
+assert.ok(!within.startsWith('..') && !isAbsolute(within), 'Output must stay inside project data/processed.');
 mkdirSync(outputDir, { recursive: true });
 const outputPath = resolve(outputDir, 'recomputed.json');
 writeFileSync(outputPath, JSON.stringify({ inputSha256: createHash('sha256').update(bytes).digest('hex'), ...recomputed }, null, 2) + '\n');

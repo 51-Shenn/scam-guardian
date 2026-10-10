@@ -96,6 +96,7 @@ export default function DemoScreen() {
             <View><Action small secondary label="Reset demo" onPress={reset} /></View>
           </View>
           <Action small secondary={!away} label={awayLabel} onPress={toggleAway} />
+          <Action small secondary label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -114,6 +115,7 @@ export default function DemoScreen() {
         <View><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
         <View><Action small secondary={!away} label={awayLabel} onPress={toggleAway} /></View>
         <View><Action small secondary label="Reset demo" onPress={reset} /></View>
+        <View><Action small secondary label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} /></View>
         <View><Action small secondary label="Product page" onPress={leave} /></View>
       </View>
     </View>

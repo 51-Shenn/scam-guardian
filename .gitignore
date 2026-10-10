@@ -44,6 +44,11 @@ yarn-error.*
 /data/processed/warning-measurements-v1/browser/run-*/
 /data/processed/warning-measurements-v1/browser/*.png
 
+# Pitch browser reruns contain isolated Edge profiles. Track reviewed evidence files explicitly.
+/data/processed/pitch-evidence-v1/browser/run-*/
+/data/processed/pitch-evidence-v1/browser/edge-profile-*/
+/data/processed/pitch-evidence-v1/browser/**/failure*
+
 example
 
 # generated native folders

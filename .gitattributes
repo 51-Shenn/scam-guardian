@@ -6,3 +6,12 @@ src/components/beui/switch.web.tsx whitespace=-blank-at-eof
 src/domain/contextual_inference.mjs text eol=lf
 reference/ai/** text eol=lf
 src/domain/model/** text eol=lf
+# Preserve the exact source/evidence bytes recorded by the pitch reproduction manifest.
+scripts/evaluate_pitch_evidence.mjs text eol=lf
+docs/four-minute-pitch-plan.md text eol=lf
+src/domain/explanation.ts text eol=lf
+src/domain/request.ts text eol=crlf
+src/domain/features.ts text eol=crlf
+src/domain/collector.ts text eol=crlf
+src/domain/risk.ts text eol=crlf
+data/processed/pitch-evidence-v1/** -text

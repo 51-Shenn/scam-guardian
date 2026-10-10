@@ -1,0 +1,1636 @@
+{
+  "version": "pitch-evidence-v1",
+  "simulationOnly": true,
+  "personalizationUsed": false,
+  "modelsChanged": false,
+  "scope": "Authored challenge cases; 16 case definitions x 2 correlated interaction profiles. Not participant-held-out or field effectiveness.",
+  "timingScope": "Authored uninterrupted confirmation minus first five-second model decision. Not displayed-warning or physical-device latency.",
+  "baselineScope": "Hand-set request cue comparator is diagnostic and unvalidated; not a fitted model.",
+  "groundTruthScope": "Scenario labels declared by the author, kept outside the model. Legitimate reviews count as burden even when prudent.",
+  "reports": [
+    {
+      "availability": "primary",
+      "sessions": 32,
+      "comparison": {
+        "transaction_rules": {
+          "tp": 2,
+          "fn": 14,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.125,
+          "precision": 0.5,
+          "f1": 0.2,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 35000,
+          "shadowLeadSamples": 2
+        },
+        "frozen_ai": {
+          "tp": 6,
+          "fn": 10,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.375,
+          "precision": 0.75,
+          "f1": 0.5,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 25000,
+          "shadowLeadSamples": 6
+        },
+        "hybrid": {
+          "tp": 8,
+          "fn": 8,
+          "fp": 4,
+          "tn": 12,
+          "recall": 0.5,
+          "precision": 0.6666666666666666,
+          "f1": 0.5714285714285714,
+          "falseInterventionRate": 0.25,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 27500,
+          "shadowLeadSamples": 8
+        },
+        "request_cue_baseline": {
+          "tp": 8,
+          "fn": 8,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.5,
+          "precision": 0.8,
+          "f1": 0.6153846153846154,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 30000,
+          "shadowLeadSamples": 8
+        }
+      },
+      "families": [
+        {
+          "family": "warning_bypass",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "authority",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 1,
+              "fn": 1,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0.5,
+              "precision": 1,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 20000,
+              "shadowLeadSamples": 1
+            },
+            "hybrid": {
+              "tp": 1,
+              "fn": 1,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0.5,
+              "precision": 1,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 20000,
+              "shadowLeadSamples": 1
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "unfamiliar_wording",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quiet_identical",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "account_change",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 1,
+              "fn": 1,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0.5,
+              "precision": 1,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 20000,
+              "shadowLeadSamples": 1
+            },
+            "hybrid": {
+              "tp": 1,
+              "fn": 1,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0.5,
+              "precision": 1,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 20000,
+              "shadowLeadSamples": 1
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "call_lookalike",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "request_absent",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quoted_instruction",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "availability": "editing_unavailable",
+      "sessions": 32,
+      "comparison": {
+        "transaction_rules": {
+          "tp": 2,
+          "fn": 14,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.125,
+          "precision": 0.5,
+          "f1": 0.2,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 35000,
+          "shadowLeadSamples": 2
+        },
+        "frozen_ai": {
+          "tp": 12,
+          "fn": 4,
+          "fp": 6,
+          "tn": 10,
+          "recall": 0.75,
+          "precision": 0.6666666666666666,
+          "f1": 0.7058823529411765,
+          "falseInterventionRate": 0.375,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 25000,
+          "shadowLeadSamples": 12
+        },
+        "hybrid": {
+          "tp": 12,
+          "fn": 4,
+          "fp": 6,
+          "tn": 10,
+          "recall": 0.75,
+          "precision": 0.6666666666666666,
+          "f1": 0.7058823529411765,
+          "falseInterventionRate": 0.375,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 27500,
+          "shadowLeadSamples": 12
+        },
+        "request_cue_baseline": {
+          "tp": 8,
+          "fn": 8,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.5,
+          "precision": 0.8,
+          "f1": 0.6153846153846154,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 30000,
+          "shadowLeadSamples": 8
+        }
+      },
+      "families": [
+        {
+          "family": "warning_bypass",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "authority",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "unfamiliar_wording",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quiet_identical",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "account_change",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "call_lookalike",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "request_absent",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quoted_instruction",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "availability": "editing_and_paste_unavailable",
+      "sessions": 32,
+      "comparison": {
+        "transaction_rules": {
+          "tp": 2,
+          "fn": 14,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.125,
+          "precision": 0.5,
+          "f1": 0.2,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 35000,
+          "shadowLeadSamples": 2
+        },
+        "frozen_ai": {
+          "tp": 12,
+          "fn": 4,
+          "fp": 6,
+          "tn": 10,
+          "recall": 0.75,
+          "precision": 0.6666666666666666,
+          "f1": 0.7058823529411765,
+          "falseInterventionRate": 0.375,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 25000,
+          "shadowLeadSamples": 12
+        },
+        "hybrid": {
+          "tp": 12,
+          "fn": 4,
+          "fp": 6,
+          "tn": 10,
+          "recall": 0.75,
+          "precision": 0.6666666666666666,
+          "f1": 0.7058823529411765,
+          "falseInterventionRate": 0.375,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 27500,
+          "shadowLeadSamples": 12
+        },
+        "request_cue_baseline": {
+          "tp": 8,
+          "fn": 8,
+          "fp": 2,
+          "tn": 14,
+          "recall": 0.5,
+          "precision": 0.8,
+          "f1": 0.6153846153846154,
+          "falseInterventionRate": 0.125,
+          "premature": 0,
+          "medianAuthoredShadowLeadMs": 30000,
+          "shadowLeadSamples": 8
+        }
+      },
+      "families": [
+        {
+          "family": "warning_bypass",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "authority",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "unfamiliar_wording",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quiet_identical",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "hybrid": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "account_change",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 0,
+              "tn": 2,
+              "recall": 1,
+              "precision": 1,
+              "f1": 1,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        },
+        {
+          "family": "call_lookalike",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 35000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "request_absent",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 15000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            }
+          }
+        },
+        {
+          "family": "quoted_instruction",
+          "sessions": 4,
+          "comparison": {
+            "transaction_rules": {
+              "tp": 0,
+              "fn": 2,
+              "fp": 0,
+              "tn": 2,
+              "recall": 0,
+              "precision": null,
+              "f1": 0,
+              "falseInterventionRate": 0,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": null,
+              "shadowLeadSamples": 0
+            },
+            "frozen_ai": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "hybrid": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            },
+            "request_cue_baseline": {
+              "tp": 2,
+              "fn": 0,
+              "fp": 2,
+              "tn": 0,
+              "recall": 1,
+              "precision": 0.5,
+              "f1": 0.6666666666666666,
+              "falseInterventionRate": 1,
+              "premature": 0,
+              "medianAuthoredShadowLeadMs": 30000,
+              "shadowLeadSamples": 2
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "scripts/evaluate_pitch_evidence.mjs": "5d54c761c2d854c0d9c68b28f494c9fab6f86928f04481ce7f2e038765e3b834",
+    "docs/four-minute-pitch-plan.md": "daf5f3aa4d2e3bfb1be9d29a17eb8b0c13f3b7a3bcb2d08f852673df02945cf3",
+    "src/domain/request.ts": "69d689bb29f8ff5d37e407bd0f57fe653147a7e5bfd5abccca1d131adac404c0",
+    "src/domain/features.ts": "0d5258cb06af99f9946e92f80983ab8d1a78f09417a5d6829d26bf2e1e7b5782",
+    "src/domain/collector.ts": "24fc6c2f9db2d85404a2520da47f80a2e5c69d80219742318125b37e87c839d8",
+    "src/domain/explanation.ts": "8a124d8fc237c74f32a0ae64ea614ba43458d7585a02a1579ec8bba0e1401576",
+    "src/domain/risk.ts": "a98a219bf1a068bb5bf8fd1b30c6319be370e3db433d0d7482f178728fc7ae1b",
+    "src/domain/contextual_inference.mjs": "01ab8a2963bb009dc08b16d6067dcce3a3fdd39e2b200daf2e1b5c1771d0560b",
+    "src/domain/model/selection.json": "c7bbb91e250ed3e79eff427146754d870a92dd9a254d0adfe37b6e599622d9d6",
+    "src/domain/model/lr_combined_binary.json": "959173dff2637856b3b5db314b60d6d01e4fd08037c6a5255eba62081335dde7",
+    "src/domain/model/xgb_behavior_binary.json": "4f1afeec7f3b6eaf8762a5f46c37ae0eb107b0a8471b1e9508cbe8187763a564",
+    "src/domain/model/xgb_behavior_binary.xgb.json": "1aa478f73b17f3709f864f6827742b3be6b332716039dc3efb0b13a5cc3b88cd"
+  },
+  "historical": {
+    "source": "../trustguard-edge/data/processed/contextual-policy-v2/report.json",
+    "snapshot": "data/processed/pitch-evidence-v1/historical-report.json",
+    "sha256": "c72986bf91a8e80d6a3d9b61e5603c69025d12e9b0fdbdc7f77fa8281ab9c6d2",
+    "sessions": 1440,
+    "scope": "Previously executed EXP013 simulated test; same authored wording banks and semantic families, new profile IDs. Not independent-language or real-world validation.",
+    "comparison": [
+      {
+        "name": "lr_behavior_binary",
+        "recall": 0.6402777777777777,
+        "f1": 0.7352472089314195,
+        "falseInterventionRate": 0.10138888888888889
+      },
+      {
+        "name": "xgb_behavior_binary",
+        "recall": 0.7597222222222222,
+        "f1": 0.838957055214724,
+        "falseInterventionRate": 0.05138888888888889
+      },
+      {
+        "name": "Selected availability policy",
+        "recall": 0.8986111111111111,
+        "f1": 0.9452154857560263,
+        "falseInterventionRate": 0.002777777777777778
+      }
+    ],
+    "selected": {
+      "tp": 647,
+      "fn": 73,
+      "fp": 2,
+      "tn": 718,
+      "coached": 720,
+      "benign": 720,
+      "quietDetected": 0,
+      "quietTotal": 60,
+      "medianAuthoredShadowLeadMs": 24507
+    }
+  }
+}

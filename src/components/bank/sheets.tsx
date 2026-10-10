@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { useState } from 'react';
 import { AI_REVIEW_REASON } from '@/domain/session';
 import { BankButton } from './button';
 import { ClipboardIcon, HandPalmIcon, MicrophoneSlashIcon, ShieldCheckIcon, type Icon } from './icons';
@@ -38,6 +39,7 @@ export function ConsentSheet({ bottom }: { bottom: number }) {
 
 /** Shown once when a coached transfer reaches review. It asks; it does not accuse. */
 export function PauseSheet({ bottom }: { bottom: number }) {
+  const [guideOpen, setGuideOpen] = useState(false);
   const { view, dispatch, guardian, canShowWarning, markWarningDisplayed } = useSession();
   const ai = view.origin === 'ai' || view.origin === 'combined';
   const choose = (action: 'cancel' | 'open_check') => {
@@ -50,6 +52,14 @@ export function PauseSheet({ bottom }: { bottom: number }) {
     {view.alert && <View className="gap-1 rounded-[20px] bg-b-tint px-4 py-3.5">
       <Text className="font-body text-[15px] leading-5 text-[#6d0a1b]">Aina would be asked to call you now. The request carries no amount and no account details.</Text>
       <Text className="font-body text-[13px] text-[#6d0a1b]">Preview only. Nothing was sent to another device.</Text>
+    </View>}
+    <BankButton variant="line" label="Open independent-check guide" onPress={() => { guardian.verify('open_check'); setGuideOpen(true); }} />
+    {guideOpen && <View className="gap-2 rounded-[20px] bg-b-tint px-4 py-3.5">
+      <Text accessibilityRole="header" className="font-body text-base text-b-ink">Check outside these instructions</Text>
+      <Text className="font-body text-[15px] leading-5 text-b-ink">1. Stop following the caller or message while checking.</Text>
+      <Text className="font-body text-[15px] leading-5 text-b-ink">2. Use a contact number you already know, not one supplied in this request.</Text>
+      <Text className="font-body text-[15px] leading-5 text-b-ink">3. Confirm the payment purpose and recipient details. Cancel if you cannot check.</Text>
+      <Text className="font-body text-xs leading-4 text-b-muted">Guidance only. This demo does not call anyone or certify a recipient.</Text>
     </View>}
     <BankButton label="Cancel this transfer" onPress={() => choose('cancel')} />
     <BankButton variant="line" label="I want to review it myself" onPress={() => choose('open_check')} />

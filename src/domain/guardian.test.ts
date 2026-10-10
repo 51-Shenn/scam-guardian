@@ -46,6 +46,33 @@ function harness(bundle: LoadedBundle | null = MODEL) {
 
 const keys = (digits: string): Action[] => [...digits].map((key) => ({ type: 'key', key }));
 
+test('first-positive explanation reconstructs the real LR score and survives later prefixes', async () => {
+  const h = harness();
+  await h.at(0, { type: 'selectRequest', request: 'coached' }, { type: 'transfer' }, { type: 'agree' });
+  await h.at(1000, { type: 'revealRequest' });
+  await h.at(5000);
+  const first = h.views.at(-1)!;
+  assert.equal(first.latched, true);
+  assert.ok(first.triggerExplanation);
+  assert.ok(Math.abs(first.triggerExplanation.reconstructedScore - first.score!) < 1e-12);
+  await h.at(10000);
+  assert.deepEqual(h.views.at(-1)!.triggerExplanation, first.triggerExplanation);
+});
+
+test('equal-length recipient replacement is counted without retaining either account', async () => {
+  const h = harness();
+  await h.at(0, { type: 'transfer' }, { type: 'agree' }, { type: 'pick', to: 'fresh' });
+  await h.at(1000, { type: 'account', value: '123412341234', pasted: false });
+  await h.at(2000, { type: 'account', value: '567856785678', pasted: false });
+  await h.at(3000, { type: 'account', value: '567856785678', pasted: false });
+  await h.at(5000);
+  const snapshot = h.snapshot(5000);
+  assert.equal(snapshot.features.recipient_edit_count, 2);
+  assert.equal(snapshot.features.recipient_negative_delta_count, 0);
+  assert.ok(!JSON.stringify(snapshot).includes('123412341234'));
+  assert.ok(!JSON.stringify(snapshot).includes('567856785678'));
+});
+
 test('nothing is collected without consent', async () => {
   const h = harness();
   await h.at(0, { type: 'transfer' }, { type: 'decline' });

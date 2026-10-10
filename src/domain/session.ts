@@ -1,5 +1,6 @@
 import { canConfirm, evaluate, validateAmount, type Decision, type Scenario, type Signals } from './risk.ts';
 import type { DemoRequestId } from './request.ts';
+import type { LinearExplanation } from './explanation.ts';
 
 export type Step = 'home' | 'recipient' | 'amount' | 'review' | 'success';
 export type RecipientId = 'aina' | 'hafiz' | 'fresh';
@@ -42,6 +43,8 @@ export interface AiView {
   cutoff: number | null;
   /** Once the model recommends a review, it stays recommended for the rest of the transfer. */
   latched: boolean;
+  /** The first positive LR prefix, retained even if a later score falls below threshold. */
+  triggerExplanation?: LinearExplanation | null;
 }
 export const AI_OFF: AiView = { status: 'off', score: null, threshold: null, model: null, cutoff: null, latched: false };
 export const AI_WAITING: AiView = { ...AI_OFF, status: 'waiting' };

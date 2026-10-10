@@ -3,6 +3,7 @@ import type { DemoEvent, PredictionReply, SessionMetadata, TimelineEntry } from 
 import { dueCutoffs } from './features.ts';
 import { CONTRACT_VERSION, FEATURE_DEFINITION_VERSION, MAX_SESSIONS, SCHEMA_VERSION, type LocalGuardianApi } from './local-api.ts';
 import type { AiView } from './session.ts';
+import type { LinearExplanation } from './explanation.ts';
 import { measurementReport, type EvaluationLabel, type SessionMeasurement, type WarningOrigin } from './measurement.ts';
 
 export const COLLECTOR_VERSION = 'bank-app-collector-1';
@@ -21,6 +22,7 @@ interface Open {
   label: EvaluationLabel; firstPositiveMs: number | null; firstWarningMs: number | null; warningOrigin: WarningOrigin | null;
   reviewEnteredMs: number | null; confirmationMs: number | null; successfulPredictions: number; unavailablePredictions: number;
   pending: Promise<AiView | null> | null;
+  triggerExplanation: LinearExplanation | null;
 }
 
 /**
@@ -67,7 +69,7 @@ export function createRecorder(options: RecorderOptions) {
       open = {
         id, seq: 0, lastCutoff: null, entry: 0, positive: null, warned: new Set(), label: nextLabel,
         firstPositiveMs: null, firstWarningMs: null, warningOrigin: null, reviewEnteredMs: null, confirmationMs: null,
-        successfulPredictions: 0, unavailablePredictions: 0, pending: null,
+        successfulPredictions: 0, unavailablePredictions: 0, pending: null, triggerExplanation: null,
       };
       recorder.record([{ type: 'session_start', source: 'observed_ui', payload: { step_id: 'recipient' } } as Draft], 0);
     },
@@ -147,7 +149,7 @@ export function createRecorder(options: RecorderOptions) {
       s.lastCutoff = cutoff;
       if (reply.status !== 'ok') {
         s.unavailablePredictions++;
-        view = { ...(view ?? toView(null)), status: 'unavailable', cutoff, latched: s.positive !== null };
+        view = { ...(view ?? toView(null)), status: 'unavailable', cutoff, latched: s.positive !== null, triggerExplanation: s.triggerExplanation };
         if (reply.error.code === 'MODEL_UNAVAILABLE') break;
         continue;
       }
@@ -157,8 +159,9 @@ export function createRecorder(options: RecorderOptions) {
       if (reply.result.reviewRecommended && !s.positive) {
         s.positive = prediction_id;
         s.firstPositiveMs = reply.inference_end_ms;
+        s.triggerExplanation = api.explanation(s.id, cutoff);
       }
-      view = toView(reply, review?.reviewLatched ?? false);
+      view = { ...toView(reply, review?.reviewLatched ?? false), triggerExplanation: s.triggerExplanation };
     }
     return view;
   }

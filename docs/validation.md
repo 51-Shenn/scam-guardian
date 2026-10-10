@@ -1,5 +1,9 @@
 # Verification
 
+## Current four-minute pitch increment — 10 October 2026
+
+See [pitch-validation.md](pitch-validation.md) for 78 domain tests, 18 actual desktop/narrow-web browser checks, both exports, faithful LR explanation, same-length-edit fix, guide/cancel acceptance and exact challenge results. The new authored challenge gives AI recall 6/16, F1 .50 and legitimate reviews 2/16; simple request cues are stronger there. Missing-input stress raises burden. Failures remain visible separately from EXP013's original simulation result. The four-minute guide and pilot template are ready; spoken venue rehearsal, participant decision improvement and physical-device release latency are not measured.
+
 ## Early warnings, false-intervention accounting and Predictive Model Track — 10 October 2026
 
 - Installed the existing lockfile's dependencies with user approval; package-lock and frozen model files are unchanged. Initial sandbox npm restore failed; approved external restore succeeded. Hermes initially could not write its sandbox temporary bundle; Android/web exports succeeded outside that sandbox.

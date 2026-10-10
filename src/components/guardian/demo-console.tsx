@@ -5,6 +5,7 @@ import { fixtures, scenarios, type AiView } from '@/domain/session';
 import type { Decision } from '@/domain/risk';
 import { WarningMetrics } from './warning-metrics';
 import { RequestControl } from './request-control';
+import { DecisionSummary } from './decision-summary';
 
 interface PanelProps { className?: string }
 interface DemoConsoleProps extends PanelProps {
@@ -76,6 +77,7 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
       <Text className="flex-1 font-body text-sm leading-5 text-ink">{reason}</Text>
     </View>)}
 
+    <DecisionSummary />
     <AiReview />
     <WarningMetrics />
 

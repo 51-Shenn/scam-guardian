@@ -93,7 +93,8 @@ export class Collector {
       case 'pick': if (prev.to !== next.to) drafts.push(transactionDraft(next)); break;
       case 'account': {
         const delta = next.account.length - prev.account.length;
-        if (delta) drafts.push(draft('edit', 'observed_ui', { field_id: 'recipient', length_delta: delta, input_source: action.pasted ? 'explicit_paste' : 'unknown' }));
+        // A different account with the same length is still an edit. Only the delta is retained, never the digits.
+        if (next.account !== prev.account) drafts.push(draft('edit', 'observed_ui', { field_id: 'recipient', length_delta: delta, input_source: action.pasted ? 'explicit_paste' : 'unknown' }));
         break;
       }
       case 'next': if (next.step === 'amount') drafts.push(navigate('amount', 'forward')); break;

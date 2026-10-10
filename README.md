@@ -36,9 +36,19 @@ The application preview runs at `http://127.0.0.1:4173`, with the demo at `/demo
 
 ## Early warning and false-intervention measurement
 
-See [the measurement manual and three-minute Predictive Model Track flow](docs/warning-measurements.md). Choose an independent evaluation label before Transfer, then optionally deliver a fixed authored request. Recipient/amount warnings appear before Review; confirmed/cancelled sessions update the measurement panel. Export JSON before reloading; the latest 20 ended sessions are retained in app-run memory. Personalization is deferred.
+See [the measurement manual](docs/warning-measurements.md) and [the current four-minute Predictive Model Track presentation](docs/four-minute-pitch.md). Choose an independent evaluation label before Transfer, then optionally deliver a fixed authored request. Recipient/amount warnings appear before Review; confirmed/cancelled sessions update the measurement panel. Export JSON before reloading; the latest 20 ended sessions are retained in app-run memory. Personalization is deferred.
 
 Live observed warning lead includes the review cool-down and user delay. The panel separately reports the warning-to-review checkpoint; it does not claim unbiased shadow lead or real-world effectiveness. False reviews, quiet misses and model outages remain visible. Browser validation: `node scripts/browser_warning_measurements.mjs`; arithmetic/export reproduction: `node scripts/check_warning_measurements.mjs`.
+
+## Four-minute pitch and model evidence
+
+- `/pitch-manual.html`: complete field selections, two live cases, 354 spoken words, timing, fallback and judge Q&A. Generated from `docs/four-minute-pitch.md` with `node scripts/build_pitch_manual.mjs` before exporting.
+- `/evidence`: five-criterion evidence view, shared by Android/web. Use **Pitch evidence** after ending a transfer to retain the current run's counters across navigation.
+- Decision support shows the policy category, priority and next action. For a first-positive LR prefix, actual feature/missingness contributions reconstruct its score. The independent-check guide gives concrete steps but does not certify a recipient or place a call.
+- `node scripts/evaluate_pitch_evidence.mjs` reproduces the authored challenge and comparison report. `--verify` requires byte-for-byte reproduction. Model files/thresholds are unchanged. The historical report is bundled as a hashed reference snapshot, so reproduction does not require the sibling research checkout.
+- `node scripts/browser_warning_measurements.mjs --pitch` rehearses explanations, guide/cancel, all five evidence sections, narrow web and local manual. Output is under `data/processed/pitch-evidence-v1/browser/`.
+
+The original simulated evaluation and new authored challenge are separate. On the new 32-session challenge, AI recall is 6/16 (37.5%), F1 0.50 and legitimate review rate 2/16 (12.5%); simple request cues do better. Missing-channel stress increases warnings. These findings prevent a claim of broad robustness or AI superiority. Human decision improvement is unmeasured; [the exploratory pilot form](docs/decision-pilot-record.md) is ready for consented testing.
 
 ## Demo walkthrough
 
