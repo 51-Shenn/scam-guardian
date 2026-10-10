@@ -1,5 +1,17 @@
 # Verification
 
+## Faster lock figure tour
+
+Checked on 10 October 2026. The page's built-in tour took about eight seconds a lap, and its pace is fixed inside the Hairline engine, which stays unchanged. The figure is now walked from outside, in `lock-figure.web.tsx`, through the pointer events it already answers: the same three chambers and a rest, in about three seconds. This replaces the `?play=1` tour described in the section below.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, figure on screen, no pointer: 9 steps and 3 rests in 9 seconds, and all 12 captures taken half a second apart differed.
+- A real pointer on the figure: no steps in 4 seconds. After it left: the tour ran again.
+- Figure scrolled out of view: no steps in 4 seconds. Scrolled back: the tour ran again.
+- Reduced motion emulated: no steps in 4 seconds and 8 identical captures.
+- 412x900: 6 steps and 2 rests in 6 seconds, no horizontal overflow. No console errors.
+- Not verified: a hidden browser tab, touch input, browsers other than Chromium. Android shows a still image.
+
 ## Lock figure plays by itself, and a two-line headline
 
 Checked on 10 October 2026. The lock figure now starts the Hairline page's own tour on load (`?play=1`), so the gates move without a pointer; a real pointer still takes over and the tour resumes after it leaves. The product page's headline is sized from the measured width of the copy, so it sets in two lines at every width.
