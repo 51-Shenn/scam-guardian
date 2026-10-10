@@ -1,48 +1,104 @@
 import { Pressable, Text, View } from 'react-native';
-import { useSession } from '@/components/wallet/session';
+import { useSession } from '@/components/bank/session';
+import { Glass } from '@/components/glass/glass';
 import { fixtures, scenarios } from '@/domain/session';
+import type { Decision } from '@/domain/risk';
 
-interface DemoConsoleProps {
+interface PanelProps { className?: string }
+interface DemoConsoleProps extends PanelProps {
   /** Drops the signal table where space is tight. The "simulated" labels always stay. */
   compact?: boolean;
-  className?: string;
 }
 
-/** Scenario switch and Guardian read-out. Everything here is a demo signal, and says so. */
-export function DemoConsole({ compact, className = '' }: DemoConsoleProps) {
-  const { session, view, dispatch } = useSession();
-  const { fixture, signals, decision, monitoring, active } = view;
-  const tone = !monitoring || decision.classification === 'Normal' ? 'text-ink' : decision.classification === 'Coached' ? 'text-w-amber' : 'text-accent';
+const classes: Decision['classification'][] = ['Normal', 'Struggling', 'Coached'];
+const fill = { Normal: 'bg-[#12905a]', Struggling: 'bg-accent', Coached: 'bg-[#b45309]' };
+const ink = { Normal: 'text-ink', Struggling: 'text-accent', Coached: 'text-b-amber' };
+const responses: Record<Decision['response'], string> = {
+  continue: 'No interruption.',
+  guide: 'Switch to Simple mode and guide one step at a time.',
+  cooldown: 'Pause for 30 seconds and ask whether someone is directing this.',
+  hold: 'Pause, ask, and prepare the family alert. The person still decides.',
+};
+const small = 'font-body text-[13px] text-soft';
+
+/** The four presets. A choice sets the simulated call and what the next transfer starts with. */
+function PresetChoice({ detailed }: { detailed?: boolean }) {
+  const { session, dispatch } = useSession();
+  return <View accessibilityRole="radiogroup" className={detailed ? 'gap-1.5' : 'flex-row flex-wrap gap-1.5'}>
+    {scenarios.map((name) => {
+      const on = session.scenario === name;
+      const { label, note } = fixtures[name];
+      return <Pressable key={name} accessibilityRole="radio" accessibilityState={{ checked: on }} onPress={() => dispatch({ type: 'scenario', scenario: name })}
+        className={`rounded-[14px] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${on ? 'bg-ink' : 'bg-white/70'} ${detailed ? 'px-3.5 py-2' : 'h-10 grow basis-[45%] items-center justify-center'}`}>
+        <Text className={`font-body ${detailed ? 'text-[15px]' : 'text-sm'} ${on ? 'text-white' : 'text-ink'}`}>{label}</Text>
+        {detailed && <Text className={`font-body text-[13px] leading-[18px] ${on ? 'text-white/80' : 'text-soft'}`}>{note}</Text>}
+      </Pressable>;
+    })}
+  </View>;
+}
+
+function ReadOutBody({ compact }: { compact?: boolean }) {
+  const { session, view } = useSession();
+  const { signals, decision, monitoring, active } = view;
+  const chosen = monitoring ? decision.classification : null;
   const rows: [string, string][] = [
-    ['Call', fixture.call ? 'Active (simulated)' : 'None'],
+    ['Call', session.call ? 'Active (simulated)' : 'None'],
     ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen'],
-    ['Paste flag', fixture.paste ? 'Present (simulated)' : 'None'],
+    ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted (simulated)' : session.entry ? 'Typed' : 'Not entered'],
     ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered'],
     ['Back steps', String(signals.backPresses)],
     ['Help taps', String(signals.helpTaps)],
   ];
-  return <View className={`rounded-3xl bg-white/90 p-4 ${className}`} style={{ boxShadow: '0 0 0 1px rgba(12, 26, 51, 0.08), 0 30px 50px -28px rgba(12, 26, 51, 0.35)' }}>
-    <Text className="mb-2.5 font-body text-[13px] text-soft">Demo signal, simulated</Text>
-    <View accessibilityRole="radiogroup" className="flex-row flex-wrap gap-1.5">
-      {scenarios.map((name) => {
-        const on = session.scenario === name;
-        return <Pressable key={name} accessibilityRole="radio" accessibilityState={{ checked: on }} onPress={() => dispatch({ type: 'scenario', scenario: name })}
-          className={`h-10 grow basis-[45%] items-center justify-center rounded-[14px] active:scale-[0.96] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${on ? 'bg-ink' : 'bg-muted'}`}>
-          <Text className={`font-body text-sm ${on ? 'text-white' : 'text-ink'}`}>{fixtures[name].label}</Text>
-        </Pressable>;
-      })}
+  return <View aria-live="polite">
+    <View className="flex-row items-baseline justify-between gap-2">
+      <Text className={small}>Guardian read-out</Text>
+      <Text className={small}>{session.consent ? 'Guardian on' : 'Guardian off'}</Text>
     </View>
-    <View aria-live="polite" className="mt-3.5 border-t border-line pt-3.5">
-      <Text className="font-body text-xs text-soft">Guardian read-out</Text>
-      <Text className={`mb-1.5 mt-0.5 font-display text-[27px] leading-[31px] tracking-[-0.5px] ${tone}`}>{monitoring ? decision.classification : 'Monitoring inactive'}</Text>
-      {decision.reasons.map((reason) => <Text key={reason} className="font-body text-[13.5px] leading-5 text-soft">{reason}</Text>)}
-      {!compact && <View className="mt-2.5 flex-row flex-wrap gap-px overflow-hidden rounded-xl bg-line">
-        {rows.map(([label, value]) => <View key={label} className="grow basis-[45%] bg-white px-2.5 py-1.5">
-          <Text className="font-body text-[11px] text-soft">{label}</Text>
-          <Text className="font-body text-[12.5px] text-ink">{value}</Text>
-        </View>)}
-      </View>}
-      <Text className="mt-2 font-body text-xs text-soft">Demonstration rules, not model output.</Text>
+    <Text className={`mt-1 font-display text-[28px] leading-8 tracking-[-0.5px] ${chosen ? ink[chosen] : 'text-ink'}`}>{chosen ? (decision.response === 'hold' ? 'Coached, high' : chosen) : 'Monitoring inactive'}</Text>
+    <Text className="mt-1 font-body text-sm leading-5 text-soft">{chosen ? responses[decision.response] : session.consent ? 'Start a transfer to see Guardian work.' : 'Turn Guardian on in the bank app to see it work.'}</Text>
+
+    {/* Which class the rules picked. Bars are on or off: the demo rules produce no scores. */}
+    <View className="mt-3.5 gap-2">
+      {classes.map((name) => <View key={name} accessibilityLabel={`${name}${name === chosen ? ', selected' : ''}`} className="flex-row items-center gap-2.5">
+        <Text className={`w-[78px] font-body text-sm ${name === chosen ? 'text-ink' : 'text-soft'}`}>{name}</Text>
+        <View className="h-2 flex-1 overflow-hidden rounded-full bg-[#dfe5f1]">{name === chosen && <View className={`h-2 rounded-full ${fill[name]}`} />}</View>
+      </View>)}
     </View>
+
+    <Text className={`mt-3.5 ${small}`}>Reasons</Text>
+    {decision.reasons.map((reason) => <View key={reason} className="mt-1 flex-row items-center gap-2">
+      <View className={`h-1.5 w-1.5 rounded-full ${chosen ? fill[chosen] : 'bg-[#9aa6bd]'}`} />
+      <Text className="flex-1 font-body text-sm leading-5 text-ink">{reason}</Text>
+    </View>)}
+
+    {!compact && <View className="mt-3.5 flex-row flex-wrap gap-1.5">
+      {rows.map(([label, value]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
+        <Text className="font-body text-[11.5px] text-soft">{label}</Text>
+        <Text className="font-body text-[13px] text-ink">{value}</Text>
+      </View>)}
+    </View>}
+    <Text className="mt-2.5 font-body text-xs leading-4 text-soft">Demo rules on simulated signals, not model output.</Text>
   </View>;
+}
+
+/** Guardian's view of the current transfer session. */
+export function ReadOut({ className = '' }: PanelProps) {
+  return <Glass radius={26} className={`p-4 ${className}`}><ReadOutBody /></Glass>;
+}
+
+/** The presets with what each one sets up. */
+export function Presets({ className = '' }: PanelProps) {
+  return <Glass radius={26} className={`gap-2.5 p-4 ${className}`}>
+    <Text className={small}>Try these. Each one presets the demo signals.</Text>
+    <PresetChoice detailed />
+  </Glass>;
+}
+
+/** Preset switch and read-out in one panel, for the product page. Everything here is a demo signal, and says so. */
+export function DemoConsole({ compact, className = '' }: DemoConsoleProps) {
+  return <Glass radius={26} className={`p-4 ${className}`}>
+    <Text className={`mb-2.5 ${small}`}>Demo signal, simulated</Text>
+    <PresetChoice />
+    <View className="mt-3.5 border-t border-line pt-3.5"><ReadOutBody compact={compact} /></View>
+  </Glass>;
 }

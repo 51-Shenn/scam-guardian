@@ -4,7 +4,7 @@ Source: [Dormathon 2026 Scam Guardian Research Brief](https://docs.google.com/do
 
 ## Confirmed decisions
 
-- Build BOTH a product landing page and an interactive mock-wallet demo.
+- Build BOTH a product landing page and an interactive mock banking app demo. The demo was an e-wallet until 10 October 2026, when the user asked for a banking app with frosted glass and the three-layout demo from the team's prototype artifact (read-out, Rohani's phone, Aina's phone).
 - Expo/React Native replaces the proposed Kotlin application; Android and web progress together. iOS is out of scope.
 - Light theme, Tailwind CSS, technical grids/particles, flowing forms, and Hedvig Letters Serif (with Hedvig Letters Sans for readable controls).
 - The user selected direction A, "Current", from the v2 studies on 9 October 2026. Spec: `docs/superpowers/specs/2026-10-09-current-redesign-design.md`.
@@ -13,7 +13,7 @@ Source: [Dormathon 2026 Scam Guardian Research Brief](https://docs.google.com/do
 
 ## Current slice
 
-Product page with a live wallet in a phone frame, a demo console, privacy explanation and the canal-lock figure. On desktop web the wallet is interactive in the frame; on narrow web and Android the frame is a preview that opens the wallet full screen. The transfer experience is shared: Home, Choose recipient, Enter amount on a keypad, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 30-second cool-down, cancellation, and a clearly labelled family-alert preview. No real money moves.
+Product page with a live bank app in a phone frame, a demo console, privacy explanation and the canal-lock figure. On desktop web the bank app is interactive in the frame; on narrow web and Android the frame is a preview that opens the demo full screen. The demo route shows the Guardian read-out, the bank app and the trusted contact's phone together. The transfer experience is shared: Home, Choose recipient, Enter amount on a keypad, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 30-second cool-down, cancellation, and a clearly labelled family-alert preview on a second phone drawn on the same screen. The simulated call can be switched at any time and a new recipient's account number is typed or pasted by hand; presets set the starting signals. No real money moves.
 
 Demo rules illustrate the brief's hard-rule example: call active + new recipient + (paste flag OR amount greater than 3x usual) pauses a coached transfer. Back presses/help taps enable simple mode. A call and new recipient without the hard-rule combination demonstrate medium risk. No trained probabilities are shown.
 
@@ -22,7 +22,7 @@ The product page and demo render at desktop width, narrow web width, and native 
 ## Delivery sequence
 
 1. Instructions, glossary, Tailwind setup, bundled typography, source/licensing notes, three HTML design samples.
-2. Shared wallet state, input validation, privacy consent, risk rule demonstrations, timers, guidance, and local contact preview.
+2. Shared transfer state, input validation, privacy consent, risk rule demonstrations, timers, guidance, and local contact preview.
 3. Visual selection and refinement after user feedback; native/web visual QA and device tests.
 4. Android signal adapter: cellular call-state permission and capability spike; paste metadata without clipboard access; app lifecycle timing. Browser adapter stays explicit about unsupported signals. Do not assume WhatsApp calls are detectable with cellular APIs.
 5. Train and evaluate the three-class model with a data card. Import verified weights with a documented feature order/normalisation; retain rules as an independent safety layer.

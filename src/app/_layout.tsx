@@ -7,7 +7,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SessionProvider } from '@/components/wallet/session';
+import { SessionProvider } from '@/components/bank/session';
 
 SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {

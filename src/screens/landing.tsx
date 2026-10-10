@@ -10,16 +10,16 @@ import { LOCK_HINT, LockFigure } from '@/components/guardian/lock-figure';
 import { PhoneFrame } from '@/components/guardian/phone-frame';
 import { Reveal } from '@/components/guardian/reveal';
 import { Wordmark } from '@/components/guardian/wordmark';
-import { AppWindowIcon, ClipboardIcon, MicrophoneSlashIcon, PhoneSlashIcon, type Icon } from '@/components/wallet/icons';
-import { useSession } from '@/components/wallet/session';
-import { Wallet } from '@/components/wallet/wallet';
+import { AppWindowIcon, ClipboardIcon, MicrophoneSlashIcon, PhoneSlashIcon, type Icon } from '@/components/bank/icons';
+import { useSession } from '@/components/bank/session';
+import { BankApp } from '@/components/bank/bank-app';
 import { FRAME, WIDE, XWIDE } from '@/constants/layout';
 import type { Scenario } from '@/domain/risk';
 import { useViewport } from '@/hooks/use-viewport';
 
 const cases: { scenario: Scenario; state: string; title: string; detail: string }[] = [
   { scenario: 'normal', state: 'Normal', title: 'Carry on', detail: 'A usual amount to a saved contact goes through with no interruption.' },
-  { scenario: 'struggling', state: 'Struggling', title: 'A clearer path', detail: 'Repeated back steps or help taps switch the wallet to Simple mode: bigger controls, one instruction at a time. No accusation.' },
+  { scenario: 'struggling', state: 'Struggling', title: 'A clearer path', detail: 'Repeated back steps or help taps switch the app to Simple mode: bigger controls, one instruction at a time. No accusation.' },
   { scenario: 'coached', state: 'Coached', title: 'Take a moment', detail: 'A call in progress plus a new recipient triggers a short pause. When it ends, the choice is still yours.' },
 ];
 const never: [Icon, string][] = [[MicrophoneSlashIcon, 'Call audio'], [PhoneSlashIcon, 'Caller identity'], [ClipboardIcon, 'Clipboard contents'], [AppWindowIcon, 'Activity in other apps']];
@@ -42,15 +42,15 @@ export default function Landing() {
 
   const openDemo = () => router.push('/demo');
   const jump = (y: number) => scroll.current?.scrollTo({ y, animated: true });
-  // On desktop the wallet is already on the page, so a scenario plays in place. Elsewhere it opens the wallet.
+  // On desktop the bank app is already on the page, so a scenario plays in place. Elsewhere it opens the demo.
   const play = (scenario: Scenario) => {
     dispatch({ type: 'scenario', scenario });
     if (wide) jump(0); else openDemo();
   };
 
   const scale = !viewport ? 0 : wide ? Math.min(viewport.height * 0.84, 840) / FRAME.height : Math.min(340, viewport.width - 56) / FRAME.width;
-  const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' ? 'light' : 'dark'} callActive={view.fixture.call}>
-    <Wallet top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={wide} />
+  const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' ? 'light' : 'dark'} callActive={session.call}>
+    <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={wide} />
   </PhoneFrame>;
 
   return <ScrollView ref={scroll} className="flex-1 bg-page" contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
@@ -61,7 +61,7 @@ export default function Landing() {
           <View className="mr-auto"><Wordmark onPress={() => jump(0)} /></View>
           {wide && <Pressable accessibilityRole="link" onPress={() => jump(anchors.current.how)} className={link}><Text className="font-body text-[15px] text-soft">How it works</Text></Pressable>}
           {wide && <Pressable accessibilityRole="link" onPress={() => jump(anchors.current.privacy)} className={link}><Text className="font-body text-[15px] text-soft">Privacy</Text></Pressable>}
-          <View><Action small label="Try the wallet" onPress={openDemo} /></View>
+          <View><Action small label="Try the demo" onPress={openDemo} /></View>
         </View>
 
         <View className="pb-12 pt-7 wide:flex-row wide:items-center wide:gap-16 wide:pt-0" style={wide && viewport ? { minHeight: viewport.height - 72 } : undefined}>
@@ -69,21 +69,21 @@ export default function Landing() {
             <Text accessibilityRole="header" className="max-w-[640px] font-display [text-wrap:balance] text-[44px] leading-[46px] tracking-[-1.5px] text-ink wide:text-[62px] wide:leading-[64px] wide:tracking-[-2.2px] xwide:text-[78px] xwide:leading-[80px] xwide:tracking-[-2.7px]">A pause before the money moves.</Text>
             <Text className="mt-6 max-w-[420px] font-body text-[17px] leading-[27px] text-soft wide:text-[19px] wide:leading-[30px]">Scam Guardian helps when a transfer gets confusing, and makes room to think when someone else may be directing it.</Text>
             <View className="mt-8 flex-row flex-wrap gap-3">
-              <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action label="Try the wallet" onPress={openDemo} /></View>
+              <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action label="Try the demo" onPress={openDemo} /></View>
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action secondary label="How it works" onPress={() => jump(anchors.current.how)} /></View>
             </View>
             {!overlap && <DemoConsole compact={!wide} className="mt-8 wide:max-w-[320px]" />}
           </View>
 
-          {/* The console comes after the phone so it paints over the frame's edge. */}
-          {viewport && wide && <View style={{ paddingLeft: overlap ? 236 : 0 }}>
+          {/* The console stands clear of the phone, with its foot on the same line as the frame's. */}
+          {viewport && wide && <View style={{ paddingLeft: overlap ? 304 : 0 }}>
             {phone}
-            {overlap && <DemoConsole className="absolute bottom-[7%] left-0 w-[264px]" />}
+            {overlap && <DemoConsole className="absolute bottom-0 left-0 w-[264px]" />}
           </View>}
-          {/* Narrow web and Android: the frame is a picture of the wallet, with one press target over it. */}
+          {/* Narrow web and Android: the frame is a picture of the bank app, with one press target over it. */}
           {viewport && !wide && <View className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">
             <Inert>{phone}</Inert>
-            <Pressable accessibilityRole="button" accessibilityLabel="Open the wallet demo full screen" onPress={openDemo} className="absolute inset-0" />
+            <Pressable accessibilityRole="button" accessibilityLabel="Open the banking demo full screen" onPress={openDemo} className="absolute inset-0" />
           </View>}
         </View>
       </View>

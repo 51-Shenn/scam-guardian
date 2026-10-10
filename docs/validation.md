@@ -1,6 +1,31 @@
-# Verification on 9 October 2026
+# Verification
 
-## Current redesign
+## Banking app, glass and three-layout demo
+
+Checked on 10 October 2026 after replacing the e-wallet with the bank app.
+
+**Project gates**
+
+- `npm run lint`: passed.
+- `npm run typecheck`: no errors in `src/`. Four errors remain in `tools/collectability-harness/`, which has its own dependencies that are not installed at the root. They predate this change.
+- `npm test`: 23 of 23 passed (6 risk rules, 17 session reducer). New cases: account entry for a new recipient, the hand-switched call, a call that starts during review, and reset.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chrome via Playwright**
+
+- `/demo` at 1440x900, 1366x700, 1920x1000 and 1024x768: all three layouts on screen, document no taller or wider than the window, no console errors.
+- `/demo` at 412x900: the top switch shows the bank app, the read-out and Aina's phone in turn; no horizontal overflow.
+- Coached, high with the trusted-contact switch on, at 1440 and 412: pause sheet, alert on Aina's phone, Continue disabled during the pause.
+- By hand at 1440: call started from the header, new recipient picked, Next disabled until "Type it" is pressed.
+- `/` at 1440, 1180 and 412: no overflow. From 1180 up the console stands clear of the phone with its foot on the frame's bottom line.
+- Glass, class bars and the family phone were checked by eye on captures.
+
+**Not verified**
+
+- Android on a device or emulator. No device was attached, so the translucent glass fallback, the SVG colour fields and the top switch were not seen running natively. The Android export passing is a bundling check only.
+- The 30-second pause running to its end in this round, keyboard-only operation, screen readers, and browsers other than Chrome.
+
+## Current redesign (9 October 2026)
 
 Checked on 9 October 2026 after rebuilding the landing page and wallet as direction A, "Current".
 
