@@ -1,185 +1,154 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { FlagPennantIcon, PulseIcon, ShieldCheckIcon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
-import { fixtures, scenarios, type AiView } from '@/domain/session';
-import type { Decision, Scenario } from '@/domain/risk';
-import { RequestControl } from './request-control';
+import { COOL_DOWN_MS, fixtures, scenarios } from '@/domain/session';
+import { evaluate, type Decision, type Scenario } from '@/domain/risk';
+import { AiReview } from './ai-review';
+import { Meter, Pips } from './charts';
+import { Label, Segmented } from './controls';
 import { DecisionSummary } from './decision-summary';
-import { WarningMetrics } from './warning-metrics';
-import { DEMO_REQUESTS } from '@/domain/request';
+import { MetricsExport } from './metrics-export';
+import { PrepareAiCase, RequestControl } from './request-control';
+import { body, caption, figures } from './text';
+import { fill, ink, wash, type Tone } from './tones';
+import { EvaluationControl, RunSummary } from './warning-metrics';
 
 interface PanelProps {
   className?: string;
-  /** The same content set tighter, for the wide stage, whose height is fixed by the phone beside it. */
+  /** Mouse-sized controls for the wide stage, whose height is fixed by the phone beside it. Otherwise every control is a full touch target. */
   dense?: boolean;
 }
 
-const classes: Decision['classification'][] = ['Normal', 'Struggling', 'Coached'];
-// Class colours are data, not brand: red would read as an accusation, and Struggling calls for help instead.
-// Three deep, quiet tones that sit with the garnet of the page: pine, indigo and bronze. Each has a fill, a text shade and a pale wash.
-const fill = { Normal: 'bg-[#1f6b57]', Struggling: 'bg-[#414f8f]', Coached: 'bg-[#a3661c]' };
-const ink = { Normal: 'text-[#17574a]', Struggling: 'text-[#36427a]', Coached: 'text-[#7c4a0c]' };
-// A class that is not chosen keeps the wash of its tone, so the three read as a legend and not as empty tracks.
-const wash = { Normal: 'bg-[#dde9e4]', Struggling: 'bg-[#e2e5f1]', Coached: 'bg-[#f0e5d3]' };
-type Tone = Decision['classification'] | undefined;
-
-/** A signal's value. One that points towards a class carries that class's tone, as a dot and the text shade; the rest stay plain. */
-function Value({ children, tone, size }: { children: string; tone: Tone; size: string }) {
-  if (!tone) return <Text className={`font-body text-ink ${size}`}>{children}</Text>;
-  return <View className="flex-row items-center gap-1.5">
-    <View className={`h-1.5 w-1.5 rounded-full ${fill[tone]}`} />
-    <Text className={`font-body ${size} ${ink[tone]}`}>{children}</Text>
-  </View>;
-}
+const pause = `${COOL_DOWN_MS / 1000}-second pause`;
 const responses: Record<Decision['response'], string> = {
   continue: 'No interruption.',
-  guide: 'Switch to Simple mode and guide one step at a time.',
-  cooldown: 'Pause for 15 seconds: ask whether someone is directing this, and verify through a trusted contact.',
-  hold: 'Pause, ask, and prepare the family alert. The person still decides.',
+  guide: 'Simple mode: one step at a time.',
+  cooldown: `A ${pause} to verify through a trusted contact.`,
+  hold: `A ${pause} and a family alert. The person still decides.`,
 };
-const small = 'font-body text-[13px] text-soft';
+// What the demonstration rules alone ask for, beside the signals they read.
+const ruled: Record<Decision['response'], [string, Tone | undefined]> = {
+  continue: ['Rules quiet', undefined], guide: ['Rules: guide', 'Struggling'], cooldown: ['Rules: pause', 'Coached'], hold: ['Rules: pause and alert', 'Coached'],
+};
+const raisedBy = { rule: 'rules', ai: 'AI', combined: 'rules and AI' };
+// The amount track runs to twice the line the hold rule draws, at three times the usual amount.
+const AMOUNT_LINE = 3;
 const seconds = (ms: number) => `${Math.floor(ms / 1000)} s`;
-const line = 'h-5 flex-row items-center';
+const card = 'gap-2.5 p-[18px]';
+const section = 'border-t border-line pt-2.5';
 
-const aiText: Record<AiView['status'], string> = {
-  off: 'Off while Guardian is off.',
-  waiting: 'Checks every 5 seconds during the transfer.',
-  unavailable: 'AI unavailable. The demo rules still apply.',
-  clear: 'No additional AI review.',
-  review: 'Review recommended: pause and verify.',
-};
-// The review's state shows as a rule down the side of its box: pine when clear, bronze when it asks for a pause, indigo while it waits.
-const aiRule: Record<AiView['status'], string> = { off: 'bg-[#d9cdd0]', waiting: fill.Struggling, unavailable: 'bg-[#d9cdd0]', clear: fill.Normal, review: fill.Coached };
-const aiInk: Record<AiView['status'], string> = { off: 'text-soft', waiting: 'text-ink', unavailable: 'text-soft', clear: ink.Normal, review: ink.Coached };
-
-/** The on-device model's binary review. Its score is uncalibrated, so it is never shown as a percentage. */
-function AiReview({ dense }: { dense?: boolean }) {
-  const { session } = useSession();
-  const { status, score, threshold, cutoff, model } = session.ai;
-  return <View className={`flex-row gap-2.5 rounded-xl bg-white/70 ${dense ? 'mt-3 px-2.5 py-2' : 'mt-3.5 px-3 py-2.5'}`}>
-    <View className={`w-[3px] rounded-full ${aiRule[status]}`} />
-    <View className={`flex-1 ${dense ? 'gap-0.5' : 'gap-1'}`}>
-      <View className="flex-row items-baseline justify-between gap-2">
-        <Text className="font-body text-[13px] text-soft">AI review (on device)</Text>
-        {cutoff !== null && <Text className="font-body text-[11.5px] text-soft" style={{ fontVariant: ['tabular-nums'] }}>at {cutoff / 1000} s</Text>}
-      </View>
-      <Text className={`font-body leading-5 ${dense ? 'text-sm' : 'text-[15px]'} ${aiInk[status]}`}>{aiText[status]}</Text>
-      {score !== null && threshold !== null && <Text className="font-body text-[13px] text-ink" style={{ fontVariant: ['tabular-nums'] }}>Score {score.toFixed(4)} · review at {threshold.toFixed(4)}</Text>}
-      <Text className="font-body text-xs leading-4 text-ink">Selected request: {session.demoRequest ? DEMO_REQUESTS[session.demoRequest].label : 'Unavailable'}</Text>
-      <Text className="font-body text-xs leading-4 text-soft">Request context: {session.requestShown ? 'delivered to this transfer' : session.demoRequest ? 'selected, not delivered yet' : 'unavailable'}{model ? ` · Model: ${model}` : ''}</Text>
-      <Text className="font-body text-[11.5px] leading-4 text-soft">Trained on simulated sessions; not a scam probability. Not yet retrained for full account numbers.</Text>
-    </View>
+/** A signal's value. One that points towards a class carries that class's tone, as a dot and the text shade; the rest stay plain. */
+function Value({ children, tone }: { children: string; tone?: Tone }) {
+  if (!tone) return <Text className={`${body} text-ink`} style={figures}>{children}</Text>;
+  return <View className="flex-row items-center gap-1.5">
+    <View className={`h-2 w-2 rounded-full ${fill[tone]}`} />
+    <Text className={`${body} ${ink[tone]}`} style={figures}>{children}</Text>
   </View>;
 }
 
-/** Guardian's view of the current transfer session. */
-export function ReadOut({ dense, className = '' }: PanelProps) {
-  const { session, view } = useSession();
-  const { signals, decision, monitoring, active } = view;
+/** Guardian's view of the current transfer session: the answer, the signals behind the rules while it is monitoring, and the AI review. Nothing in it is pressed. */
+export function ReadOut({ className = '' }: PanelProps) {
+  const { session, view, measurement } = useSession();
+  const { signals, decision, monitoring } = view;
+  // When the warning first reached the screen, counted from the start of the transfer.
+  const shown = measurement?.firstWarningMs ?? null;
   const chosen = monitoring ? decision.classification : null;
   const pending = chosen === 'Normal' && session.ai.status === 'waiting';
   const unavailable = chosen === 'Normal' && session.ai.status === 'unavailable';
-  const selectedPolicy = pending || unavailable ? null : chosen;
   const heading = pending ? 'Checking payment…' : unavailable ? 'AI unavailable'
     : chosen === 'Normal' ? 'No warning currently'
     : chosen ? (decision.response === 'hold' ? 'Coached, high' : chosen) : 'Monitoring inactive';
-  // The signals in the three groups the design draws them from: where the person is, what the transfer is, and how they move through it.
-  // A row's third entry is the class the signal points towards while it is present. The app switch has none: no rule and no model uses it.
-  const groups: [string, [string, string, Tone][]][] = [
-    ['Situation', [
-      ['Call', session.call ? 'Active (simulated)' : 'None', session.call ? 'Coached' : undefined],
-      ['App switch', session.away ? `Away ${seconds(view.awayMs)} (simulated)` : view.awayMs ? `Back · ${seconds(view.awayMs)} away` : 'In bank app', undefined],
-    ]],
-    ['Transaction', [
-      ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen', active && signals.newRecipient ? 'Coached' : undefined],
-      ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered', active && signals.pasted ? 'Coached' : undefined],
-      // Above three times the usual amount, the same line the hold rule draws.
-      ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered', active && signals.amountRatio > 3 ? 'Coached' : undefined],
-    ]],
-    ['Behaviour', [
-      ['Back steps', String(signals.backPresses), signals.backPresses > 0 ? 'Struggling' : undefined],
-      ['Help taps', String(signals.helpTaps), signals.helpTaps > 0 ? 'Struggling' : undefined],
-    ]],
+  const summary = pending ? 'Waiting for the first AI score. No rule asks for a pause.'
+    : unavailable ? 'The AI could not score this payment. The demo rules still apply.'
+    : chosen === 'Normal' ? 'No rule or AI warning so far. That does not prove the payment is safe.'
+    : chosen ? responses[decision.response] : session.consent ? 'Start a transfer to see Guardian work.' : 'Turn Guardian on in the bank app to see it work.';
+  // The rules' own answer, apart from the review the AI may add to the decision.
+  const [rule, ruleTone] = ruled[evaluate(signals).response];
+  // A cell's third entry is the class the signal points towards while it is present. The app switch has none: no rule and no model uses it.
+  const cells: [string, string, Tone | undefined][] = [
+    ['Simulated call', session.call ? 'Active' : 'None', session.call ? 'Coached' : undefined],
+    ['Simulated app switch', session.away ? `Away ${seconds(view.awayMs)}` : view.awayMs ? `Back, ${seconds(view.awayMs)} away` : 'In bank app', undefined],
+    ['Recipient', signals.newRecipient ? 'New' : 'Saved', signals.newRecipient ? 'Coached' : undefined],
+    ['Account number', !signals.newRecipient ? 'Not needed' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered', signals.pasted ? 'Coached' : undefined],
   ];
-  const rows = groups.flatMap(([, list]) => list);
-  return <Glass radius={26} className={`${dense ? 'p-3.5' : 'p-4'} ${className}`}>
-    <View aria-live="polite">
-      <View className="flex-row items-baseline justify-between gap-2">
-        <Text className={small}>Guardian read-out</Text>
-        <View className="flex-row items-center gap-1.5">
-          <View className={`h-1.5 w-1.5 rounded-full ${session.consent ? fill.Normal : 'bg-[#b3a4a9]'}`} />
-          <Text className={`font-body text-[13px] ${session.consent ? ink.Normal : 'text-soft'}`}>{session.consent ? 'Guardian on' : 'Guardian off'}</Text>
+  const over = signals.amountRatio > AMOUNT_LINE;
+  return <Glass radius={26} className={`${card} ${className}`}>
+    <View aria-live="polite" className="gap-2.5">
+      <View>
+        <Label icon={ShieldCheckIcon} note={<View className="flex-row items-center gap-1.5">
+          <View className={`h-2 w-2 rounded-full ${session.consent ? fill.Normal : 'bg-[#b3a4a9]'}`} />
+          <Text className={`${body} ${session.consent ? ink.Normal : 'text-soft'}`}>{session.consent ? 'Guardian on' : 'Guardian off'}</Text>
+        </View>}>Guardian read-out</Label>
+        <View className="mt-1.5 flex-row flex-wrap items-center justify-between gap-x-2">
+          <Text className={`font-display text-[30px] leading-9 tracking-[-0.6px] ${chosen ? ink[chosen] : 'text-ink'}`}>{heading}</Text>
+          {view.origin && <View className={`rounded-md px-2 py-0.5 ${wash.Coached}`}>
+            <Text className={`font-body text-[13px] leading-[18px] ${ink.Coached}`} style={figures}>Raised by {raisedBy[view.origin]}{shown === null ? '' : ` at ${(shown / 1000).toFixed(1)} s`}</Text>
+          </View>}
         </View>
-      </View>
-      <Text className={`mt-1 font-display tracking-[-0.5px] ${dense ? 'text-2xl leading-7' : 'text-[28px] leading-8'} ${chosen ? ink[chosen] : 'text-ink'}`}>{heading}</Text>
-      <Text className={`mt-1 font-body text-soft ${dense ? 'text-[13px] leading-[18px]' : 'text-sm leading-5'}`}>{pending ? 'Waiting for the first local AI score. No demonstration rule currently asks for a pause.'
-        : unavailable ? 'The AI could not assess this payment. The demonstration rules remain active.'
-        : chosen === 'Normal' ? 'No rule or AI warning at this point. This does not establish that the payment is safe.'
-        : chosen ? responses[decision.response] : session.consent ? 'Start a transfer to see Guardian work.' : 'Turn Guardian on in the bank app to see it work.'}</Text>
-
-      <Text className="mt-3 font-body text-xs leading-4 text-soft">Policy status · no confidence percentages</Text>
-      <View className="mt-1.5 flex-row flex-wrap gap-1.5">
-        {classes.map((name) => <View key={name} accessibilityLabel={`${name}${name === selectedPolicy ? ', selected' : ''}`}
-          className={`rounded-xl px-2.5 py-1.5 ${wash[name]}`}>
-          <Text className={`font-body text-xs ${name === selectedPolicy ? ink[name] : 'text-soft'}`}>{name}{name === selectedPolicy ? ' · selected' : ''}</Text>
-        </View>)}
+        <Text className={`${body} text-soft`}>{summary}</Text>
+        {monitoring && <View className="mt-3"><DecisionSummary /></View>}
       </View>
 
-      <Text className={`${dense ? 'mt-3' : 'mt-3.5'} ${small}`}>Reasons</Text>
-      {decision.reasons.map((reason) => <View key={reason} className="mt-1 flex-row items-center gap-2">
-        <View className={`h-1.5 w-1.5 rounded-full ${chosen ? fill[chosen] : 'bg-[#b3a4a9]'}`} />
-        <Text className={`flex-1 font-body text-ink ${dense ? 'text-[13px] leading-[18px]' : 'text-sm leading-5'}`}>{reason}</Text>
-      </View>)}
-
-      <DecisionSummary />
-      <AiReview dense={dense} />
-      <WarningMetrics />
-
-      {/* Dense: a table on one grid. The group is named down the left, then every label and every value starts on the same line as the ones above it. Otherwise two tiles to a row. */}
-      {dense ? <View className="mt-3 rounded-xl bg-white/70 px-3 py-1">
-        {groups.map(([group, list], index) => <View key={group} className={`flex-row ${index ? 'mt-[3px] border-t border-line pt-[3px]' : ''}`}>
-          <Text className="w-[100px] font-body text-[10.5px] uppercase leading-5 tracking-[0.7px] text-soft">{group}</Text>
-          <View className="flex-1">
-            {list.map(([label, value, tone]) => <View key={label} className={line}>
-              <Text className="w-[116px] font-body text-xs text-soft">{label}</Text>
-              <Value tone={tone} size="text-[12.5px]">{value}</Value>
-            </View>)}
-          </View>
-        </View>)}
-      </View> : <View className="mt-3.5 flex-row flex-wrap gap-1.5">
-        {rows.map(([label, value, tone]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
-          <Text className="font-body text-[11.5px] text-soft">{label}</Text>
-          <Value tone={tone} size="text-[13px]">{value}</Value>
-        </View>)}
+      {/* The signals belong to a monitored transfer. Outside one there is nothing to read. */}
+      {monitoring && <View className={`${section} gap-2.5`}>
+        <Label icon={PulseIcon} note={<Value tone={ruleTone}>{rule}</Value>}>Signals</Label>
+        <View className="flex-row flex-wrap justify-between gap-x-3 gap-y-2">
+          {cells.map(([label, value, tone]) => <View key={label}>
+            <Text className={caption}>{label}</Text>
+            <Value tone={tone}>{value}</Value>
+          </View>)}
+        </View>
+        <View className="flex-row items-start gap-3">
+          <Text className={`w-[56px] ${caption}`}>Amount</Text>
+          <View className="flex-1"><Meter value={signals.amountRatio / (AMOUNT_LINE * 2)} line={0.5} lineLabel={`${AMOUNT_LINE}x`} tone={over ? fill.Coached : fill.Normal}
+            label={`Amount is ${signals.amountRatio.toFixed(1)} times the usual transfer; the rules look above ${AMOUNT_LINE} times`} /></View>
+          <View className="w-[100px] items-end"><Value tone={over ? 'Coached' : undefined}>{`${signals.amountRatio.toFixed(1)}x usual`}</Value></View>
+        </View>
+        <View className="flex-row gap-3">
+          {([['Back steps', signals.backPresses, 3], ['Help taps', signals.helpTaps, 2]] as const).map(([label, count, of]) => <View key={label} className="flex-1 flex-row items-center gap-2">
+            <Text className={caption}>{label}</Text>
+            <Pips count={count} of={of} tone={fill.Struggling} />
+            <Value tone={count > 0 ? 'Struggling' : undefined}>{String(count)}</Value>
+          </View>)}
+        </View>
       </View>}
-      <Text className={`font-body text-xs leading-4 text-soft ${dense ? 'mt-2' : 'mt-2.5'}`}>{view.origin === 'ai' ? 'The transaction rules did not request a pause; the frozen AI model recommended review.' : 'Review origin is recorded separately for rules and AI.'} These are simulated sessions. AI outputs binary review; the three presentation classes come from demo policy.</Text>
+
+      <View className={section}><AiReview /></View>
+      <Text className={caption}>Simulated sessions. The AI score is not a scam probability.</Text>
     </View>
   </Glass>;
 }
 
-// Each preset carries the tone of the class it leads to, in a lighter shade on the chosen, dark row.
-const presetTone: Record<Scenario, Decision['classification']> = { normal: 'Normal', struggling: 'Struggling', medium: 'Coached', coached: 'Coached' };
+// Each preset carries the tone of the class it leads to, in a lighter shade on the chosen, dark tile.
+const presetTone: Record<Scenario, Tone> = { normal: 'Normal', struggling: 'Struggling', medium: 'Coached', coached: 'Coached' };
 const onDark = { Normal: 'bg-[#8fcdb8]', Struggling: 'bg-[#a9b3e6]', Coached: 'bg-[#e3b877]' };
 
-/** The four presets with what each one sets up. A choice sets the simulated call and what the next transfer starts with. */
+/**
+ * The controls: a preset for the demo signals, the authored request, and the operator's label with what it has measured.
+ * Everything boxed here is pressed. A transfer locks its set-up, so until it ends the choices give way to a line that states them and the one control that still works: delivering the request.
+ */
 export function Presets({ dense, className = '' }: PanelProps) {
-  const { session, dispatch } = useSession();
-  return <Glass radius={26} className={`${dense ? 'gap-2 p-3.5' : 'gap-2.5 p-4'} ${className}`}>
-    <Text className={small}>Try these. Each one presets the demo signals.</Text>
-    <View accessibilityRole="radiogroup" className={dense ? 'gap-1' : 'gap-1.5'}>
-      {scenarios.map((name) => {
-        const on = session.scenario === name;
-        const { label, note } = fixtures[name];
-        return <Pressable key={name} accessibilityRole="radio" accessibilityState={{ checked: on }} onPress={() => dispatch({ type: 'scenario', scenario: name })}
-          className={`rounded-[14px] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${on ? 'bg-ink' : 'bg-white/70'} ${dense ? 'px-3 py-1' : 'px-3.5 py-2'}`}>
-          <View className="flex-row items-center gap-2">
-            <View className={`h-2 w-2 rounded-full ${(on ? onDark : fill)[presetTone[name]]}`} />
-            <Text className={`font-body ${dense ? 'text-sm' : 'text-[15px]'} ${on ? 'text-white' : 'text-ink'}`}>{label}</Text>
-          </View>
-          <Text className={`pl-4 font-body ${dense ? 'text-xs leading-4' : 'text-[13px] leading-[18px]'} ${on ? 'text-white/80' : 'text-soft'}`}>{note}</Text>
-        </Pressable>;
-      })}
-    </View>
-    <RequestControl />
+  const { session, dispatch, report, evaluationLabel } = useSession();
+  const home = session.step === 'home';
+  return <Glass radius={26} className={`${card} ${className}`}>
+    {home ? <View className="gap-2">
+      <Label icon={FlagPennantIcon} note="Set up here, then press Transfer">Scenario preset</Label>
+      <Segmented dense={dense} value={session.scenario} onChange={(scenario) => dispatch({ type: 'scenario', scenario })}
+        options={scenarios.map((name) => ({ value: name, label: fixtures[name].label, mark: (on) => <View className={`h-2 w-2 rounded-full ${(on ? onDark : fill)[presetTone[name]]}`} /> }))} />
+      <Text className={caption}>{fixtures[session.scenario].note}</Text>
+    </View> : <View className="gap-1">
+      <Label icon={FlagPennantIcon} note="Locked until this transfer ends">Set-up</Label>
+      <Text className={caption}>{fixtures[session.scenario].label} preset. Evaluation label: {evaluationLabel ?? 'none'}.</Text>
+    </View>}
+    <View className={section}><RequestControl dense={dense} /></View>
+    {home && <View className={section}><EvaluationControl dense={dense} /></View>}
+    {home && <View className={`${section} gap-3`}>
+      <RunSummary />
+      <View className="flex-row flex-wrap gap-1">
+        <PrepareAiCase dense={dense} />
+        <MetricsExport dense={dense} json={JSON.stringify(report, null, 2)} />
+      </View>
+    </View>}
   </Glass>;
 }

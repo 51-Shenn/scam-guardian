@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Action } from '@/components/guardian/action';
+import { WarningMetrics } from '@/components/guardian/warning-metrics';
 import { Wordmark } from '@/components/guardian/wordmark';
 import { useSession } from '@/components/bank/session';
 import evidence from '../../data/processed/pitch-evidence-v1/summary.json';
@@ -90,12 +91,13 @@ export default function EvidenceScreen() {
         </>}
         {chapter===4&&<>
           <Text accessibilityRole="header" className={headings}>Timing and burden you can inspect</Text>
+          <WarningMetrics />
           <Text className={body}>Current app run: {report.summary.falseInterventionSessions}/{report.summary.legitimateSessions} legitimate sessions warned. FIR: {percent(report.summary.falseInterventionRate)}. Tiny demo counters are not estimated real-world false alarms.</Text>
           <Text className={body}>Before-review interval: {report.summary.medianWarningToReviewMs===null?'Not measured':`${(report.summary.medianWarningToReviewMs/1000).toFixed(2)} s`}. This ends at first Review entry and excludes the review cooldown.</Text>
           <Text className={body}>Observed warning-to-confirmation: {report.summary.medianObservedLeadMs===null?'Not measured':`${(report.summary.medianObservedLeadMs/1000).toFixed(2)} s`}. Includes the 15-second pause and response delays. Cancelled sessions have no confirmation lead.</Text>
           <Text className={muted}>Separate authored shadow lead in the evaluation report uses uninterrupted scripted confirmation times, not real user timings. Layout is a warning-display proxy; reading or noticing is not established.</Text>
           <Text className={body}>Demo sequence: routine payment → coached request while transaction rules stay quiet → independent-check guide → cancellation → inspect all evaluation outcomes.</Text>
-          <Text className={muted}>No field effectiveness or physical Android release-latency result is claimed. Export metrics before reload; this run retains the most recent 20 sessions in memory.</Text>
+          <Text className={muted}>No field effectiveness or physical Android release-latency result is claimed. Export metrics before reload; this run retains the most recent 20 sessions in memory ({report.retention.retainedSessions} kept, {report.retention.evictedSessions} evicted). Excluded from the counts: {report.summary.abandonedSessions} abandoned, {report.summary.unlabelledSessions} unlabelled. Confirmed coached sessions without a warning: {report.summary.confirmedCoachedWithoutWarning}. Sessions with no successful AI prediction: {report.summary.sessionsWithoutSuccessfulPrediction}.</Text>
           <Action secondary label="Return to measurements" onPress={()=>router.replace('/demo')} />
         </>}
       </View>

@@ -81,7 +81,7 @@ export interface Session {
   requestShown: boolean;
 }
 export const initialSession: Session = {
-  step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 2500,
+  step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 12500,
   amount: '', to: 'aina', account: '', entry: null, call: false, away: false, awaySince: null, awayMs: 0, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
   demoRequest: null, requestShown: false,
 };

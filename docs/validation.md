@@ -1,5 +1,67 @@
 # Verification
 
+## Console level with the phone's top, and glass top actions — 11 October 2026
+
+The user asked for the left cards to line up with the head of the phone, and for a glass background on the buttons at the top of `/demo`. The console now starts 30 below the stage's top, the height of the phone's caption and its gap, so the read-out's top edge is the phone frame's top edge. To keep room, the cards' padding went from 20 to 18 and the gaps between their sections from 12 to 10. The secondary actions at the top use the same frosted glass as the cards; an active signal's button stays solid crimson. Android draws that glass as near-opaque white with the same shadow.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Headless Edge at 1440x900: the read-out's top and the phone frame's top are both at 101 in all seven captured states. The tallest state, the AI review with its bars, ends at 845 against the phone's 868; console height 763 of 787 available.
+- `node scripts/browser_warning_measurements.mjs --pitch`: the first run failed, and the commit for this work was made before that was noticed. It failed where the script returns from the product page to the demo: it pressed the phone the moment the window size was restored, the press missed, and the page never left. The script now waits 600 ms there, as it already does after every other size change. It then passed twice, 27 checks each, runs `run-1791653665007` and `run-1791653736349`. The failed run is `run-1791653572092`.
+- Checked by eye on a capture of the AI review at 1440x900.
+- Not checked: the glass buttons over the flow art in motion, Android.
+
+## Round icon buttons, and no Pitch evidence button — 11 October 2026
+
+The user sent a capture of the two icon-only buttons drawn as narrow slivers, and asked for them to be round and for Pitch evidence to go. I could not reproduce the slivers: in headless Edge they measured 42 by 42. Their size is now set inline with no shrinking, so neither a crowded row nor a stale stylesheet can narrow them. The Pitch evidence button is removed from both layouts of `/demo`. The page itself stays at `/evidence`; opened there it is a separate app run, so its Live proof chapter no longer shows the demo's counters. Those are on the controls card at Home and in the export.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Reset demo and Product page measured 42 by 42 at 1440x900, 900x800 and 866x700.
+- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed, run `run-1791653272450`. The script now opens `/evidence` at its own address and expects that run's counters to be empty.
+- Not checked: the user's own browser, where the slivers appeared; Android.
+
+## Icons on the demo's top actions — 11 October 2026
+
+The user asked for icons on the action buttons at the top of `/demo`, and for the text to go where an icon states the action in full. Reset demo and Product page are now icon-only: a counter-clockwise arrow and a house, each with its name as the accessible name and, on web, the tooltip. The simulated call, the simulated app switch and Pitch evidence keep their words beside an icon: the two signals must say they are simulated, and no icon states "pitch evidence" by itself. The narrow layout's Guardian tab has the same buttons.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed, run `run-1791652965621`. The script now finds Product page by its accessible name.
+- Checked by eye on captures at 1440x900, during a rule-raised review, and at 390x844 idle.
+- Not checked: the tooltips on hover, Android.
+
+## Lock figure tour settles between steps — 11 October 2026
+
+The user said the canal lock was not smooth. Measured on the exported page in headless Edge at 1440x900, sampling the drawing every frame: frames arrived 16.7 ms apart with none over 34 ms, so nothing was dropping. The cause was the pace set in `lock-figure.web.tsx`. A step came every 700 ms, which is how long the gates take to swing, so each movement began the moment the last one ended and the drawing was moving in 93% of frames, with rests of about 150 ms. The start of each swing is abrupt because the drawing eases out only.
+
+A step now comes every 1000 ms and the rest lasts 1000 ms: a lap takes about four seconds, not three. Measured the same way: each movement lasts 700 to 750 ms, then the drawing is near still for 450 to 530 ms before the next, and it is moving in 75% of frames.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Not changed: the swing's own curve. It is fixed inside the Hairline drawing, which is built from `design/locks.js` with the Hairline engine. A softer start would mean rebuilding that drawing.
+- Not checked: by eye on a real display, the browser acceptance script after this change (it does not exercise the figure), Android (which shows the figure's rest pose).
+
+## Read-out as charts, controls that look pressed, and the landing card over the phone — 11 October 2026
+
+Checked on 11 October 2026 on branch `feat/readout-charts`. The user asked for the demo's left cards to be trimmed for pitching, to use charts in place of text, and to be less cluttered; then for controls that look pressable, larger type and padding, and the two cards stacked together. They also pointed out that the landing hero no longer had the glass card over the phone.
+
+What changed:
+
+- The read-out is a report with nothing to press: heading, policy category and priority, the signals during a monitored transfer (amount on a track against the 3x line, back steps and help taps as pips), the AI score on a track against its review line, and after an AI review the three largest terms towards it and the largest against it as bars from a centre line. The reasons list, the decision-support text block, the request-context lines, the long caveats and the measurements block left the read-out. The full measurement tiles are on **Pitch evidence → Live proof**; the exclusions and retention counts are in the note there.
+- The controls card holds the scenario preset, authored request, evaluation label, two run counters, **Prepare MT02 · AI warning test** and the metrics export, each as a bordered, raised tile, with icons on the actions. A transfer locks its set-up, so during one the card states the set-up in a line and keeps only **Deliver**.
+- The console is 500 wide and the stage is as tall as the phone and its caption, 817, not 848. Console text is 13 to 15 px at natural size.
+- The landing scenario card laps 28 px over the phone again. The browser check that forbade any overlap now allows up to 28 px.
+- The demo balance is RM 12,500 in place of RM 2,500. Neither frozen model has a balance or amount-value feature, so scoring is unchanged.
+
+Checks:
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79 domain tests passed, after two balance figures and one over-balance amount in `session.test.ts` were updated.
+- `npm run export:platforms`: Android Hermes and static web exports passed.
+- `node scripts/browser_warning_measurements.mjs --pitch` in headless Edge: **27 acceptance checks** passed, run `run-1791652033679`. The script's text assertions were rewritten for the new wording; it now also asserts that the read-out contains no percent sign and that the label choices are gone during a transfer.
+- Console height at natural size, against a stage of 817, measured in headless Edge at 1440x900: idle 660; a rule-raised Coached transfer 599; the AI review with its contribution bars during a transfer 785, the tallest state; Home after that transfer 572; Struggling 643. The same figures at 1366x700 and 1920x1000, with the page no taller or wider than the window.
+- At 1024x768 the page measured 1028 wide. The stage fits; the overflow is in the header row of five buttons and is not part of this work.
+- Narrow web at 390x844: the Guardian tab shows the same cards with full-height touch targets, checked from idle to a rule-raised review. No horizontal overflow.
+- Landing at 1440x900: the card's right edge is 28 px past the phone's left edge; no horizontal overflow.
+- The three class tones were run through a palette validator. Bronze against pine, the pair used for the contribution bars, passes colour-blind and normal-vision separation; the bars also differ by direction and carry signed values. Pine against indigo is close (14.7 against a floor of 15), so the read-out never relies on those two tones alone.
+- Not checked: a physical Android device or emulator, the Vercel deployment, and reduced-motion behaviour, which this work does not touch.
+
 ## Follow-up: scenario card and phone separation
 
 The refreshed page still intentionally overlapped the scenario card with the phone. User rejected that layout. Removed the negative margin and stacking override, reserved the full 340-pixel card width plus a 24-pixel gap, and included that gap when deciding whether three columns fit. Narrower layouts retain the card below the copy. The headline's available-width calculation now accounts for the gap.

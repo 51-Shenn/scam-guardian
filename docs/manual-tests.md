@@ -6,12 +6,12 @@ Open [the app](/demo) on the same deployment as this manual. For a local preview
 
 ## Before testing
 
-1. Use a fresh browser tab for an empty report. Keep the same tab for all ten cases; do not refresh. On desktop, scroll inside the left Guardian panel. On narrow screens, use the Guardian tab for controls and Bank app for the transfer.
+1. Use a fresh browser tab for an empty report. Keep the same tab for all ten cases; do not refresh. On desktop the left Guardian console fits the window without scrolling: its lower card holds the set-up controls at Home, and only **Deliver** during a transfer. On narrow screens, use the Guardian tab for controls and Bank app for the transfer.
 2. For each case, select the preset first, then the evaluation label and authored request before pressing Transfer. Presets reset transfer controls and can abandon an active session; never change preset to force an outcome after starting.
 3. Turn Guardian on with **Agree and turn on** if prompted. Leave **Let Aina be asked to call me if a transfer is paused** off for every case. This is the family-preview consent, not real messaging.
 4. Set simulated call and app-switch controls exactly as specified. **Start simulated call** changes off → active; **End simulated call** changes active → off. **Simulate app switch** changes in-bank → away; **Return to bank app** changes away → in-bank. These buttons do not detect real calls or other apps.
 5. Use only the dummy account `123412341234`. Amounts are entered with the mock bank's numeric keypad, not a free-text field. Its usual amount is the fixed demonstration value RM 50; this is not a learned personal baseline.
-6. The model scores on five-second prefixes. Where instructed to wait, keep the bank visible until **AI review (on device)** shows a scored cutoff after the relevant action. Allow up to 15 seconds for the manual observation window. If it remains Waiting or Unavailable, record that explicitly; do not interpret it as a negative prediction. This window is a testing procedure, not a promised latency target.
+6. The model scores on five-second prefixes. Where instructed to wait, keep the bank visible until **AI review, on device** shows a scored cutoff after the relevant action. Allow up to 15 seconds for the manual observation window. If it remains Waiting or Unavailable, record that explicitly; do not interpret it as a negative prediction. This window is a testing procedure, not a promised latency target.
 7. Record each case's last session ID immediately after confirming or cancelling. The export has no MT case ID, so keep the ID-to-case mapping yourself. Download an export after each case for safety, and one final export after MT10. Do not infer detection accuracy from the preset's name.
 
 ## What each field means
@@ -20,17 +20,17 @@ Open [the app](/demo) on the same deployment as this manual. For a local preview
 | --- | --- |
 | Demo preset | Sets mock starting signals. Normal uses a saved recipient and call off. Struggling adds mock back-navigation difficulty. Coached uses new recipient and call on. Coached, high also starts new/call on; paste or amount evidence determines the stronger rule response. |
 | Evaluation label | Your predeclared simulated ground truth: Normal/Struggling are legitimate; Coached-medium/Coached-high are coached. It is locked during a transfer and is not a model input. |
-| Authored request | Choose Unavailable, Routine rent request, Coached request with warning bypass, or Quiet request (negative control). These are fixed fixtures, not messages captured from a messaging app. |
-| Deliver authored request | Makes the selected fixture available during this transfer. Merely selecting it does not deliver it. A new transfer starts with request context unavailable. |
+| Authored request | Choose None (request unavailable), Routine (routine rent request), Coached (coached request with warning bypass) or Quiet (quiet request, negative control). During the transfer the control shows the full name. These are fixed fixtures, not messages captured from a messaging app. |
+| Deliver | Shown during a transfer. Makes the selected fixture available during this transfer. Merely selecting it does not deliver it. A new transfer starts with request context unavailable. |
 | Recipient | Choose Aina, a saved contact, or New recipient. The dummy account field applies only to a new recipient. |
 | Account number | Dummy UI value; its contents are excluded from the model and metrics export. Typing/paste/edit counters may affect behavior features. |
 | Amount | Mock payment amount. The demonstration rules compare it with RM 50. Local collection records mock transaction context separately from selected model features; the warning-metrics download excludes the amount. |
 | Call / app switch | Explicit simulated state changes. Neither is a newly trained phone feature. The app read-out shows cumulative simulated away duration. |
 | Family preview | Separate consent for a mock alert on this screen. Keep off throughout this manual. Nothing goes to a second phone. |
-| AI review | Frozen model output: review/no additional review. Score is uncalibrated and is not a scam probability. Waiting/Unavailable are separate states. The read-out says Checking payment while awaiting its first score and No warning currently after an unwarned assessment; neither means 100% safe. Request context says selected/not delivered, delivered, or unavailable, with the actual model ID once scoring succeeds. |
-| Decision support | Plain-language reason, policy category, priority and next action. Normal/Struggling/Coached display categories are policy outputs, not three learned model classes. |
-| Warning origin | Rule, AI or combined. Credit AI only if it actually contributed; a rule warning alone is not evidence of AI detection. |
-| Warning measurements | Actual warning-display, review and confirmation timestamps, session outcomes and interruption counts. Display timestamp is a rendering proxy, not proof you read the warning. |
+| AI review | Frozen model output: review/no additional review. Score is uncalibrated and is not a scam probability. Waiting/Unavailable are separate states. The read-out says Checking payment while awaiting its first score and No warning currently after an unwarned assessment; neither means 100% safe. The score is drawn on a track against its review line, with the actual model ID and cutoff beside it once scoring succeeds. The Authored request control says whether the request is selected and not delivered yet, or delivered. |
+| Policy category and priority | Under the read-out's heading during a monitored transfer. The reason and next action are in the bank app's warning. Normal/Struggling/Coached display categories are policy outputs, not three learned model classes. |
+| Warning origin | Rule, AI or combined, shown as **Raised by …** beside the heading with the time the warning first appeared. Credit AI only if it actually contributed; a rule warning alone is not evidence of AI detection. |
+| Warning measurements | At Home the controls card shows false interventions and the median lead; the export has the rest. Actual warning-display, review and confirmation timestamps, session outcomes and interruption counts. Display timestamp is a rendering proxy, not proof you read the warning. |
 
 ## Every selection for every case
 
@@ -41,22 +41,22 @@ Guardian **on**, family preview **off**, dummy account **typed**, and app switch
 | MT01: legitimate reference | Normal | Normal | Routine rent request | Aina saved / N/A | RM 50 | Off | In bank |
 | MT02: AI contribution, explanation, cancellation | Normal | Coached-high | Coached request with warning bypass | New / `123412341234` | RM 50 | Off | In bank |
 | MT03: quiet scam limitation | Normal | Coached-high | Quiet request (negative control) | Aina saved / N/A | RM 50 | Off | In bank |
-| MT04: early rule warning and timing | Coached | Coached-medium | Unavailable | New / `123412341234` | RM 50 | Active | In bank |
-| MT05: legitimate false intervention | Coached | Normal | Unavailable | New / `123412341234` | RM 50 | Active | In bank |
+| MT04: early rule warning and timing | Coached | Coached-medium | None | New / `123412341234` | RM 50 | Active | In bank |
+| MT05: legitimate false intervention | Coached | Normal | None | New / `123412341234` | RM 50 | Active | In bank |
 | MT06: difficulty versus suspicion | Struggling | Struggling | Routine rent request | Aina saved / N/A | RM 50 | Off | In bank |
 | MT07: repeated external-app visits | Normal | Normal | Routine rent request | Aina saved / N/A | RM 50 | Off | Away 3 s, return; away 4 s, return |
-| MT08: call toggling without new recipient | Normal | Normal | Unavailable | Aina saved / N/A | RM 50 | Off → active 3 s → off → active 2 s → off | In bank |
-| MT09: missing request context | Normal | Coached-high | Unavailable | New / `123412341234` | RM 50 | Off | In bank |
-| MT10: amount-rule boundary | Coached | Coached-medium | Unavailable | New / `123412341234` | RM 150, then RM 151 before ending | Active | In bank |
+| MT08: call toggling without new recipient | Normal | Normal | None | Aina saved / N/A | RM 50 | Off → active 3 s → off → active 2 s → off | In bank |
+| MT09: missing request context | Normal | Coached-high | None | New / `123412341234` | RM 50 | Off | In bank |
+| MT10: amount-rule boundary | Coached | Coached-medium | None | New / `123412341234` | RM 150, then RM 151 before ending | Active | In bank |
 
 ## Exact actions and evidence
 
-If the display stays Normal/no warning, first check which case you are running. MT01's routine request is intended as a benign reference. Selecting an evaluation label does not force a model prediction. For MT02, choose the coached request before Transfer and press the dark **Deliver authored request** button during the monitored transfer; confirm that it says **Authored request delivered**. Wait for a scored cutoff after delivery. The policy labels are status indicators, not confidence bars. If MT02 still does not warn, keep that result and export it rather than switching presets to force an AI success.
+If the display stays Normal/no warning, first check which case you are running. MT01's routine request is intended as a benign reference. Selecting an evaluation label does not force a model prediction. For MT02, choose the coached request before Transfer and press the red **Deliver** button during the monitored transfer; confirm that it says **Delivered**. Wait for a scored cutoff after delivery. The read-out shows no confidence percentages. If MT02 still does not warn, keep that result and export it rather than switching presets to force an AI success.
 
 ### MT01 — legitimate reference
 
 1. Apply the MT01 row. Press Transfer; agree if asked. Select Aina if necessary.
-2. Press **Deliver authored request**, then Next. Press keypad **5**, **0**. Wait for a scored prefix after delivery.
+2. Press **Deliver**, then Next. Press keypad **5**, **0**. Wait for a scored prefix after delivery.
 3. Press Review. If an unexpected warning appears, keep label Normal, record it, choose **I want to review it myself**, and wait for the pause to finish.
 4. Press Confirm transfer, or Continue with transfer if a pause occurred, then Done.
 
@@ -64,18 +64,18 @@ Expected: prior scripted reference completed unwarned, but live behavior can dif
 
 ### MT02 — AI warning, explanation and independent-check action
 
-1. Finish or cancel any current transfer. At Home, press **Prepare MT02 · AI warning test** in the Guardian panel. This selects the Normal preset (call off / in bank), Coached-high evaluation label and **Coached request with warning bypass**. It configures inputs without forcing a positive prediction. Keep family preview off. Press Transfer → agree and turn on if prompted → New recipient. Press **Deliver authored request** while still at recipient; leave the account empty for the initial observation.
+1. Finish or cancel any current transfer. At Home, press **Prepare MT02 · AI warning test** in the controls card. This selects the Normal preset (call off / in bank), Coached-high evaluation label and **Coached request with warning bypass**. It configures inputs without forcing a positive prediction. Keep family preview off. Press Transfer → agree and turn on if prompted → New recipient. Press **Deliver** while still at recipient; leave the account empty for the initial observation.
 2. Wait for a scored prefix, up to 15 seconds. Inspect AI review and warning origin. The transaction rules should stay quiet with call off and this ordinary amount.
 3. If AI recommends review, capture the recipient-step banner, category, priority, next action and **Why the first AI review fired** contribution breakdown. A prior scripted run warned here; a live miss remains a miss.
 4. Type `123412341234` → Next → keypad 5, 0 → Review. If the pause sheet appears, open **Open independent-check guide**, then **Cancel this transfer**. If it does not, record the miss and use Cancel.
 
 Expected software behavior: guide gives a trusted-contact route and cancellation ends the transfer. AI evidence requires an actual AI recommendation. Cancelled coached sessions have no confirmation lead; do not invent one. A before-review interval exists only if a warning really appeared before review.
 
-If there is no warning, inspect **AI review (on device)** before leaving the transfer. The selected request must read **Coached request with warning bypass**, request context must say **delivered to this transfer**, and the next scored model should be **lr_combined_binary**. **xgb_behavior_binary** is the behavior-only route, used while request context is unavailable to that scored prefix. Note the cutoff, score and threshold; keep a screenshot. A scored LR answer below its frozen threshold is a model miss, not a successful warning. Waiting/Unavailable is a different failure. The score is not a scam probability. The metrics download does not contain these detailed inputs, so it cannot alone diagnose which request was selected.
+If there is no warning, inspect **AI review, on device** before leaving the transfer. The Authored request control must read **Coached request with warning bypass** and **Delivered to this transfer**, and the next scored model should be **lr_combined_binary**. **xgb_behavior_binary** is the behavior-only route, used while request context is unavailable to that scored prefix. Note the cutoff, score and threshold; keep a screenshot. A scored LR answer below its frozen threshold is a model miss, not a successful warning. Waiting/Unavailable is a different failure. The score is not a scam probability. The metrics download does not contain these detailed inputs, so it cannot alone diagnose which request was selected.
 
 ### MT03 — quiet scam negative control
 
-1. Apply MT03. Repeat MT01's timings and navigation as closely as possible: Transfer → Aina → Deliver authored request → Next → 5, 0 → scored prefix → Review → confirm → Done.
+1. Apply MT03. Repeat MT01's timings and navigation as closely as possible: Transfer → Aina → Deliver → Next → 5, 0 → scored prefix → Review → confirm → Done.
 2. Keep the Coached-high annotation even if everything looks normal. Log any warning rather than trying to suppress it.
 
 Expected model limitation: routine and quiet fixtures have identical encoded request cues, so the model cannot distinguish their labels from request cues alone. Live behavioral differences may still change scores. An unwarned confirmation increases confirmed coached misses; lead stays null. This is a functional execution with a detection miss, not a successful scam-protection case.
@@ -99,7 +99,7 @@ Expected: outcome cancelled, label Normal, warning retained. Legitimate denomina
 
 ### MT06 — guidance for difficulty
 
-1. Apply MT06. Transfer → Deliver authored request → Next → 5, 0.
+1. Apply MT06. Transfer → Deliver → Next → 5, 0.
 2. Go back to recipient and press Next again. Inspect the step-by-step guidance; check the amount and re-enter 50 if needed.
 3. Wait for a scored prefix → Review → confirm after any required pause → Done.
 
@@ -107,7 +107,7 @@ Expected: the preset's mock repeated navigation triggers Simple mode guidance. G
 
 ### MT07 — multiple app switches in one transaction
 
-1. Apply MT07. Transfer → Aina → Deliver authored request.
+1. Apply MT07. Transfer → Aina → Deliver.
 2. Press **Simulate app switch**; wait approximately 3 seconds; press **Return to bank app**.
 3. Repeat: Simulate app switch → approximately 4 seconds → Return to bank app.
 4. Inspect App switch in the Guardian read-out: returned state and approximately 7 seconds total away, allowing for manual timing. Then Next → 5, 0 → scored prefix → Review → confirm after any required pause → Done.
@@ -125,7 +125,7 @@ Expected: call status toggles correctly and finishes off. The current transactio
 
 ### MT09 — request unavailable
 
-1. Apply MT09. Transfer → New recipient → type dummy account. Do not press Deliver authored request; it is unavailable.
+1. Apply MT09. Transfer → New recipient → type dummy account. Do not press Deliver; it is unavailable.
 2. Next → 5, 0 → wait for a scored prefix → Review → confirm after any required pause → Done.
 3. Record model availability, score, threshold and whether any warning appeared.
 
@@ -142,7 +142,7 @@ Expected: amount high-rule boundary is strictly greater than RM 150, not greater
 
 ## Save and interpret the results
 
-After each case, download **Download metrics JSON** from Warning measurements. Android's corresponding control is **Copy metrics JSON**. Record the last session ID before starting another case. The integrated app retains at most 20 ended sessions in this app run and does not automatically write them to disk; reload/new tab can discard the report. Keep exports locally. If you want a later audit, provide the saved file or its local path.
+After each case, finish or cancel the transfer, then press **Download metrics JSON** in the controls card. Android's corresponding control is **Copy metrics JSON**. Record the last session ID before starting another case. The integrated app retains at most 20 ended sessions in this app run and does not automatically write them to disk; reload/new tab can discard the report. Keep exports locally. If you want a later audit, provide the saved file or its local path.
 
 | Case | Session ID | Outcome | AI score / threshold / cutoff | Warning origin and stage | Observed lead / before-review interval | Software check | Detection outcome | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
