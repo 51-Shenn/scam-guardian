@@ -181,6 +181,8 @@ try {
     checks.push(`Landing keeps the scenario card within the page and at most 28 px over the phone's edge, with no header or horizontal overflow at ${width}x${height}.`);
   }
   await send('Emulation.clearDeviceMetricsOverride');
+  // Let the hero lay out at the restored size before aiming at the phone, as after each size above.
+  await delay(600);
   await click('Open the banking demo', 'button', true);
   await until(() => evaluate("document.body.innerText.includes('False interventions')"));
   assert.equal(await matches('/False interventions\\s*1 of 2/'), true, 'Navigation must preserve the measurement history.');

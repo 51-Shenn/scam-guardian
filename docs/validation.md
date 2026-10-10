@@ -6,7 +6,7 @@ The user asked for the left cards to line up with the head of the phone, and for
 
 - `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
 - Headless Edge at 1440x900: the read-out's top and the phone frame's top are both at 101 in all seven captured states. The tallest state, the AI review with its bars, ends at 845 against the phone's 868; console height 763 of 787 available.
-- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed.
+- `node scripts/browser_warning_measurements.mjs --pitch`: the first run failed, and the commit for this work was made before that was noticed. It failed where the script returns from the product page to the demo: it pressed the phone the moment the window size was restored, the press missed, and the page never left. The script now waits 600 ms there, as it already does after every other size change. It then passed twice, 27 checks each, runs `run-1791653665007` and `run-1791653736349`. The failed run is `run-1791653572092`.
 - Checked by eye on a capture of the AI review at 1440x900.
 - Not checked: the glass buttons over the flow art in motion, Android.
 
