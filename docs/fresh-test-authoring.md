@@ -1,5 +1,7 @@
 # Fresh independent test — authoring template, not executed
 
+User-confirmed deadline boundaries: no retraining/retuning on the 32 inspected cases, no text embedding replacement, and no improvement claim evaluated on cases used to edit the system. See [standing constraints](../CONSTRAINTS.md). The next test evaluates the unchanged frozen system; future changes require separate development data and another untouched test.
+
 Purpose: evaluate the frozen model on genuinely new mock requests and, separately, distinguishable observed/role-play behavior. Start with 30–40 independently authored items to expose defects; do not treat this small convenience sample as a reliable real-world effectiveness estimate. More sessions alone do not fix shared-author, wording-family or participant dependence.
 
 The [blank CSV](fresh-test-template.csv) contains 40 empty slots. It contains **no examples or labels** and must never be counted as collected data. Use dummy facts only; no real messages, names, accounts, caller identity, clipboard contents or call audio. Save completed local collection files under project `data/raw/fresh-test-v1/`; derived predictions/evaluation belong under `data/processed/fresh-test-v1/`.
