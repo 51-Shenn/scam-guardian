@@ -21,6 +21,8 @@ Checked on 10 October 2026 after replacing the e-wallet with the bank app.
 - Glass, class bars and the family phone were checked by eye on captures.
 - After the accent changed from cobalt to the bank's crimson the same day: all four gates and every check above were run again with the same results, and the page art, logo, buttons and lock screen were checked by eye on new captures.
 
+- Flow art residue: the trails used to leave a permanent hatch, because an 8-bit canvas cannot fade a pixel below about 7% opacity with the old erase step. After the fix, at 1440x900 and 15 seconds in, pixels that held the same value for a further 6 seconds topped out at alpha 9 of 255 on the canvas, shown at 1.8 of 255 once the canvas opacity applies. No hatch was visible on a capture at 21 seconds.
+
 **Not verified**
 
 - Android on a device or emulator. No device was attached, so the translucent glass fallback, the SVG colour fields and the top switch were not seen running natively. The Android export passing is a bundling check only.

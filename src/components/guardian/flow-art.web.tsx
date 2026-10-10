@@ -25,10 +25,13 @@ export function FlowArt({ paused }: FlowArtProps) {
       particle.age = 0;
       return particle;
     };
+    // Trails fade by erasing a little of the canvas each frame. An 8-bit canvas rounds that erasure away once a pixel
+    // is faint enough, so every trail leaves a residue that never clears. Strokes are therefore drawn at full strength
+    // and the canvas is shown at 20% opacity (global.css): the residue falls below one visible step of the page colour.
     const step = (still: boolean) => {
       if (!still) {
         context.globalCompositeOperation = 'destination-out';
-        context.fillStyle = 'rgba(0,0,0,.028)';
+        context.fillStyle = 'rgba(0,0,0,.05)';
         context.fillRect(0, 0, width, height);
         context.globalCompositeOperation = 'source-over';
       }
@@ -48,7 +51,7 @@ export function FlowArt({ paused }: FlowArtProps) {
         }
         const x = particle.x + vx * 1.25, y = particle.y + vy * 1.25;
         const fade = Math.min(1, particle.age / 30, (particle.life - particle.age) / 30);
-        context.strokeStyle = `rgba(200,16,46,${(still ? 0.05 : 0.2) * fade})`;
+        context.strokeStyle = `rgba(200,16,46,${(still ? 0.25 : 1) * fade})`;
         context.beginPath();
         context.moveTo(particle.x, particle.y);
         context.lineTo(x, y);
