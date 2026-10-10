@@ -2,3 +2,6 @@
 design/Hedvig-Letters-*-OFL.txt whitespace=-blank-at-eol
 src/components/beui/base.web.tsx whitespace=-blank-at-eof
 src/components/beui/switch.web.tsx whitespace=-blank-at-eof
+# The AI team's files are kept byte for byte; their hashes are checked in src/domain/local-api.test.ts.
+src/domain/contextual_inference.mjs text eol=lf
+reference/ai/** text eol=lf
