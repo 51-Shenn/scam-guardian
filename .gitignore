@@ -40,6 +40,9 @@ yarn-error.*
 /data/processed/warning-measurements-v1/browser/edge-profile-*/
 /data/processed/warning-measurements-v1/browser/run-*/edge-profile/
 /data/processed/warning-measurements-v1/browser/**/failure*
+# Generated reruns remain local; the explicitly tracked accepted run is retained in Git.
+/data/processed/warning-measurements-v1/browser/run-*/
+/data/processed/warning-measurements-v1/browser/*.png
 
 example
 
