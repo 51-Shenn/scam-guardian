@@ -43,10 +43,10 @@ export function StepFooter({ label, onPress, disabled, bottom }: { label: string
   const { view, dispatch } = useSession();
   return <View className="gap-2 px-5 pt-2.5" style={{ paddingBottom: bottom + 10 }}>
     <EarlyWarning />
-    <BankButton label={label} onPress={onPress} disabled={disabled} large={view.simple} />
+    <BankButton label={label} onPress={onPress} disabled={disabled} large={view.large} />
     <View className="flex-row justify-between">
-      <BankButton variant="quiet" large={view.simple} label="Help me with this step" icon={<LifebuoyIcon size={18} color={B.red} />} onPress={() => dispatch({ type: 'help' })} />
-      <BankButton variant="quiet" large={view.simple} label="Cancel" onPress={() => dispatch({ type: 'cancel' })} />
+      <BankButton variant="quiet" large={view.large} label="Help me with this step" icon={<LifebuoyIcon size={18} color={B.red} />} onPress={() => dispatch({ type: 'help' })} />
+      <BankButton variant="quiet" large={view.large} label="Cancel" onPress={() => dispatch({ type: 'cancel' })} />
     </View>
   </View>;
 }

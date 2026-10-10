@@ -15,7 +15,7 @@ export function RecipientStep({ top, bottom }: { top: number; bottom: number }) 
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerClassName="gap-3 px-5 pb-3 pt-[18px]">
       <AuthoredRequest />
       {view.simple && <Guide>Choose the person you want to send to. Then press Next.</Guide>}
-      <Text accessibilityRole="header" className={`font-body text-b-ink ${view.simple ? 'text-[28px] leading-[34px]' : 'text-2xl'}`}>Who are you sending to?</Text>
+      <Text accessibilityRole="header" className={`font-body text-b-ink ${view.large ? 'text-[28px] leading-[34px]' : 'text-2xl'}`}>Who are you sending to?</Text>
       {!view.simple && <Text className="font-body text-[15px] text-b-muted">Pick a saved contact or a new recipient.</Text>}
       <View accessibilityRole="radiogroup" className="gap-2.5">
         {recipientIds.map((id) => {
@@ -23,20 +23,20 @@ export function RecipientStep({ top, bottom }: { top: number; bottom: number }) 
           const selected = session.to === id;
           return <Pressable key={id} accessibilityRole="radio" accessibilityLabel={`Recipient ${person.name}`} accessibilityState={{ checked: selected }} onPress={() => dispatch({ type: 'pick', to: id })}
             className={`rounded-[24px] border-2 active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${selected ? 'border-b-red' : 'border-transparent'}`}>
-            <Glass radius={22} className={`flex-row items-center gap-3.5 ${view.simple ? 'p-4' : 'px-3.5 py-3'}`}>
+            <Glass radius={22} className={`flex-row items-center gap-3.5 ${view.large ? 'p-4' : 'px-3.5 py-3'}`}>
               <View aria-hidden className={`h-[46px] w-[46px] items-center justify-center rounded-full ${person.fresh ? 'bg-b-amber-bg' : 'bg-b-tint'}`}>
                 {person.fresh ? <UserPlusIcon size={22} color={B.amber} /> : <Text className="font-body text-[19px] text-b-red">{person.initial}</Text>}
               </View>
               <View className="flex-1 gap-0.5">
-                <Text className={`font-body text-b-ink ${view.simple ? 'text-[21px]' : 'text-[17px]'}`}>{person.name}</Text>
-                <Text className={`font-body text-b-muted ${view.simple ? 'text-base' : 'text-sm'}`}>{person.meta}</Text>
+                <Text className={`font-body text-b-ink ${view.large ? 'text-[21px]' : 'text-[17px]'}`}>{person.name}</Text>
+                <Text className={`font-body text-b-muted ${view.large ? 'text-base' : 'text-sm'}`}>{person.meta}</Text>
               </View>
               {selected && <CheckCircleIcon size={24} color={B.red} weight="fill" />}
             </Glass>
           </Pressable>;
         })}
       </View>
-      {recipients[session.to].fresh && <AccountField large={view.simple} />}
+      {recipients[session.to].fresh && <AccountField large={view.large} />}
     </ScrollView>
     <StepFooter label="Next" disabled={!view.ready} onPress={() => dispatch({ type: 'next' })} bottom={bottom} />
   </View>;

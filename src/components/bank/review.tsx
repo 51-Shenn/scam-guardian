@@ -7,7 +7,7 @@ import { Guide, StepFooter, StepHeader } from './step-chrome';
 
 export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
   const { session, view, dispatch, guardian, checking } = useSession();
-  const size = view.simple ? 'text-[19px]' : 'text-base';
+  const size = view.large ? 'text-[19px]' : 'text-base';
   const person = recipients[session.to];
   const account: [string, string][] = person.fresh ? [['Account', groupDigits(session.account)]] : [];
   const confirm = () => {
@@ -19,7 +19,7 @@ export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
     <StepHeader title="Review" progress={3} top={top} />
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerClassName="gap-3.5 px-5 pb-3 pt-[18px]">
       {view.simple && <Guide>Check the person and the amount. Confirm only when both are right.</Guide>}
-      <Text accessibilityRole="header" className={`font-body text-b-ink ${view.simple ? 'text-[28px] leading-[34px]' : 'text-2xl'}`}>{view.paused ? 'Take a moment' : 'Check before you send'}</Text>
+      <Text accessibilityRole="header" className={`font-body text-b-ink ${view.large ? 'text-[28px] leading-[34px]' : 'text-2xl'}`}>{view.paused ? 'Take a moment' : 'Check before you send'}</Text>
       <Glass radius={22} className="px-4 py-1">
         {rows.map(([label, value], index) => <View key={label} className={`flex-row items-center justify-between gap-4 py-[13px] ${index ? 'border-t border-b-line' : ''}`}>
           <Text className={`font-body text-b-muted ${size}`}>{label}</Text>
