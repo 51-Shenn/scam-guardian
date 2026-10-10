@@ -64,12 +64,14 @@ Expected: prior scripted reference completed unwarned, but live behavior can dif
 
 ### MT02 — AI warning, explanation and independent-check action
 
-1. Apply MT02. Transfer → New recipient. Press **Deliver authored request** while still at recipient; leave the account empty for the initial observation.
+1. Finish or cancel any current transfer. At Home, press **Prepare MT02 · AI warning test** in the Guardian panel. This selects the Normal preset (call off / in bank), Coached-high evaluation label and **Coached request with warning bypass**. It configures inputs without forcing a positive prediction. Keep family preview off. Press Transfer → agree and turn on if prompted → New recipient. Press **Deliver authored request** while still at recipient; leave the account empty for the initial observation.
 2. Wait for a scored prefix, up to 15 seconds. Inspect AI review and warning origin. The transaction rules should stay quiet with call off and this ordinary amount.
 3. If AI recommends review, capture the recipient-step banner, category, priority, next action and **Why the first AI review fired** contribution breakdown. A prior scripted run warned here; a live miss remains a miss.
 4. Type `123412341234` → Next → keypad 5, 0 → Review. If the pause sheet appears, open **Open independent-check guide**, then **Cancel this transfer**. If it does not, record the miss and use Cancel.
 
 Expected software behavior: guide gives a trusted-contact route and cancellation ends the transfer. AI evidence requires an actual AI recommendation. Cancelled coached sessions have no confirmation lead; do not invent one. A before-review interval exists only if a warning really appeared before review.
+
+If there is no warning, inspect **AI review (on device)** before leaving the transfer. The selected request must read **Coached request with warning bypass**, request context must say **delivered to this transfer**, and the next scored model should be **lr_combined_binary**. **xgb_behavior_binary** is the behavior-only route, used while request context is unavailable to that scored prefix. Note the cutoff, score and threshold; keep a screenshot. A scored LR answer below its frozen threshold is a model miss, not a successful warning. Waiting/Unavailable is a different failure. The score is not a scam probability. The metrics download does not contain these detailed inputs, so it cannot alone diagnose which request was selected.
 
 ### MT03 — quiet scam negative control
 

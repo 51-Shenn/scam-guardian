@@ -3,12 +3,21 @@ import { useSession } from '@/components/bank/session';
 import { DEMO_REQUESTS, type DemoRequestId } from '@/domain/request';
 
 export function RequestControl() {
-  const { session, dispatch, measurement } = useSession();
+  const { session, dispatch, measurement, annotate } = useSession();
   const selected = session.demoRequest;
   const deliverable = measurement !== null && selected !== null && !session.requestShown;
   const choices: (DemoRequestId | null)[] = [null, 'routine', 'coached', 'quiet'];
   return <View className="gap-2 rounded-xl bg-white/70 p-3">
     <Text className="font-body text-[15px] text-ink">Authored request · simulated</Text>
+    <Pressable accessibilityRole="button" disabled={session.step !== 'home'} accessibilityState={{ disabled: session.step !== 'home' }}
+      onPress={() => {
+        dispatch({ type: 'scenario', scenario: 'normal' });
+        annotate('Coached-high');
+        dispatch({ type: 'selectRequest', request: 'coached' });
+      }} className={`min-h-11 justify-center rounded-xl bg-white px-3 ${session.step !== 'home' ? 'opacity-50' : ''}`}>
+      <Text className="font-body text-sm text-ink">Prepare MT02 · AI warning test</Text>
+    </Pressable>
+    <Text className="font-body text-xs leading-4 text-soft">MT02 setup: call off, in bank, coached request selected, Coached-high evaluation label. Then Transfer → New recipient → Deliver. This configures inputs; it does not force a warning.</Text>
     <Text className="font-body text-xs leading-4 text-soft">Choose before Transfer, then deliver during the payment. Only numeric cues reach the model; no messages are read from another app.</Text>
     <View accessibilityRole="radiogroup" className="flex-row flex-wrap gap-1.5">
       {choices.map((id) => <Pressable key={id ?? 'none'} accessibilityRole="radio" accessibilityLabel={`Authored request ${id ?? 'none'}`}
@@ -21,7 +30,8 @@ export function RequestControl() {
       onPress={() => dispatch({ type: 'revealRequest' })} className={`min-h-11 justify-center rounded-xl px-3 ${deliverable ? 'bg-ink' : 'bg-white opacity-50'}`}>
       <Text className={`font-body text-sm ${deliverable ? 'text-white' : 'text-ink'}`}>{session.requestShown ? 'Authored request delivered' : 'Deliver authored request'}</Text>
     </Pressable>
-    <Text className="font-body text-xs leading-4 text-soft">{session.requestShown ? 'Delivered. The next scored five-second prefix can use these request cues.'
+    <Text className="font-body text-xs leading-4 text-ink">Selected request: {selected ? DEMO_REQUESTS[selected].label : 'Unavailable'}</Text>
+    <Text className="font-body text-xs leading-4 text-soft">{session.requestShown ? 'Delivered. The next scored five-second prefix can use these request cues. Delivery itself does not trigger a warning.'
       : selected === null ? 'No request selected. Choose an example before starting a transfer.'
       : measurement === null ? 'Start a transfer with Guardian on to enable delivery.'
       : 'Selected, not delivered. Press the dark button above to send the mock request to this transfer.'}</Text>

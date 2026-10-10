@@ -94,9 +94,9 @@ try {
   await until(() => evaluate("document.body.innerText.includes('(1/1 legitimate sessions)')"));
   checks.push('Cancelled legitimate warning enters FIR as 1/1, not zero.');
 
-  await click('Normal', 'radio');
-  await click('Authored request coached', 'radio', true);
-  await click('Evaluation label Coached-high', 'radio', true);
+  await click('Prepare MT02 · AI warning test');
+  assert.equal(await evaluate("document.querySelector('[aria-label=\"Authored request coached\"]').getAttribute('aria-checked') === 'true' && document.querySelector('[aria-label=\"Evaluation label Coached-high\"]').getAttribute('aria-checked') === 'true' && document.body.innerText.includes('Start simulated call')"), true);
+  checks.push('MT02 setup configures coached input and independent label with call off; actual inference still determines warning.');
   await click('Transfer');
   await click('Recipient New recipient', 'radio', true);
   assert.equal(await evaluate("document.body.innerText.includes('selected, not delivered yet')"), true);

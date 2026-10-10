@@ -6,6 +6,7 @@ import type { Decision } from '@/domain/risk';
 import { WarningMetrics } from './warning-metrics';
 import { RequestControl } from './request-control';
 import { DecisionSummary } from './decision-summary';
+import { DEMO_REQUESTS } from '@/domain/request';
 
 interface PanelProps { className?: string }
 interface DemoConsoleProps extends PanelProps {
@@ -118,7 +119,8 @@ function AiReview() {
       {cutoff !== null && <Text className="font-body text-[11.5px] text-soft" style={{ fontVariant: ['tabular-nums'] }}>at {cutoff / 1000} s</Text>}
     </View>
     <Text className={`font-body text-[15px] leading-5 ${status === 'review' ? 'text-b-amber' : 'text-ink'}`}>{aiText[status]}</Text>
-    {score !== null && threshold !== null && <Text className="font-body text-[13px] text-ink" style={{ fontVariant: ['tabular-nums'] }}>Score {score.toFixed(2)} · review at {threshold.toFixed(2)}</Text>}
+    {score !== null && threshold !== null && <Text className="font-body text-[13px] text-ink" style={{ fontVariant: ['tabular-nums'] }}>Score {score.toFixed(4)} · review at {threshold.toFixed(4)}</Text>}
+    <Text className="font-body text-xs leading-4 text-ink">Selected request: {session.demoRequest ? DEMO_REQUESTS[session.demoRequest].label : 'Unavailable'}</Text>
     <Text className="font-body text-xs leading-4 text-soft">Request context: {session.requestShown ? 'delivered to this transfer' : session.demoRequest ? 'selected, not delivered yet' : 'unavailable'}{model ? ` · Model: ${model}` : ''}</Text>
     <Text className="font-body text-[11.5px] leading-4 text-soft">Trained on simulated sessions; not a scam probability. Not yet retrained for full account numbers.</Text>
   </View>;

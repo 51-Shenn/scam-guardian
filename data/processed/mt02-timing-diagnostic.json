@@ -1,0 +1,786 @@
+{
+  "simulated": true,
+  "purpose": "Frozen-model timing diagnosis, not held-out accuracy or a human-session result",
+  "cases": [
+    {
+      "request": "coached",
+      "deliveryMs": 1000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.9591892348929131,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.966469141420292,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9707202050305344,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 1000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.9826718010865142,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.985824744772386,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9876532417252595,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 4000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.9591892348929131,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.966469141420292,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9707202050305344,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 4000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.9826718010865142,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.985824744772386,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9876532417252595,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 6000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.966469141420292,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9707202050305344,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.9734268262584652,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 6000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.985824744772386,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.9876532417252595,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.9888126144674241,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 15000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 15000,
+          "model": "xgb_behavior_binary",
+          "score": 0.012815193273127079,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.9734268262584652,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 25000,
+          "model": "lr_combined_binary",
+          "score": 0.9753612845720125,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 30000,
+          "model": "lr_combined_binary",
+          "score": 0.9768412037949091,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 15000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 15000,
+          "model": "xgb_behavior_binary",
+          "score": 0.012815193273127079,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.9888126144674241,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 25000,
+          "model": "lr_combined_binary",
+          "score": 0.9896389488421815,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 30000,
+          "model": "lr_combined_binary",
+          "score": 0.9902698384144818,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 60000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 60000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 65000,
+          "model": "lr_combined_binary",
+          "score": 0.9822174592208349,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 70000,
+          "model": "lr_combined_binary",
+          "score": 0.9826637991264398,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 75000,
+          "model": "lr_combined_binary",
+          "score": 0.9830694837687298,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 60000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 60000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 65000,
+          "model": "lr_combined_binary",
+          "score": 0.9925524382222025,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 70000,
+          "model": "lr_combined_binary",
+          "score": 0.9927412882903294,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 75000,
+          "model": "lr_combined_binary",
+          "score": 0.9929128502906378,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 120000,
+      "focusAccount": false,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 120000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 125000,
+          "model": "lr_combined_binary",
+          "score": 0.985797282934225,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 130000,
+          "model": "lr_combined_binary",
+          "score": 0.9859879110077309,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 135000,
+          "model": "lr_combined_binary",
+          "score": 0.9861689684978898,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "coached",
+      "deliveryMs": 120000,
+      "focusAccount": true,
+      "review": true,
+      "predictions": [
+        {
+          "cutoff": 120000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 125000,
+          "model": "lr_combined_binary",
+          "score": 0.9940642885451099,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 130000,
+          "model": "lr_combined_binary",
+          "score": 0.9941446164017935,
+          "threshold": 0.952430717666823,
+          "latched": true
+        },
+        {
+          "cutoff": 135000,
+          "model": "lr_combined_binary",
+          "score": 0.9942208946155247,
+          "threshold": 0.952430717666823,
+          "latched": true
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 1000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 8.007111048992583e-7,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 9.81950355758862e-7,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000011294634665593215,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 1000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.0000019319721884300422,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.0000023692693661525743,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000027251913684930013,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 4000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 8.007111048992583e-7,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 9.81950355758862e-7,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000011294634665593215,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 4000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 5000,
+          "model": "lr_combined_binary",
+          "score": 0.0000019319721884300422,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.0000023692693661525743,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000027251913684930013,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 6000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 9.81950355758862e-7,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000011294634665593215,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.0000012479752771333483,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 6000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 10000,
+          "model": "lr_combined_binary",
+          "score": 0.0000023692693661525743,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 15000,
+          "model": "lr_combined_binary",
+          "score": 0.0000027251913684930013,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.000003011138460504567,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 15000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 15000,
+          "model": "xgb_behavior_binary",
+          "score": 0.012815193273127079,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.0000012479752771333483,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 25000,
+          "model": "lr_combined_binary",
+          "score": 0.0000013486321419913952,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 30000,
+          "model": "lr_combined_binary",
+          "score": 0.000001436990858620239,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 15000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 15000,
+          "model": "xgb_behavior_binary",
+          "score": 0.012815193273127079,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 20000,
+          "model": "lr_combined_binary",
+          "score": 0.000003011138460504567,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 25000,
+          "model": "lr_combined_binary",
+          "score": 0.000003254004793786878,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 30000,
+          "model": "lr_combined_binary",
+          "score": 0.0000034671979209603296,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 60000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 60000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 65000,
+          "model": "lr_combined_binary",
+          "score": 0.0000018817401846016528,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 70000,
+          "model": "lr_combined_binary",
+          "score": 0.000001931064714854834,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 75000,
+          "model": "lr_combined_binary",
+          "score": 0.0000019781526209720767,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 60000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 60000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 65000,
+          "model": "lr_combined_binary",
+          "score": 0.000004540294405570768,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 70000,
+          "model": "lr_combined_binary",
+          "score": 0.0000046593051380904125,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 75000,
+          "model": "lr_combined_binary",
+          "score": 0.000004772919305477887,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 120000,
+      "focusAccount": false,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 120000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 125000,
+          "model": "lr_combined_binary",
+          "score": 0.0000023646223747908516,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 130000,
+          "model": "lr_combined_binary",
+          "score": 0.00000239725538289135,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 135000,
+          "model": "lr_combined_binary",
+          "score": 0.0000024290829602732005,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    },
+    {
+      "request": "routine",
+      "deliveryMs": 120000,
+      "focusAccount": true,
+      "review": false,
+      "predictions": [
+        {
+          "cutoff": 120000,
+          "model": "xgb_behavior_binary",
+          "score": 0.013460048474371433,
+          "threshold": 0.724197506904602,
+          "latched": false
+        },
+        {
+          "cutoff": 125000,
+          "model": "lr_combined_binary",
+          "score": 0.0000057053967933414535,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 130000,
+          "model": "lr_combined_binary",
+          "score": 0.000005784133944428908,
+          "threshold": 0.952430717666823,
+          "latched": false
+        },
+        {
+          "cutoff": 135000,
+          "model": "lr_combined_binary",
+          "score": 0.000005860927739629135,
+          "threshold": 0.952430717666823,
+          "latched": false
+        }
+      ]
+    }
+  ]
+}
