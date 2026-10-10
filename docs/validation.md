@@ -1,5 +1,28 @@
 # Verification
 
+## Product page console
+
+Checked on 10 October 2026 after tightening the console beside the phone. It keeps its place and all of its content: the presets, the read-out, the three classes on one line, the reasons, the AI review, one line per signal, and the note.
+
+**Project gates**
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+- These also cover the help change below, which could not be built when it was made.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- `/` at 1440x900 and 1920x1000: the console is 651 tall, down from 831, with its foot on the frame's bottom line. Before, its top was 9 from the top of the page at 1440, over the header.
+- `/` at 1440x900 with the Coached, high preset on the recipient step after the first model check: 710 tall, down from 881, which had run off the top of the page.
+- `/` at 1280x720: the console is taller than the phone there, so the row grows by a few points and the console starts directly under the header. Before, it started 154 above the top of the page.
+- `/` at 1024x768: the console under the copy is 617 tall, down from 783.
+- `/` at 412x900: unchanged. No horizontal overflow at any width, no console errors.
+- `/demo` at 1440x900 and 1366x700: the read-out there is not changed by this work. It measured 32 and 16 taller than the window; that came with the AI review and is still open.
+
+**Not verified**
+
+- Android on a device or emulator, keyboard-only operation, screen readers, and browsers other than Chromium.
+
 ## Help without enlargement
 
 Checked on 10 October 2026 after separating the guidance from the larger controls. A help tap now shows the step's instruction only; repeated back steps still enlarge the controls.

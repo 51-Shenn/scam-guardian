@@ -72,13 +72,13 @@ export default function Landing() {
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action label="Try the demo" onPress={openDemo} /></View>
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action secondary label="How it works" onPress={() => jump(anchors.current.how)} /></View>
             </View>
-            {!overlap && <DemoConsole compact={!wide} className="mt-8 wide:max-w-[320px]" />}
+            {!overlap && <DemoConsole compact={!wide} dense={wide} className="mt-8 wide:max-w-[320px]" />}
           </View>
 
-          {/* The console stands clear of the phone, with its foot on the same line as the frame's. */}
-          {viewport && wide && <View style={{ paddingLeft: overlap ? 304 : 0 }}>
+          {/* The console stands clear of the phone, with its foot on the same line as the frame's. It sits in the row, so a long read-out makes the row taller instead of running up over the header. */}
+          {viewport && wide && <View className="flex-row items-end gap-10">
+            {overlap && <DemoConsole dense className="w-[264px]" />}
             {phone}
-            {overlap && <DemoConsole className="absolute bottom-0 left-0 w-[264px]" />}
           </View>}
           {/* Narrow web and Android: the frame is a picture of the bank app, with one press target over it. */}
           {viewport && !wide && <View className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">
