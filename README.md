@@ -6,6 +6,16 @@
 
 <p align="center">A pause before the money moves.</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Expo-1B1F23?style=for-the-badge&logo=expo&logoColor=FFFFFF" alt="Expo" />
+  <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
+
 Scam Guardian sits inside a bank app's transfer flow. It tells apart a person who is finding the transfer hard from a person who may be following someone else's instructions, and answers each one differently: help for the first, time to think for the second.
 
 This repository is a prototype for Dormathon 2026, Track 1, "Predict Early, Decide Better". It is an Expo application for Android and web with a product page and an interactive mock banking app.
