@@ -11,7 +11,7 @@ Checked on 10 October 2026. The product page no longer runs the demo: the phone 
 
 **Web, exported build served locally, Chromium driven over the DevTools protocol**
 
-- `/` at 1440x900, 1920x1000, 1280x720, 1024x768 and 412x900: no horizontal overflow, no console errors. From 1180 wide the card is centred on the phone, 320 wide, and overlaps it by 20; below that it sits under the copy.
+- `/` at 1440x900, 1920x1000, 1280x720, 1024x768 and 412x900: no horizontal overflow, no console errors. From 1180 wide the card is centred on the phone, 340 wide, and overlaps it by 28; below that it sits under the copy.
 - `/` at 1440: pressing the phone where Transfer is opens `/demo` and starts no transfer. Pressing "Coached, high" opens `/demo` with the simulated call already started.
 - `/demo` at 1440x900, 1920x1000, 1366x700, 1280x720 and 1024x768: the page is no taller or wider than the window. Before, it was 32 taller at 1440x900 and the read-out started 8 from the top of the page, over the header.
 - `/demo` at 1440x900, panel height against a stage of 796: idle 710, Coached on the recipient step 748, Coached, high at review with three reasons and a model score 788.

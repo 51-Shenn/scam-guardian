@@ -82,7 +82,7 @@ export default function Landing() {
 
           {/* The card is centred on the phone and laps over its edge, so the frosted glass has the bank app to blur. */}
           {viewport && wide && <View className="flex-row items-center">
-            {beside && <ScenarioCard onPick={play} className="z-10 -mr-5 w-[320px]" />}
+            {beside && <ScenarioCard onPick={play} className="z-10 -mr-7 w-[340px]" />}
             <View>{preview}</View>
           </View>}
           {/* Narrow web and Android: the frame is cropped to its upper part. */}
