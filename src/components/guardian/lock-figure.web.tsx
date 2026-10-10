@@ -11,9 +11,11 @@ const DRAWING_ONLY = 'html,body{overflow:hidden}body{place-items:start center}.c
 // The figure's own tour stops, in its 400 x 320 drawing units: the upper, middle and lower chambers, then rest.
 const STOPS: ([number, number] | null)[] = [[243, 130], [201, 169], [147, 207], null];
 // The page's built-in tour (?play=1) takes about eight seconds a lap and its pace is fixed inside the engine.
-// This one walks the same stops from outside, through the pointer events the figure already answers, in about three.
-const STEP = 700;
-const REST = 900;
+// This one walks the same stops from outside, through the pointer events the figure already answers, in about four.
+// The gates take 700 ms to swing, and the far chamber starts 90 ms late. A step waits for all of that and a short rest,
+// so each movement settles before the next begins; stepping any sooner makes the figure twitch without a pause.
+const STEP = 1000;
+const REST = 1000;
 
 export function LockFigure() {
   const frame = useRef<HTMLIFrameElement>(null);

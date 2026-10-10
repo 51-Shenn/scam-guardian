@@ -1,5 +1,15 @@
 # Verification
 
+## Lock figure tour settles between steps — 11 October 2026
+
+The user said the canal lock was not smooth. Measured on the exported page in headless Edge at 1440x900, sampling the drawing every frame: frames arrived 16.7 ms apart with none over 34 ms, so nothing was dropping. The cause was the pace set in `lock-figure.web.tsx`. A step came every 700 ms, which is how long the gates take to swing, so each movement began the moment the last one ended and the drawing was moving in 93% of frames, with rests of about 150 ms. The start of each swing is abrupt because the drawing eases out only.
+
+A step now comes every 1000 ms and the rest lasts 1000 ms: a lap takes about four seconds, not three. Measured the same way: each movement lasts 700 to 750 ms, then the drawing is near still for 450 to 530 ms before the next, and it is moving in 75% of frames.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Not changed: the swing's own curve. It is fixed inside the Hairline drawing, which is built from `design/locks.js` with the Hairline engine. A softer start would mean rebuilding that drawing.
+- Not checked: by eye on a real display, the browser acceptance script after this change (it does not exercise the figure), Android (which shows the figure's rest pose).
+
 ## Read-out as charts, controls that look pressed, and the landing card over the phone — 11 October 2026
 
 Checked on 11 October 2026 on branch `feat/readout-charts`. The user asked for the demo's left cards to be trimmed for pitching, to use charts in place of text, and to be less cluttered; then for controls that look pressable, larger type and padding, and the two cards stacked together. They also pointed out that the landing hero no longer had the glass card over the phone.
