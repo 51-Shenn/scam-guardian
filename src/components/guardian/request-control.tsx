@@ -18,8 +18,12 @@ export function RequestControl() {
       </Pressable>)}
     </View>
     <Pressable accessibilityRole="button" accessibilityState={{ disabled: !deliverable }} disabled={!deliverable}
-      onPress={() => dispatch({ type: 'revealRequest' })} className={`min-h-11 justify-center rounded-xl bg-white px-3 ${deliverable ? '' : 'opacity-50'}`}>
-      <Text className="font-body text-sm text-ink">{session.requestShown ? 'Authored request delivered' : 'Deliver authored request'}</Text>
+      onPress={() => dispatch({ type: 'revealRequest' })} className={`min-h-11 justify-center rounded-xl px-3 ${deliverable ? 'bg-ink' : 'bg-white opacity-50'}`}>
+      <Text className={`font-body text-sm ${deliverable ? 'text-white' : 'text-ink'}`}>{session.requestShown ? 'Authored request delivered' : 'Deliver authored request'}</Text>
     </Pressable>
+    <Text className="font-body text-xs leading-4 text-soft">{session.requestShown ? 'Delivered. The next scored five-second prefix can use these request cues.'
+      : selected === null ? 'No request selected. Choose an example before starting a transfer.'
+      : measurement === null ? 'Start a transfer with Guardian on to enable delivery.'
+      : 'Selected, not delivered. Press the dark button above to send the mock request to this transfer.'}</Text>
   </View>;
 }

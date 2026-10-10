@@ -46,6 +46,12 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
   const { session, view } = useSession();
   const { signals, decision, monitoring, active } = view;
   const chosen = monitoring ? decision.classification : null;
+  const pending = chosen === 'Normal' && session.ai.status === 'waiting';
+  const unavailable = chosen === 'Normal' && session.ai.status === 'unavailable';
+  const selectedPolicy = pending || unavailable ? null : chosen;
+  const heading = pending ? 'Checking payment…' : unavailable ? 'AI unavailable'
+    : chosen === 'Normal' ? 'No warning currently'
+    : chosen ? (decision.response === 'hold' ? 'Coached, high' : chosen) : 'Monitoring inactive';
   const rows: [string, string][] = [
     ['Call', session.call ? 'Active (simulated)' : 'None'],
     ['App switch', session.away ? `Away ${seconds(view.awayMs)} (simulated)` : view.awayMs ? `Back · ${seconds(view.awayMs)} away` : 'In bank app'],
@@ -60,14 +66,17 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
       <Text className={small}>Guardian read-out</Text>
       <Text className={small}>{session.consent ? 'Guardian on' : 'Guardian off'}</Text>
     </View>
-    <Text className={`mt-1 font-display text-[28px] leading-8 tracking-[-0.5px] ${chosen ? ink[chosen] : 'text-ink'}`}>{chosen ? (decision.response === 'hold' ? 'Coached, high' : chosen) : 'Monitoring inactive'}</Text>
-    <Text className="mt-1 font-body text-sm leading-5 text-soft">{chosen ? responses[decision.response] : session.consent ? 'Start a transfer to see Guardian work.' : 'Turn Guardian on in the bank app to see it work.'}</Text>
+    <Text className={`mt-1 font-display text-[28px] leading-8 tracking-[-0.5px] ${chosen ? ink[chosen] : 'text-ink'}`}>{heading}</Text>
+    <Text className="mt-1 font-body text-sm leading-5 text-soft">{pending ? 'Waiting for the first local AI score. No demonstration rule currently asks for a pause.'
+      : unavailable ? 'The AI could not assess this payment. The demonstration rules remain active.'
+      : chosen === 'Normal' ? 'No rule or AI warning at this point. This does not establish that the payment is safe.'
+      : chosen ? responses[decision.response] : session.consent ? 'Start a transfer to see Guardian work.' : 'Turn Guardian on in the bank app to see it work.'}</Text>
 
-    {/* Which class the rules picked. Bars are on or off: the demo rules produce no scores. */}
-    <View className="mt-3.5 gap-2">
-      {classes.map((name) => <View key={name} accessibilityLabel={`${name}${name === chosen ? ', selected' : ''}`} className="flex-row items-center gap-2.5">
-        <Text className={`w-[78px] font-body text-sm ${name === chosen ? 'text-ink' : 'text-soft'}`}>{name}</Text>
-        <View className="h-2 flex-1 overflow-hidden rounded-full bg-[#eadfe2]">{name === chosen && <View className={`h-2 rounded-full ${fill[name]}`} />}</View>
+    <Text className="mt-3.5 font-body text-xs leading-4 text-soft">Policy status · no confidence percentages</Text>
+    <View className="mt-1.5 flex-row flex-wrap gap-1.5">
+      {classes.map((name) => <View key={name} accessibilityLabel={`${name}${name === selectedPolicy ? ', selected' : ''}`}
+        className={`rounded-xl px-2.5 py-1.5 ${name === selectedPolicy ? 'bg-white' : 'bg-white/50'}`}>
+        <Text className={`font-body text-sm ${name === selectedPolicy ? ink[name] : 'text-soft'}`}>{name}{name === selectedPolicy ? ' · selected' : ''}</Text>
       </View>)}
     </View>
 
@@ -102,7 +111,7 @@ const aiText: Record<AiView['status'], string> = {
 /** The on-device model's binary review. Its score is uncalibrated, so it is never shown as a percentage. */
 function AiReview() {
   const { session } = useSession();
-  const { status, score, threshold, cutoff } = session.ai;
+  const { status, score, threshold, cutoff, model } = session.ai;
   return <View className="mt-3.5 gap-1 rounded-xl bg-white/70 px-3 py-2.5">
     <View className="flex-row items-baseline justify-between gap-2">
       <Text className="font-body text-[13px] text-soft">AI review (on device)</Text>
@@ -110,6 +119,7 @@ function AiReview() {
     </View>
     <Text className={`font-body text-[15px] leading-5 ${status === 'review' ? 'text-b-amber' : 'text-ink'}`}>{aiText[status]}</Text>
     {score !== null && threshold !== null && <Text className="font-body text-[13px] text-ink" style={{ fontVariant: ['tabular-nums'] }}>Score {score.toFixed(2)} · review at {threshold.toFixed(2)}</Text>}
+    <Text className="font-body text-xs leading-4 text-soft">Request context: {session.requestShown ? 'delivered to this transfer' : session.demoRequest ? 'selected, not delivered yet' : 'unavailable'}{model ? ` · Model: ${model}` : ''}</Text>
     <Text className="font-body text-[11.5px] leading-4 text-soft">Trained on simulated sessions; not a scam probability. Not yet retrained for full account numbers.</Text>
   </View>;
 }

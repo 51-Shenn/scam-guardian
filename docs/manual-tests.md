@@ -27,7 +27,7 @@ Open [the app](/demo) on the same deployment as this manual. For a local preview
 | Amount | Mock payment amount. The demonstration rules compare it with RM 50. Local collection records mock transaction context separately from selected model features; the warning-metrics download excludes the amount. |
 | Call / app switch | Explicit simulated state changes. Neither is a newly trained phone feature. The app read-out shows cumulative simulated away duration. |
 | Family preview | Separate consent for a mock alert on this screen. Keep off throughout this manual. Nothing goes to a second phone. |
-| AI review | Frozen model output: review/no additional review. Score is uncalibrated and is not a scam probability. Waiting/Unavailable are separate states. |
+| AI review | Frozen model output: review/no additional review. Score is uncalibrated and is not a scam probability. Waiting/Unavailable are separate states. The read-out says Checking payment while awaiting its first score and No warning currently after an unwarned assessment; neither means 100% safe. Request context says selected/not delivered, delivered, or unavailable, with the actual model ID once scoring succeeds. |
 | Decision support | Plain-language reason, policy category, priority and next action. Normal/Struggling/Coached display categories are policy outputs, not three learned model classes. |
 | Warning origin | Rule, AI or combined. Credit AI only if it actually contributed; a rule warning alone is not evidence of AI detection. |
 | Warning measurements | Actual warning-display, review and confirmation timestamps, session outcomes and interruption counts. Display timestamp is a rendering proxy, not proof you read the warning. |
@@ -50,6 +50,8 @@ Guardian **on**, family preview **off**, dummy account **typed**, and app switch
 | MT10: amount-rule boundary | Coached | Coached-medium | Unavailable | New / `123412341234` | RM 150, then RM 151 before ending | Active | In bank |
 
 ## Exact actions and evidence
+
+If the display stays Normal/no warning, first check which case you are running. MT01's routine request is intended as a benign reference. Selecting an evaluation label does not force a model prediction. For MT02, choose the coached request before Transfer and press the dark **Deliver authored request** button during the monitored transfer; confirm that it says **Authored request delivered**. Wait for a scored cutoff after delivery. The policy labels are status indicators, not confidence bars. If MT02 still does not warn, keep that result and export it rather than switching presets to force an AI success.
 
 ### MT01 — legitimate reference
 

@@ -99,7 +99,10 @@ try {
   await click('Evaluation label Coached-high', 'radio', true);
   await click('Transfer');
   await click('Recipient New recipient', 'radio', true);
+  assert.equal(await evaluate("document.body.innerText.includes('selected, not delivered yet')"), true);
+  assert.equal(await evaluate("document.body.innerText.includes('Policy status · no confidence percentages')"), true);
   await click('Deliver authored request');
+  await until(() => evaluate("document.body.innerText.includes('Request context: delivered to this transfer')"));
   await until(() => evaluate("document.body.innerText.includes('The transaction rules did not request a pause') && !document.body.innerText.includes('first shown warning Not measured')"));
   if (pitch) {
     await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired') && document.body.innerText.includes('Reconstructed score')"));
@@ -120,6 +123,7 @@ try {
   await until(() => evaluate("document.body.innerText.includes('Demo transfer complete')"));
   assert.equal(await evaluate("document.body.innerText.includes('Median observed warning lead: Not measured')"), false);
   checks.push('Actual frozen AI warns while transaction rules stay quiet; cool-down and confirmation produce a labelled live lead.');
+  checks.push('Policy uses status labels rather than confidence bars; selected and delivered request context are distinguished.');
 
   await click('Done');
   await click('Normal', 'radio');
@@ -128,6 +132,7 @@ try {
   await click('Transfer'); await click('Deliver authored request'); await click('Next');
   await click('5'); await click('0');
   await delay(5500);
+  await until(() => evaluate("document.body.innerText.includes('No warning currently')"));
   await click('Review'); await click('Confirm transfer');
   await until(() => evaluate("document.body.innerText.includes('Demo transfer complete')"));
   checks.push('A routine authored request completes without a warning, using actual local inference.');
