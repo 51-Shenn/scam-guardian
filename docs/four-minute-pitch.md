@@ -4,7 +4,7 @@ Audience: Predictive Model Track judges. This is a working simulation prototype,
 
 ## Before entering the stage
 
-- Serve the exported app locally: `node scripts/preview.mjs dist 4173`. Open `http://127.0.0.1:4173/demo` and `http://127.0.0.1:4173/evidence` in the same browser. For live counters navigate within the demo using **Pitch evidence**, rather than the separate tab; different tabs have different app-run memory.
+- On Vercel, open `/demo` and `/evidence` on the deployment's own HTTPS origin. For a local preview, serve the exported app with `node scripts/preview.mjs dist 4173` and open `http://127.0.0.1:4173/demo` and `http://127.0.0.1:4173/evidence`. For live counters navigate within the demo using **Pitch evidence**, rather than the separate tab; different tabs have different app-run memory.
 - Use a desktop window about 1440 × 1000 or larger. Close unrelated tabs and enable the presentation display before rehearsal. Test the real venue screen; this is not a physical Android validation.
 - Reset once before the presentation; do not reload between cases. Reset restores controls but intentionally retains prior ended measurement sessions in this app run. Start a fresh tab if you need a new empty measurement report, and export older records first.
 - Scroll the Guardian panel to find controls beforehand. Its independent scrollbar is intentional. Locate Authored request, Evaluation label, Decision support and Warning measurements.

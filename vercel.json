@@ -1,5 +1,7 @@
 {
-  "buildCommand": "expo export -p web",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "devCommand": "expo",
   "cleanUrls": true,

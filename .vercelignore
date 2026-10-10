@@ -1,0 +1,17 @@
+# CLI uploads need the app, not local evaluation/session records or design work.
+# Keep only the public authored evidence summary imported by /evidence.
+/data/*
+!/data/processed/
+/data/processed/*
+!/data/processed/pitch-evidence-v1/
+/data/processed/pitch-evidence-v1/*
+!/data/processed/pitch-evidence-v1/summary.json
+/design/
+/reference/
+/tools/
+/.agents/
+/.claude/
+/.vscode/
+/dist/
+/android/
+/ios/

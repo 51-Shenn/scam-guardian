@@ -2,6 +2,9 @@
   "name": "scam-guardian",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@expo-google-fonts/hedvig-letters-sans": "^0.4.1",
     "@expo-google-fonts/hedvig-letters-serif": "^0.4.3",
@@ -58,7 +61,11 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "test": "node --test src/domain/*.test.ts",
-    "export:platforms": "expo export --platform android --platform web --max-workers 2"
+    "export:platforms": "expo export --platform android --platform web --max-workers 2",
+    "prebuild:web": "node scripts/build_pitch_manual.mjs",
+    "build:web": "expo export --platform web --max-workers 2",
+    "postbuild:web": "node scripts/check_vercel_export.mjs",
+    "check:vercel": "node scripts/check_vercel_export.mjs"
   },
   "overrides": {
     "lightningcss": "1.30.1"

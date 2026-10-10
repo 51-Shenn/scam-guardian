@@ -14,6 +14,12 @@ npm run android
 
 Android builds require Android Studio's SDK and Java 21, plus a running emulator or connected device. `npm run android` generates the ignored native project through Expo and compiles it. The app identifier is `com.scamguardian.app` for local development; confirm ownership before a store release.
 
+## Deploy web to Vercel
+
+Use this app folder as the Vercel project root, framework **Other**, Node **22.x**, installation **npm ci**, build **npm run build:web**, and output **dist**. The checked-in vercel.json supplies the build settings. No environment secrets or model server are required. See [deployment instructions and hosted smoke checks](docs/vercel-deployment.md).
+
+The hosted paths are `/demo`, `/evidence`, `/pitch-manual` and `/testing-manual`. The ten-case manual is generated from [manual-tests.md](docs/manual-tests.md). Scoring stays in the browser; export measurements before refreshing. Local build checks do not confirm an actual Vercel cloud deployment.
+
 ## Design
 
 The app follows direction A, "Current". The HTML studies it was chosen from were removed once the app was built; they remain in git history under `design/v2/`.
