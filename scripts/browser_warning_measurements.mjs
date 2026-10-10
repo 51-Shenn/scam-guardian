@@ -161,13 +161,15 @@ try {
   // Return through the UI so the same provider still holds the completed measurement history.
   await click('Product page');
   await until(() => evaluate("document.body.innerText.includes('A pause before the money moves.')"));
-  for (const [width, height] of [[1700, 900], [1200, 760], [860, 780], [390, 844]]) {
+  for (const [width, height] of [[1700, 900], [1320, 820], [1200, 760], [860, 780], [390, 844]]) {
     await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     await delay(600);
     assert.equal(await evaluate("!document.body.innerText.includes('Guardian read-out') && !document.body.innerText.includes('Warning measurements')"), true, 'The landing hero must not contain the growing live monitoring panel.');
     assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true, `Landing overflow at ${width}`);
-    const card = await evaluate("(()=>{const e=document.querySelector('[aria-label=\"Normal: No interruption. Open in the demo\"]');const r=e.getBoundingClientRect();return {top:r.top,left:r.left,right:r.right};})()");
+    const card = await evaluate("(()=>{const e=document.querySelector('[aria-label=\"Normal: No interruption. Open in the demo\"]').closest('.glass');const r=e.getBoundingClientRect();return {top:r.top,left:r.left,right:r.right};})()");
     assert.ok(card.top >= 64 && card.left >= -1 && card.right <= width + 1, JSON.stringify({ width, card }));
+    const overlap = await evaluate("(()=>{const r=document.querySelector('[aria-label=\"Open the banking demo\"]').getBoundingClientRect();const e=document.querySelector('[aria-label=\"Normal: No interruption. Open in the demo\"]').closest('.glass').getBoundingClientRect();return {width:Math.max(0,Math.min(r.right,e.right)-Math.max(r.left,e.left)),height:Math.max(0,Math.min(r.bottom,e.bottom)-Math.max(r.top,e.top))};})()");
+    assert.ok(overlap.width <= 1 || overlap.height <= 1, `Scenario control covers phone: ${JSON.stringify({ width, overlap })}`);
     await shot(`landing-${width}.png`);
     checks.push(`Landing uses a bounded scenario card after completed sessions, with no header or horizontal overflow at ${width}x${height}.`);
   }

@@ -10,6 +10,8 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 ## Current
 
+- Landing hero: the scenario card and banking preview occupy separate space. Reserve the full 340-pixel card plus a 24-pixel gap; move the card below the copy when the remaining headline column would be too narrow. Do not use negative margins to cover the phone. Live measurements belong in the demo's scrollable Guardian panel.
+
 - Palette: page `#faf6f6`, ink `#22141a`, one accent, crimson `#c8102e`. On 10 October 2026 the user asked for the whole product to take the bank app's red, replacing the cobalt accent: page art, logo, buttons, Guardian's surfaces inside the bank app, and the trusted contact's lock screen. The bank app adds garnet `#8a0b20`. Amber still marks pause states, so a pause never looks like the brand colour. In the read-out, the three classes keep their own data colours: red would read as an accusation, and Struggling calls for help instead. Since 10 October 2026 these are three deep tones chosen to sit with the garnet: pine `#1f6b57` for Normal, indigo `#414f8f` for Struggling and bronze `#a3661c` for Coached, each with a darker text shade and a pale wash. A signal that points towards a class carries that class's tone as a dot and the text shade; the AI review shows its state as a rule down the side of its box. The scenario card and the presets use the same three.
 - Type: Hedvig Letters Serif for display, Hedvig Letters Sans for everything else.
 - Shape: pill buttons, 14px controls, 24px surfaces.

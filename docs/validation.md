@@ -1,5 +1,11 @@
 # Verification
 
+## Follow-up: scenario card and phone separation
+
+The refreshed page still intentionally overlapped the scenario card with the phone. User rejected that layout. Removed the negative margin and stacking override, reserved the full 340-pixel card width plus a 24-pixel gap, and included that gap when deciding whether three columns fit. Narrower layouts retain the card below the copy. The headline's available-width calculation now accounts for the gap.
+
+Lint/type checking and all 79 domain tests pass. Android/web exports and the Vercel static hosting check succeed. Edge run `run-1791648142284` passes **27 acceptance checks**. At widths 1700, 1320, 1200, 860 and 390, the entire scenario card is below the header, within the viewport, and does not intersect the phone preview. Screenshots were inspected at 1320 pixels. No physical Android test was performed.
+
 ## Landing preview overflow and stale browser tab — 10 October 2026
 
 The user's screenshot showed the earlier hero containing the full Guardian read-out, whose growing session summary extended above the header. Current main uses the bounded four-scenario card; the local preview was confirmed to serve that newer bundle. An already-open tab can continue running the old bundle until refreshed. The preview now sends `Cache-Control: no-store`; only the verified local preview process on port 4173 was restarted, and HTTP 200/no-store was checked. Existing app-run measurements are not automatically migrated across a refresh: export them first.
