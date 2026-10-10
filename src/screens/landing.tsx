@@ -30,9 +30,8 @@ const intro = 'mt-5 max-w-[560px] font-body text-lg leading-[29px] text-soft';
 const h3 = 'font-display text-[28px] leading-8 tracking-[-0.5px]';
 const cell = 'rounded-3xl p-[26px] wide:p-[34px]';
 const link = 'rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent';
-// Reserve the card's full width and a real gap; it must never cover the banking preview.
-const CARD = 340;
-const PREVIEW_GAP = 24;
+// What the scenario card adds to the phone's width when it stands beside it: 340 wide, less the 28 it laps over the frame.
+const CARD = 312;
 
 export default function Landing() {
   const viewport = useViewport();
@@ -54,10 +53,10 @@ export default function Landing() {
   const scale = !viewport ? 0 : wide ? Math.min(viewport.height * 0.84, 840) / FRAME.height : Math.min(340, viewport.width - 56) / FRAME.width;
   // Width left for the copy once the phone has its place. The card stands beside the phone only while the copy keeps enough of it.
   const room = !viewport ? 0 : wide ? Math.min(viewport.width, 1320) - 80 - 64 - FRAME.width * scale : viewport.width - 40;
-  const beside = wide && room - CARD - PREVIEW_GAP >= 440;
+  const beside = wide && room - CARD >= 440;
   // The headline always sets in two lines: its longer line is a little under eight times the type size.
   // The copy's measured width is used once it is known, because a scrollbar takes some of the estimate.
-  const type = Math.max(28, Math.min(wide ? 78 : 44, Math.floor(Math.min(copy || (beside ? room - CARD - PREVIEW_GAP : room), 640) / 8)));
+  const type = Math.max(28, Math.min(wide ? 78 : 44, Math.floor(Math.min(copy || (beside ? room - CARD : room), 640) / 8)));
   const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' ? 'light' : 'dark'} callActive={session.call}>
     <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={false} />
   </PhoneFrame>;
@@ -89,9 +88,9 @@ export default function Landing() {
             {!beside && <ScenarioCard onPick={play} className="mt-8 wide:max-w-[320px]" />}
           </View>
 
-          {/* A separate scenario card beside the phone, with enough space reserved for the headline. */}
-          {viewport && wide && <View className="flex-row items-center" style={{ gap: PREVIEW_GAP }}>
-            {beside && <ScenarioCard onPick={play} className="w-[340px]" />}
+          {/* The card is centred on the phone and laps over its edge, so the frosted glass has the bank app to blur. */}
+          {viewport && wide && <View className="flex-row items-center">
+            {beside && <ScenarioCard onPick={play} className="z-10 -mr-7 w-[340px]" />}
             <View>{preview}</View>
           </View>}
           {/* Narrow web and Android: the frame is cropped to its upper part. */}
