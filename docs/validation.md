@@ -1,5 +1,26 @@
 # Verification
 
+## Lock figure plays by itself, and a two-line headline
+
+Checked on 10 October 2026. The lock figure now starts the Hairline page's own tour on load (`?play=1`), so the gates move without a pointer; a real pointer still takes over and the tour resumes after it leaves. The product page's headline is sized from the measured width of the copy, so it sets in two lines at every width.
+
+**Project gates**
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- Lock figure at 1440x900 with no pointer on the page: 12 of 16 captures of the figure taken half a second apart differed. At 412x900: 6 of 10. The bench controls stay hidden.
+- Lock figure with reduced motion emulated: 12 captures in a row were identical.
+- Headline, two lines at each of 1920x1000, 1440x900, 1366x768, 1280x900, 1280x720, 1180x800, 1024x768, 900x700, 860x900, 412x900, 360x740 and 320x640, at sizes from 33 to 78. No horizontal overflow, no console errors.
+- The scenario card stands beside the phone at 1920x1000, 1440x900, 1366x768, 1280x900 and 1280x720, and under the copy at the narrower sizes. That now depends on the room the copy keeps, not on a fixed width.
+
+**Not verified**
+
+- Whether the tour stops while the figure is scrolled out of view. The engine has an observer for that; it was not measured here.
+- Android: the figure is a still image there, so nothing plays. The headline size on Android was not seen on a device.
+
 ## Product page as a preview, and the demo stage's height
 
 Checked on 10 October 2026. The product page no longer runs the demo: the phone is a picture that opens `/demo`, and a glass card of the four scenarios laps over the phone's edge and opens `/demo` with that preset. On `/demo` the read-out and the presets are set tighter and the panel is 400 wide instead of 340, so both stay within the phone's height.

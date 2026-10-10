@@ -27,6 +27,6 @@ export function LockFigure() {
   }, []);
   // scrolling="no" keeps the bench out of reach until the style above lands.
   return <div className="lock-figure">
-    <iframe ref={frame} src="/hairline-locks.html?theme=light" title="Interactive line drawing of three canal locks" loading="lazy" scrolling="no" />
+    <iframe ref={frame} src="/hairline-locks.html?theme=light&play=1" title="Interactive line drawing of three canal locks" loading="lazy" scrolling="no" />
   </div>;
 }
