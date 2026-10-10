@@ -43,6 +43,8 @@ Android builds require Android Studio's SDK and Java 21, plus a running emulator
 
 ## Demo walkthrough
 
+The product page at `/` only shows the bank app. Pressing the phone, or one of the four scenarios on the card beside it, opens `/demo`.
+
 `/demo` shows three layouts: the Guardian read-out, Rohani's phone with the bank app, and Aina's phone as the trusted contact. On a wide screen they sit side by side and always fit the window. On a phone, a switch at the top moves between them.
 
 Enable Guardian on the bank app's home screen. Family-alert consent is separate. Pick a preset under "Try these", then start a transfer:
@@ -90,7 +92,7 @@ The static Android art is generated: `node scripts/build-native-art.mjs` writes 
 - `src/screens/`: responsive shared Android/web screens.
 - `src/components/bank/`: the mock banking app, its transfer flow, the account-number field and the simulated other app.
 - `src/components/glass/`: the frosted glass surface, as CSS backdrop blur on web and a translucent sheen on Android.
-- `src/components/guardian/`: the read-out, the family phone, the phone frame, web beUI controls and platform art.
+- `src/components/guardian/`: the read-out and presets, the product page's scenario card, the family phone, the phone frame, web beUI controls and platform art.
 - `src/domain/`: the session reducer, demonstration risk rules, the signal collector, feature extraction, the on-device model bundle and tests.
 - `reference/ai/`: the AI team's handoff files, kept byte for byte and used by the tests.
 - `tools/collectability-harness/`: a separate Expo app that tests which behavioural fields can be collected. It is a test tool with its own `package.json`, not part of the product build.

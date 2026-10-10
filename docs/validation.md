@@ -1,5 +1,27 @@
 # Verification
 
+## Product page as a preview, and the demo stage's height
+
+Checked on 10 October 2026. The product page no longer runs the demo: the phone is a picture that opens `/demo`, and a glass card of the four scenarios laps over the phone's edge and opens `/demo` with that preset. On `/demo` the read-out and the presets are set tighter and the panel is 400 wide instead of 340, so both stay within the phone's height.
+
+**Project gates**
+
+- `npm run lint`: passed, after deleting a stale `.expo/cache/eslint` that still reported `expo-clipboard` as missing. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- `/` at 1440x900, 1920x1000, 1280x720, 1024x768 and 412x900: no horizontal overflow, no console errors. From 1180 wide the card is centred on the phone, 320 wide, and overlaps it by 20; below that it sits under the copy.
+- `/` at 1440: pressing the phone where Transfer is opens `/demo` and starts no transfer. Pressing "Coached, high" opens `/demo` with the simulated call already started.
+- `/demo` at 1440x900, 1920x1000, 1366x700, 1280x720 and 1024x768: the page is no taller or wider than the window. Before, it was 32 taller at 1440x900 and the read-out started 8 from the top of the page, over the header.
+- `/demo` at 1440x900, panel height against a stage of 796: idle 710, Coached on the recipient step 748, Coached, high at review with three reasons and a model score 788.
+- `/demo` at 412x900: the Guardian view keeps the roomier read-out and presets. No horizontal overflow.
+
+**Not verified**
+
+- A hold with the model's own review added as a fourth reason, which would make the panel about 20 taller than the stage. The model does not reach its threshold on app-shaped transfers yet.
+- Android on a device or emulator, keyboard-only operation, screen readers, and browsers other than Chromium.
+
 ## Product page console
 
 Checked on 10 October 2026 after tightening the console beside the phone. It keeps its place and all of its content: the presets, the read-out, the three classes on one line, the reasons, the AI review, one line per signal, and the note.
