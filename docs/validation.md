@@ -1,5 +1,18 @@
 # Verification
 
+## Early warnings, false-intervention accounting and Predictive Model Track — 10 October 2026
+
+- Installed the existing lockfile's dependencies with user approval; package-lock and frozen model files are unchanged. Initial sandbox npm restore failed; approved external restore succeeded. Hermes initially could not write its sandbox temporary bundle; Android/web exports succeeded outside that sandbox.
+- `npm run lint` and `npm run typecheck`: passed. `npm test`: **73/73 passed**, including annotation separation, missing measurements, duplicate warning suppression, cancellation/abandonment, quiet identical inputs, request-arrival cutoffs, actual frozen LR review without a transaction-rule trigger, pending prediction sharing and stale-session rejection.
+- `npm run export:platforms`: Android Hermes and static web exports passed. No new APK/device test or release latency benchmark was run.
+- `node scripts/check_warning_measurements.mjs`: **4 arithmetic/export checks passed**, including independent 1/2 FIR arithmetic, 20,000 minus 4,000 ms lead arithmetic, retained quiet miss and JSON validation. Fixture numbers are illustrative calculation oracles, not model performance.
+- `node scripts/browser_warning_measurements.mjs`: **7 actual headless Edge web acceptance checks passed**, at 1440-wide desktop and 390-wide web. Exported report contains three authored demonstration sessions: a cancelled legitimate rule false review, a coached AI-origin early warning with no call/rule trigger, and a routine request completing without warning. The deliberate false-review case gives **1/2 legitimate sessions = 50% FIR** in this tiny acceptance set. This is a failure-path check, not an estimated population rate or proof of low false alarms.
+- The coached acceptance run recorded **18.895 seconds observed warning-to-confirmation** and **2.240 seconds warning-to-first-review**. The former includes the existing 15-second cool-down and user/automation response; unbiased shadow lead remains unmeasured. These are actual browser timing observations on simulated input, not held-out model effectiveness or phone-performance measurements.
+- Evidence: `data/processed/warning-measurements-v1/browser/acceptance.json`, the browser-downloaded `scam-guardian-warning-metrics.json`, and screenshots in `browser/run-1791635709071/`. JSON was independently revalidated/recomputed and contains no account number or authored message text. All scenarios remain explicitly simulated.
+- Browser validation found and fixed a stale measurement-panel render caused by reading mutable recorder getters in React render. Immutable provider snapshots now update labels, active measurements, completed results and exports. Earlier driver failures from text selectors, animation timing and mobile-emulation viewport assumptions were corrected; final checks use real clicks and a narrow web viewport, not claimed Android behavior.
+
+The manual and rubric mapping are in [warning-measurements.md](warning-measurements.md). The current change improves warning visibility and measurement; no new fitting, threshold tuning, personalized baseline, real banking integration or protection guarantee is claimed.
+
 ## Banking app, glass and three-layout demo
 
 Checked on 10 October 2026 after replacing the e-wallet with the bank app.

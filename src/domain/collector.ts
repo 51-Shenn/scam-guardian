@@ -1,5 +1,6 @@
 import type { DemoEvent } from './contract.ts';
 import { recipients, type Action, type RecipientId, type Session } from './session.ts';
+import { DEMO_REQUESTS, requestFeatures } from './request.ts';
 
 /** An event before the recorder gives it a session, sequence number and time. */
 export type Draft = Pick<DemoEvent, 'type' | 'source' | 'payload'>;
@@ -85,6 +86,9 @@ export class Collector {
       return { start: false, drafts: event ? [event] : [], end };
     };
     switch (action.type) {
+      case 'revealRequest':
+        if (!prev.requestShown && next.requestShown && next.demoRequest) drafts.push(draft('request_context', 'authored_demo_request', requestFeatures(DEMO_REQUESTS[next.demoRequest])));
+        break;
       case 'scenario': case 'reset': return finish('abandoned');
       case 'pick': if (prev.to !== next.to) drafts.push(transactionDraft(next)); break;
       case 'account': {

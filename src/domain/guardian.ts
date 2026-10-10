@@ -21,6 +21,9 @@ export function createGuardian(options: RecorderOptions) {
     predictDue: recorder.predictDue,
     warn: recorder.warn,
     verify: recorder.verify,
+    annotate: recorder.annotate,
+    report: recorder.report,
+    get measurement() { return recorder.measurement; },
   };
 }
 

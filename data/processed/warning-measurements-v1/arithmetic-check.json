@@ -1,0 +1,24 @@
+{
+  "simulationOnly": true,
+  "purpose": "Arithmetic/integration fixture; these numbers are NOT model performance.",
+  "node": "v22.18.0",
+  "checks": [
+    "independent FIR arithmetic",
+    "independent lead arithmetic",
+    "quiet miss retained",
+    "export validation and recomputation"
+  ],
+  "hashes": {
+    "src/domain/measurement.ts": "66df20d4ad7d1d104f832f544fb8af6a7beb9a3cbb4a6ad9c764a4c2a3d0cb47",
+    "src/domain/recorder.ts": "959730e72ced5200d02c715caf17c183033c9a2ac9733190714631455ecb80c1",
+    "src/domain/guardian.ts": "b98c93c377a4dd4177ff18c7900311747866c94e65c8da90069af5f7a5ee35db",
+    "src/domain/collector.ts": "585729a80853ebcb2ce05f714e07f31942d60a27a21cf3930e4f68b65092fd5f",
+    "src/domain/request.ts": "69d689bb29f8ff5d37e407bd0f57fe653147a7e5bfd5abccca1d131adac404c0",
+    "src/components/bank/session.tsx": "408af5e0afd1624777b87459dab25fd7abe4b9fddb04d4c1b433e03ce1ae1e63",
+    "src/components/bank/early-warning.tsx": "b1a517affeb60907d8adafb4eda39ec9625ee50fc53f063e43d804cfc5195b74",
+    "src/domain/model/selection.json": "c7bbb91e250ed3e79eff427146754d870a92dd9a254d0adfe37b6e599622d9d6",
+    "src/domain/model/lr_combined_binary.json": "959173dff2637856b3b5db314b60d6d01e4fd08037c6a5255eba62081335dde7",
+    "src/domain/model/xgb_behavior_binary.json": "4f1afeec7f3b6eaf8762a5f46c37ae0eb107b0a8471b1e9508cbe8187763a564",
+    "src/domain/model/xgb_behavior_binary.xgb.json": "1aa478f73b17f3709f864f6827742b3be6b332716039dc3efb0b13a5cc3b88cd"
+  }
+}

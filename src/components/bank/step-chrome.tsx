@@ -5,6 +5,7 @@ import { BankButton } from './button';
 import { CaretLeftIcon, LifebuoyIcon, LightbulbIcon } from './icons';
 import { B } from './palette';
 import { useSession } from './session';
+import { EarlyWarning } from './early-warning';
 
 export function StepHeader({ title, progress, top }: { title: string; progress: 1 | 2 | 3; top: number }) {
   const { dispatch } = useSession();
@@ -41,6 +42,7 @@ export function Guide({ children }: { children: string }) {
 export function StepFooter({ label, onPress, disabled, bottom }: { label: string; onPress: () => void; disabled?: boolean; bottom: number }) {
   const { view, dispatch } = useSession();
   return <View className="gap-2 px-5 pt-2.5" style={{ paddingBottom: bottom + 10 }}>
+    <EarlyWarning />
     <BankButton label={label} onPress={onPress} disabled={disabled} large={view.simple} />
     <View className="flex-row justify-between">
       <BankButton variant="quiet" large={view.simple} label="Help me with this step" icon={<LifebuoyIcon size={18} color={B.red} />} onPress={() => dispatch({ type: 'help' })} />

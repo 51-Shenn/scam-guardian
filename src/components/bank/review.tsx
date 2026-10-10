@@ -6,7 +6,7 @@ import { useSession } from './session';
 import { Guide, StepFooter, StepHeader } from './step-chrome';
 
 export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
-  const { session, view, dispatch, guardian } = useSession();
+  const { session, view, dispatch, guardian, checking } = useSession();
   const size = view.simple ? 'text-[19px]' : 'text-base';
   const person = recipients[session.to];
   const account: [string, string][] = person.fresh ? [['Account', groupDigits(session.account)]] : [];
@@ -31,6 +31,6 @@ export function ReviewStep({ top, bottom }: { top: number; bottom: number }) {
         <Text aria-live="polite" className="flex-1 font-body text-[17px] leading-[23px] text-[#4f2b00]">{view.locked ? 'A short pause before you decide.' : 'The pause has ended. The choice is yours.'}</Text>
       </View>}
     </ScrollView>
-    <StepFooter label={view.paused ? 'Continue with transfer' : 'Confirm transfer'} disabled={view.locked} onPress={confirm} bottom={bottom} />
+    <StepFooter label={checking ? 'Checking local model…' : view.paused ? 'Continue with transfer' : 'Confirm transfer'} disabled={view.locked || checking} onPress={confirm} bottom={bottom} />
   </View>;
 }

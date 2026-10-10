@@ -5,8 +5,14 @@ import { createLocalDemoApi } from '@/domain/local-api';
 import { loadModelBundle } from '@/domain/model-bundle';
 import { derive, initialSession, reduce, type Action, type Derived, type Session } from '@/domain/session';
 import { useWindowFocus } from './use-window-focus';
+import type { EvaluationLabel } from '@/domain/measurement';
 
-interface SessionValue { session: Session; view: Derived; dispatch: (action: Action) => void; guardian: Guardian }
+interface SessionValue {
+  session: Session; view: Derived; dispatch: (action: Action) => void; guardian: Guardian;
+  checking: boolean; canShowWarning: boolean; markWarningDisplayed: () => void;
+  evaluationLabel: EvaluationLabel; annotate: (label: EvaluationLabel) => void;
+  report: ReturnType<Guardian['report']>; measurement: Guardian['measurement'];
+}
 const SessionContext = createContext<SessionValue | null>(null);
 
 const newId = () => `s-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
@@ -33,20 +39,48 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, baseDispatch] = useReducer(reduce, initialSession);
   const [now, setNow] = useState(() => Date.now());
   const [guardian] = useState(makeGuardian);
+  const [checking, setChecking] = useState(false);
+  const confirming = useRef(false);
+  const [foreground, setForeground] = useState(AppState.currentState !== 'background' && AppState.currentState !== 'inactive');
+  const [windowFocused, setWindowFocused] = useState(true);
+  const [evaluationLabel, setEvaluationLabel] = useState<EvaluationLabel>(null);
+  // React owns immutable snapshots. Reading a mutable guardian getter directly in render can be memoized by the React Compiler.
+  const [measurements, setMeasurements] = useState(() => ({ report: guardian.report(), active: guardian.measurement }));
   // Every state change goes through dispatch below, so this ref always holds the state the next action applies to.
   const current = useRef(initialSession);
 
   // Every action is also shown to the guardian, which turns it into content-free contract events.
-  const dispatch = useCallback((action: Action) => {
+  const apply = useCallback((action: Action) => {
     const prev = current.current;
     const next = reduce(prev, action);
     guardian.observe(action, prev, next);
     current.current = next;
     baseDispatch(action);
+    setMeasurements({ report: guardian.report(), active: guardian.measurement });
   }, [guardian]);
 
-  const { step, deadline, sheet, away } = session;
-  const monitored = guardian.sessionId !== null && (step === 'recipient' || step === 'amount' || step === 'review');
+  const dispatch = useCallback((action: Action) => {
+    if (action.type !== 'confirm' || guardian.sessionId === null) { apply(action); return; }
+    if (confirming.current) return;
+    confirming.current = true;
+    setChecking(true);
+    const id = guardian.sessionId;
+    // Await every already-due prefix before allowing confirmation. Do not reuse answers after reset.
+    guardian.predictDue().then((ai) => {
+      if (guardian.sessionId !== id || current.current.step !== 'review') return;
+      if (ai) apply({ type: 'ai', ai, now: Date.now() });
+      apply({ ...action, now: Date.now() });
+    }).catch(() => {
+      if (guardian.sessionId === id) apply({ type: 'ai', ai: { ...current.current.ai, status: 'unavailable' }, now: Date.now() });
+    }).finally(() => { confirming.current = false; setChecking(false); });
+  }, [guardian, apply]);
+
+  const annotate = useCallback((label: EvaluationLabel) => {
+    if (guardian.annotate(label)) setEvaluationLabel(label);
+  }, [guardian]);
+
+  const { step, deadline, away } = session;
+  const monitored = measurements.active !== null && (step === 'recipient' || step === 'amount' || step === 'review');
 
   // One timer for the whole app, running only while a pause is on screen.
   useEffect(() => {
@@ -73,7 +107,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const timer = setInterval(() => {
       if (running) return;
       running = true;
-      guardian.predictDue().then((ai) => { if (ai) dispatch({ type: 'ai', ai, now: Date.now() }); }).finally(() => { running = false; });
+      const id = guardian.sessionId;
+      guardian.predictDue().then((ai) => { if (ai && guardian.sessionId === id) dispatch({ type: 'ai', ai, now: Date.now() }); })
+        .catch(() => { if (guardian.sessionId === id) dispatch({ type: 'ai', ai: { ...current.current.ai, status: 'unavailable' }, now: Date.now() }); })
+        .finally(() => { running = false; });
     }, 1000);
     return () => clearInterval(timer);
   }, [monitored, guardian, dispatch]);
@@ -81,19 +118,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // App lifecycle while a transfer is monitored.
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
+      setForeground(state === 'active');
       if (state === 'active' || state === 'background' || state === 'inactive') guardian.lifecycle(state);
     });
     return () => subscription.remove();
   }, [guardian]);
-  useWindowFocus(useCallback((focused: boolean) => guardian.windowFocus(focused), [guardian]));
+  useWindowFocus(useCallback((focused: boolean) => { setWindowFocused(focused); guardian.windowFocus(focused); }, [guardian]));
 
   const view = derive(session, now);
-  // A shown pause is logged once, with what decided it.
-  useEffect(() => {
-    if (sheet === 'pause' && view.origin) guardian.warn(view.origin);
-  }, [sheet, view.origin, guardian]);
+  const canShowWarning = foreground && windowFocused && !away && monitored;
+  const markWarningDisplayed = useCallback(() => {
+    if (canShowWarning && view.origin && guardian.warn(view.origin)) setMeasurements({ report: guardian.report(), active: guardian.measurement });
+  }, [canShowWarning, view.origin, guardian]);
 
-  return <SessionContext value={{ session, view, dispatch, guardian }}>{children}</SessionContext>;
+  return <SessionContext value={{ session, view, dispatch, guardian, checking, canShowWarning, markWarningDisplayed, evaluationLabel, annotate, report: measurements.report, measurement: measurements.active }}>{children}</SessionContext>;
 }
 
 export function useSession(): SessionValue {

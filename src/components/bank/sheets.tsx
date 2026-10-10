@@ -38,14 +38,14 @@ export function ConsentSheet({ bottom }: { bottom: number }) {
 
 /** Shown once when a coached transfer reaches review. It asks; it does not accuse. */
 export function PauseSheet({ bottom }: { bottom: number }) {
-  const { view, dispatch, guardian } = useSession();
+  const { view, dispatch, guardian, canShowWarning, markWarningDisplayed } = useSession();
   const ai = view.origin === 'ai' || view.origin === 'combined';
   const choose = (action: 'cancel' | 'open_check') => {
     guardian.verify(action);
     dispatch({ type: action === 'cancel' ? 'cancel' : 'closeSheet' });
   };
   return <Sheet label="Take a moment" bottom={bottom}>
-    <Text accessibilityRole="header" className={title}>{view.origin === 'ai' ? 'Pause and verify this payment' : 'Is someone on the phone telling you to do this?'}</Text>
+    <Text key={String(canShowWarning)} onLayout={markWarningDisplayed} accessibilityRole="header" className={title}>{view.origin === 'ai' ? 'Pause and verify this payment' : 'Is someone on the phone telling you to do this?'}</Text>
     <Text className={body}>{ai ? `${AI_REVIEW_REASON}. ` : ''}Take time to check with someone you trust. You can cancel now, or decide to continue after the pause.</Text>
     {view.alert && <View className="gap-1 rounded-[20px] bg-b-tint px-4 py-3.5">
       <Text className="font-body text-[15px] leading-5 text-[#6d0a1b]">Aina would be asked to call you now. The request carries no amount and no account details.</Text>

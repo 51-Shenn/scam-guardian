@@ -1,10 +1,10 @@
 # Scam Guardian
 
-A light-theme Expo application for Android and web, with a product landing page and an interactive mock banking app. No real money moves. Call and paste signals are simulated, classification uses demonstration rules, and family alerts remain local previews.
+A light-theme Expo application for Android and web, with a product landing page and an interactive mock banking app. No real money moves. Calls and external switching are simulated; local UI edit/paste metadata and fixed authored request cues feed the frozen simulation-trained model. Demo rules remain separate, and family alerts remain local previews.
 
 ## Run
 
-Use Node.js 24+ and npm:
+Use Node.js 22.13+ and npm (validated here with Node 22.18.0):
 
 ```sh
 npm ci
@@ -33,6 +33,12 @@ node scripts/preview.mjs
 ```
 
 The application preview runs at `http://127.0.0.1:4173`, with the demo at `/demo`. Both Android and web bundles go into ignored `dist/`. These exports verify compilation, not APK assembly or device behavior.
+
+## Early warning and false-intervention measurement
+
+See [the measurement manual and three-minute Predictive Model Track flow](docs/warning-measurements.md). Choose an independent evaluation label before Transfer, then optionally deliver a fixed authored request. Recipient/amount warnings appear before Review; confirmed/cancelled sessions update the measurement panel. Export JSON before reloading; the latest 20 ended sessions are retained in app-run memory. Personalization is deferred.
+
+Live observed warning lead includes the review cool-down and user delay. The panel separately reports the warning-to-review checkpoint; it does not claim unbiased shadow lead or real-world effectiveness. False reviews, quiet misses and model outages remain visible. Browser validation: `node scripts/browser_warning_measurements.mjs`; arithmetic/export reproduction: `node scripts/check_warning_measurements.mjs`.
 
 ## Demo walkthrough
 

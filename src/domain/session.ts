@@ -1,4 +1,5 @@
 import { canConfirm, evaluate, validateAmount, type Decision, type Scenario, type Signals } from './risk.ts';
+import type { DemoRequestId } from './request.ts';
 
 export type Step = 'home' | 'recipient' | 'amount' | 'review' | 'success';
 export type RecipientId = 'aina' | 'hafiz' | 'fresh';
@@ -73,10 +74,13 @@ export interface Session {
   error: string | null;
   hidden: boolean;
   ai: AiView;
+  demoRequest: DemoRequestId | null;
+  requestShown: boolean;
 }
 export const initialSession: Session = {
   step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 2500,
   amount: '', to: 'aina', account: '', entry: null, call: false, away: false, awaySince: null, awayMs: 0, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, ai: AI_OFF,
+  demoRequest: null, requestShown: false,
 };
 
 export type Action =
@@ -87,7 +91,9 @@ export type Action =
   | { type: 'key'; key: string } | { type: 'setAmount'; amount: string }
   | { type: 'review'; now: number } | { type: 'confirm'; now: number }
   | { type: 'back' } | { type: 'help' } | { type: 'cancel' } | { type: 'done' } | { type: 'toggleHidden' }
-  | { type: 'ai'; ai: AiView; now: number };
+  | { type: 'ai'; ai: AiView; now: number }
+  // Independently selected from evaluation labels and rule presets.
+  | { type: 'selectRequest'; request: DemoRequestId | null } | { type: 'revealRequest' };
 
 export interface Derived {
   fixture: Fixture;
@@ -148,7 +154,7 @@ function start(session: Session): Session {
   const fixture = fixtures[session.scenario];
   return {
     ...session, step: 'recipient', amount: '', to: fixture.to, account: '', entry: null, help: 0, back: 0, deadline: null, error: null, sheet: null, awayMs: 0,
-    pendingStart: false, ai: session.consent ? AI_WAITING : AI_OFF,
+    pendingStart: false, ai: session.consent ? AI_WAITING : AI_OFF, requestShown: false,
   };
 }
 
@@ -173,6 +179,8 @@ function enterAccount(session: Session, value: string, pasted: boolean): Session
 
 export function reduce(session: Session, action: Action): Session {
   switch (action.type) {
+    case 'selectRequest': return session.step === 'home' ? { ...session, demoRequest: action.request, requestShown: false } : session;
+    case 'revealRequest': return derive(session, 0).monitoring && session.demoRequest && !session.requestShown ? { ...session, requestShown: true } : session;
     case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call, away: false, awaySince: null, awayMs: 0 };
     case 'toggleCall': return hold({ ...session, call: !session.call }, action.now);
     // The person can keep using the bank app while the simulated switch says they are away.

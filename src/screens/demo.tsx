@@ -120,7 +120,9 @@ export default function DemoScreen() {
     <View className="flex-1 items-center justify-center pb-8">
       <View style={{ width: STAGE.width * fit, height: STAGE.height * fit }}>
         <View className="flex-row items-center" style={{ width: STAGE.width, height: STAGE.height, gap: STAGE.gap, transform: [{ scale: fit }], transformOrigin: 'top left' }}>
-          <View className="gap-3" style={{ width: STAGE.panel }}><ReadOut /><Presets /></View>
+          <ScrollView style={{ width: STAGE.panel, height: STAGE.height }} contentContainerClassName="gap-3 pb-3" showsVerticalScrollIndicator>
+            <ReadOut /><Presets />
+          </ScrollView>
           <View className="items-center gap-2.5">
             <Text className={caption}>Rohani&apos;s phone</Text>
             <PhoneFrame scale={STAGE.phone} chrome={step === 'home' ? 'light' : 'dark'} callActive={call}>

@@ -5,6 +5,7 @@ import { Keypad } from './keypad';
 import { useSession } from './session';
 import { Guide, StepFooter, StepHeader, Tag } from './step-chrome';
 import { useAmountKeys } from './use-amount-keys';
+import { AuthoredRequest } from './authored-request';
 
 export function AmountStep({ top, bottom, keys }: { top: number; bottom: number; keys: boolean }) {
   const { session, view, dispatch } = useSession();
@@ -14,6 +15,7 @@ export function AmountStep({ top, bottom, keys }: { top: number; bottom: number;
   return <View className="flex-1">
     <StepHeader title="Transfer" progress={2} top={top} />
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerClassName="gap-3 pb-3 pt-[18px]">
+      <View className="px-5"><AuthoredRequest /></View>
       {view.simple && <View className="px-5"><Guide>Enter the amount in ringgit. Then press Review.</Guide></View>}
       <View className="items-center px-5 pt-2.5">
         <View className="flex-row items-center gap-2">

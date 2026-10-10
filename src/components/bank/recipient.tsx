@@ -6,12 +6,14 @@ import { CheckCircleIcon, UserPlusIcon } from './icons';
 import { B } from './palette';
 import { useSession } from './session';
 import { Guide, StepFooter, StepHeader } from './step-chrome';
+import { AuthoredRequest } from './authored-request';
 
 export function RecipientStep({ top, bottom }: { top: number; bottom: number }) {
   const { session, view, dispatch } = useSession();
   return <View className="flex-1">
     <StepHeader title="Transfer" progress={1} top={top} />
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerClassName="gap-3 px-5 pb-3 pt-[18px]">
+      <AuthoredRequest />
       {view.simple && <Guide>Choose the person you want to send to. Then press Next.</Guide>}
       <Text accessibilityRole="header" className={`font-body text-b-ink ${view.simple ? 'text-[28px] leading-[34px]' : 'text-2xl'}`}>Who are you sending to?</Text>
       {!view.simple && <Text className="font-body text-[15px] text-b-muted">Pick a saved contact or a new recipient.</Text>}
@@ -19,7 +21,7 @@ export function RecipientStep({ top, bottom }: { top: number; bottom: number }) 
         {recipientIds.map((id) => {
           const person = recipients[id];
           const selected = session.to === id;
-          return <Pressable key={id} accessibilityRole="radio" accessibilityState={{ checked: selected }} onPress={() => dispatch({ type: 'pick', to: id })}
+          return <Pressable key={id} accessibilityRole="radio" accessibilityLabel={`Recipient ${person.name}`} accessibilityState={{ checked: selected }} onPress={() => dispatch({ type: 'pick', to: id })}
             className={`rounded-[24px] border-2 active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${selected ? 'border-b-red' : 'border-transparent'}`}>
             <Glass radius={22} className={`flex-row items-center gap-3.5 ${view.simple ? 'p-4' : 'px-3.5 py-3'}`}>
               <View aria-hidden className={`h-[46px] w-[46px] items-center justify-center rounded-full ${person.fresh ? 'bg-b-amber-bg' : 'bg-b-tint'}`}>

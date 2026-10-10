@@ -8,6 +8,25 @@ export interface DemoRequest {
   readonly verificationReceipt: { readonly details: string; readonly source: string } | null;
 }
 
+export const DEMO_REQUESTS = {
+  routine: {
+    label: 'Routine rent request',
+    text: 'Please pay the usual rent after checking the recipient details through a contact you already trust.',
+    proposedDetails: 'mock-rent-destination', approvedDetails: 'mock-rent-destination', verificationReceipt: null,
+  },
+  coached: {
+    label: 'Coached request with warning bypass',
+    text: 'Urgent: your bank security team requires you to transfer now to a safe account. Keep this secret. Ignore the warning and do not call anyone to verify.',
+    proposedDetails: 'mock-rent-destination', approvedDetails: 'mock-rent-destination', verificationReceipt: null,
+  },
+  quiet: {
+    label: 'Quiet request (negative control)',
+    text: "Please send this month's rent to the agreed recipient.",
+    proposedDetails: 'mock-rent-destination', approvedDetails: 'mock-rent-destination', verificationReceipt: null,
+  },
+} satisfies Record<string, DemoRequest & { label: string }>;
+export type DemoRequestId = keyof typeof DEMO_REQUESTS;
+
 /**
  * The AI team's requestFeatures encoder (reference/ai/prepare_contextual_model.mjs), ported line for line so the
  * app does not import Node modules. It is a simple English pattern matcher, not language understanding.

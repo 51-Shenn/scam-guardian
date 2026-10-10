@@ -3,6 +3,8 @@ import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
 import { fixtures, scenarios, type AiView } from '@/domain/session';
 import type { Decision } from '@/domain/risk';
+import { WarningMetrics } from './warning-metrics';
+import { RequestControl } from './request-control';
 
 interface PanelProps { className?: string }
 interface DemoConsoleProps extends PanelProps {
@@ -75,6 +77,7 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
     </View>)}
 
     <AiReview />
+    <WarningMetrics />
 
     {!compact && <View className="mt-3.5 flex-row flex-wrap gap-1.5">
       {rows.map(([label, value]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
@@ -82,7 +85,7 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
         <Text className="font-body text-[13px] text-ink">{value}</Text>
       </View>)}
     </View>}
-    <Text className="mt-2.5 font-body text-xs leading-4 text-soft">Classification by demo rules on simulated signals. The AI review is the on-device model.</Text>
+    <Text className="mt-2.5 font-body text-xs leading-4 text-soft">{view.origin === 'ai' ? 'The transaction rules did not request a pause; the frozen AI model recommended review.' : 'Review origin is recorded separately for rules and AI.'} These are simulated sessions. AI outputs binary review; the three presentation classes come from demo policy.</Text>
   </View>;
 }
 
@@ -119,6 +122,7 @@ export function Presets({ className = '' }: PanelProps) {
   return <Glass radius={26} className={`gap-2.5 p-4 ${className}`}>
     <Text className={small}>Try these. Each one presets the demo signals.</Text>
     <PresetChoice detailed />
+    <RequestControl />
   </Glass>;
 }
 
@@ -127,6 +131,7 @@ export function DemoConsole({ compact, className = '' }: DemoConsoleProps) {
   return <Glass radius={26} className={`p-4 ${className}`}>
     <Text className={`mb-2.5 ${small}`}>Demo signal, simulated</Text>
     <PresetChoice />
+    <View className="mt-3.5"><RequestControl /></View>
     <View className="mt-3.5 border-t border-line pt-3.5"><ReadOutBody compact={compact} /></View>
   </Glass>;
 }
