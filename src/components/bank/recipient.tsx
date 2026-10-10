@@ -1,15 +1,14 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Glass } from '@/components/glass/glass';
-import { DEMO_ACCOUNT, recipientIds, recipients } from '@/domain/session';
-import { BankButton } from './button';
-import { CheckCircleIcon, ClipboardTextIcon, KeyboardIcon, UserPlusIcon } from './icons';
+import { recipientIds, recipients } from '@/domain/session';
+import { AccountField } from './account-field';
+import { CheckCircleIcon, UserPlusIcon } from './icons';
 import { B } from './palette';
 import { useSession } from './session';
-import { Guide, StepFooter, StepHeader, Tag } from './step-chrome';
+import { Guide, StepFooter, StepHeader } from './step-chrome';
 
 export function RecipientStep({ top, bottom }: { top: number; bottom: number }) {
   const { session, view, dispatch } = useSession();
-  const { entry } = session;
   return <View className="flex-1">
     <StepHeader title="Transfer" progress={1} top={top} />
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerClassName="gap-3 px-5 pb-3 pt-[18px]">
@@ -35,18 +34,7 @@ export function RecipientStep({ top, bottom }: { top: number; bottom: number }) 
           </Pressable>;
         })}
       </View>
-      {recipients[session.to].fresh && <Glass radius={22} className="gap-2.5 p-4">
-        <Text className="font-body text-sm text-b-muted">Account number</Text>
-        <View className="flex-row flex-wrap items-center gap-2">
-          <Text aria-live="polite" className={`font-body ${entry ? 'text-[22px] tracking-[0.6px] text-b-ink' : 'text-[17px] text-b-muted'}`} style={{ fontVariant: ['tabular-nums'] }}>{entry ? DEMO_ACCOUNT : 'Not entered yet'}</Text>
-          {entry === 'pasted' && <Tag label="Pasted" icon={<ClipboardTextIcon size={14} color={B.amber} />} />}
-        </View>
-        <View className="flex-row gap-2.5">
-          <View className="flex-1"><BankButton variant="line" selected={entry === 'typed'} label="Type it" icon={<KeyboardIcon size={18} color={B.ink} />} onPress={() => dispatch({ type: 'entry', entry: 'typed' })} /></View>
-          <View className="flex-1"><BankButton variant="line" selected={entry === 'pasted'} label="Paste it" icon={<ClipboardTextIcon size={18} color={B.ink} />} onPress={() => dispatch({ type: 'entry', entry: 'pasted' })} /></View>
-        </View>
-        <Text className="font-body text-[13px] leading-[18px] text-b-muted">Simulated entry with a made-up number. Nothing is read from your clipboard.</Text>
-      </Glass>}
+      {recipients[session.to].fresh && <AccountField large={view.simple} />}
     </ScrollView>
     <StepFooter label="Next" disabled={!view.ready} onPress={() => dispatch({ type: 'next' })} bottom={bottom} />
   </View>;
