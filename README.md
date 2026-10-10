@@ -1,6 +1,6 @@
 # Scam Guardian
 
-A light-theme Expo application for Android and web, with a product landing page and an interactive mock wallet. No real money moves. Call and paste signals are simulated, classification uses demonstration rules, and family alerts remain local previews.
+A light-theme Expo application for Android and web, with a product landing page and an interactive mock banking app. No real money moves. Call and paste signals are simulated, classification uses demonstration rules, and family alerts remain local previews.
 
 ## Run
 
@@ -32,16 +32,20 @@ npm run export:platforms
 node scripts/preview.mjs
 ```
 
-The application preview runs at `http://127.0.0.1:4173`, with the wallet at `/demo`. Both Android and web bundles go into ignored `dist/`. These exports verify compilation, not APK assembly or device behavior.
+The application preview runs at `http://127.0.0.1:4173`, with the demo at `/demo`. Both Android and web bundles go into ignored `dist/`. These exports verify compilation, not APK assembly or device behavior.
 
 ## Demo walkthrough
 
-Enable Guardian on the wallet home screen. Family-alert consent is separate. Select a fixture, then start a transfer:
+`/demo` shows three layouts: the Guardian read-out, Rohani's phone with the bank app, and Aina's phone as the trusted contact. On a wide screen they sit side by side and always fit the window. On a phone, a switch at the top moves between them.
+
+Enable Guardian on the bank app's home screen. Family-alert consent is separate. Pick a preset under "Try these", then start a transfer:
 
 - Normal: saved recipient, RM50, no interruption.
 - Struggling: step-by-step guidance and larger controls.
-- Coached / medium: simulated call and new recipient, 30-second pause.
-- Coached / high: additional paste metadata, 30-second pause and a local family-alert preview if consented.
+- Coached: simulated call and new recipient, 30-second pause.
+- Coached, high: a pasted account number as well, 30-second pause and an alert on Aina's phone if consented. That phone is a picture on the same screen; nothing is sent to another device.
+
+A preset only sets the starting signals. The simulated call can be started or ended at any time, and a new recipient's account number can be typed or pasted by hand.
 
 Help works immediately. Invalid amounts cannot proceed. Back navigation preserves the pause deadline. Cancellation ends monitoring. The uniform pause duration is provisional; it is not a calibrated risk policy.
 
@@ -49,7 +53,9 @@ Help works immediately. Invalid amounts cannot proceed. Back navigation preserve
 
 - `src/app/`: Expo Router landing and demo routes.
 - `src/screens/`: responsive shared Android/web screens.
-- `src/components/guardian/`: web beUI controls, native Expo UI controls and platform art.
+- `src/components/bank/`: the mock banking app and its transfer flow.
+- `src/components/glass/`: the frosted glass surface, as CSS backdrop blur on web and a translucent sheen on Android.
+- `src/components/guardian/`: the read-out, the family phone, the phone frame, web beUI controls and platform art.
 - `src/domain/`: deterministic risk rules, validation and tests.
 - `design/`: the Hairline artifact and its source.
 - `docs/implementation-plan.md`: research source, scope, remaining decisions and later integration work.

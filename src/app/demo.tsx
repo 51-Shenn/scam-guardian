@@ -1,1 +1,1 @@
-export { default } from '@/screens/wallet';
+export { default } from '@/screens/demo';

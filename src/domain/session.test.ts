@@ -100,3 +100,36 @@ test('money formats ringgit with separators and two decimals', () => {
   assert.equal(money('50.2'), 'RM 50.20');
   assert.equal(money(''), 'RM 0.00');
 });
+
+test('a new recipient needs an account number, and only a paste raises the paste flag', () => {
+  const picked = run(consented('normal'), { type: 'pick', to: 'fresh' });
+  assert.equal(derive(picked, 0).ready, false);
+  assert.equal(run(picked, { type: 'next' }).step, 'recipient');
+  const typed = run(picked, { type: 'entry', entry: 'typed' });
+  assert.deepEqual([derive(typed, 0).ready, derive(typed, 0).signals.pasted], [true, false]);
+  assert.equal(derive(run(picked, { type: 'entry', entry: 'pasted' }), 0).signals.pasted, true);
+  assert.equal(run(typed, { type: 'next' }).step, 'amount');
+  assert.equal(run(typed, { type: 'pick', to: 'aina' }).entry, null, 'a saved contact clears it');
+  assert.equal(consented('coached').entry, 'pasted');
+  assert.equal(consented('medium').entry, 'typed');
+});
+
+test('the simulated call follows the preset and can be switched by hand', () => {
+  assert.equal(consented('coached').call, true);
+  assert.equal(consented('normal').call, false);
+  const byHand = run(consented('normal'), { type: 'toggleCall', now: 0 }, { type: 'pick', to: 'fresh' }, { type: 'entry', entry: 'pasted' });
+  assert.equal(derive(byHand, 0).decision.response, 'hold');
+  assert.equal(derive(run(byHand, { type: 'toggleCall', now: 0 }), 0).decision.response, 'continue');
+});
+
+test('a call that starts during review begins the cool-down instead of locking the transfer', () => {
+  const review = run(consented('normal'), { type: 'pick', to: 'fresh' }, { type: 'entry', entry: 'typed' }, { type: 'next' }, { type: 'review', now: 1000 });
+  assert.equal(review.deadline, null);
+  const called = run(review, { type: 'toggleCall', now: 2000 });
+  assert.deepEqual([called.deadline, called.sheet], [2000 + COOL_DOWN_MS, 'pause']);
+  assert.equal(run(called, { type: 'toggleCall', now: 3000 }).deadline, 2000 + COOL_DOWN_MS, 'ending the call does not end the pause');
+});
+
+test('reset returns the demo to its first state', () => {
+  assert.deepEqual(run(consented('coached'), { type: 'next' }, { type: 'review', now: 0 }, { type: 'reset' }), initialSession);
+});

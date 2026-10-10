@@ -7,7 +7,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SessionProvider } from '@/components/wallet/session';
+import { SessionProvider } from '@/components/bank/session';
 
 SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
@@ -15,6 +15,6 @@ export default function RootLayout() {
   useEffect(() => { if (loaded || error) SplashScreen.hideAsync(); }, [loaded, error]);
   if (!loaded && !error) return null;
   return <SafeAreaProvider><SessionProvider>
-    <StatusBar style="dark" /><Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F4F7FC' } }} />
+    <StatusBar style="dark" /><Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#FAF6F6' } }} />
   </SessionProvider></SafeAreaProvider>;
 }

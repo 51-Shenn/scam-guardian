@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 // Static companion to src/components/guardian/flow-art.web.tsx: the same flow field at time zero, drawn once.
 // Seeded so the asset is reproducible. Run: node scripts/build-native-art.mjs
-const WIDTH = 480, HEIGHT = 760, ACCENT = '#1447e6', ZOOM = 2.4;
+const WIDTH = 480, HEIGHT = 760, ACCENT = '#c8102e', ZOOM = 2.4;
 let seed = 20261009;
 const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
 const angle = (x, y) => Math.sin(x * ZOOM * 0.0026) * 1.05 + Math.cos(y * ZOOM * 0.0052) * 1.1 + Math.sin((x - y) * ZOOM * 0.0017) * 0.55;

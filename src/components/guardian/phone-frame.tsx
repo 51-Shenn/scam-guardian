@@ -2,14 +2,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Text, View } from 'react-native';
 import Animated, { Easing, FadeIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { BatteryFullIcon, CellSignalFullIcon, PhoneCallIcon, WifiHighIcon } from '@/components/wallet/icons';
+import { BatteryFullIcon, CellSignalFullIcon, PhoneCallIcon, WifiHighIcon } from '@/components/bank/icons';
 import { FRAME } from '@/constants/layout';
 
 interface PhoneFrameProps {
   /** 1 renders the frame at 468 x 984. The wrapper takes the scaled size, so layout around it stays correct. */
   scale: number;
-  /** Colour of the status row: light over the blue wallet header, dark elsewhere. */
+  /** Colour of the status row: light over the bank app's red header, dark elsewhere. */
   chrome: 'light' | 'dark';
+  /** A lock screen: its own large clock replaces the small one, and the home indicator turns light. */
+  lock?: boolean;
   /** Expands the island into a call indicator. The call is a demo signal and is labelled as simulated. */
   callActive: boolean;
   children: ReactNode;
@@ -46,8 +48,8 @@ function Island({ live }: { live: boolean }) {
   </Animated.View>;
 }
 
-export function PhoneFrame({ scale, chrome, callActive, children }: PhoneFrameProps) {
-  const tint = chrome === 'light' ? '#ffffff' : '#0e1b33';
+export function PhoneFrame({ scale, chrome, lock, callActive, children }: PhoneFrameProps) {
+  const tint = chrome === 'light' ? '#ffffff' : '#22141a';
   return <View style={{ width: FRAME.width * scale, height: FRAME.height * scale }}>
     <View style={{ width: FRAME.width, height: FRAME.height, transform: [{ scale }], transformOrigin: 'top left' }}>
       <View aria-hidden style={[key, { left: -4, top: 168, height: 38 }]} />
@@ -60,13 +62,13 @@ export function PhoneFrame({ scale, chrome, callActive, children }: PhoneFramePr
             <View style={{ flex: 1, borderRadius: 62, overflow: 'hidden', backgroundColor: '#ffffff' }}>
               {children}
               <View aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: FRAME.statusBar, paddingTop: 20, paddingLeft: 46, paddingRight: 38, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', pointerEvents: 'none' }}>
-                <Text style={{ fontFamily: 'HedvigLettersSans', fontSize: 17, color: tint }}>9:41</Text>
+                <Text style={{ fontFamily: 'HedvigLettersSans', fontSize: 17, color: tint, opacity: lock ? 0 : 1 }}>9:41</Text>
                 <View style={{ flexDirection: 'row', gap: 7 }}>
                   <CellSignalFullIcon size={19} color={tint} weight="fill" /><WifiHighIcon size={19} color={tint} weight="fill" /><BatteryFullIcon size={19} color={tint} weight="fill" />
                 </View>
               </View>
               <Island live={callActive} />
-              <View aria-hidden style={{ position: 'absolute', bottom: 9, alignSelf: 'center', width: 148, height: 5, borderRadius: 3, backgroundColor: 'rgba(14, 27, 51, 0.82)', pointerEvents: 'none' }} />
+              <View aria-hidden style={{ position: 'absolute', bottom: 9, alignSelf: 'center', width: 148, height: 5, borderRadius: 3, backgroundColor: lock ? 'rgba(255, 255, 255, 0.85)' : 'rgba(14, 27, 51, 0.82)', pointerEvents: 'none' }} />
             </View>
           </View>
         </LinearGradient>

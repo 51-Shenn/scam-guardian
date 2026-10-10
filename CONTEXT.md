@@ -4,7 +4,7 @@ Scam Guardian supports a person making a transfer by distinguishing everyday use
 
 ## Language
 
-**Transfer session**: The period from opening the recipient step until a transfer is confirmed or cancelled. Browsing a wallet balance is outside the session.
+**Transfer session**: The period from opening the recipient step until a transfer is confirmed or cancelled. Browsing an account balance is outside the session.
 
 **Normal**: A session consistent with the person's usual transfer activity, needing no intervention.
 
@@ -21,5 +21,8 @@ _Avoid_: Suspicious senior, scam victim
 _Avoid_: Guardian administrator, payment approver
 
 **Family alert**: A request for the trusted contact to call the user about a paused transfer. It excludes account details and amounts.
+
+**Bank app**: The mock banking app that hosts Guardian in the demo. It has no real bank's name or logo.
+_Avoid_: Wallet, e-wallet
 
 **Demo signal**: An explicitly simulated input used to demonstrate the transfer responses. It is distinct from an observed device capability.
