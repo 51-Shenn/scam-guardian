@@ -101,6 +101,31 @@ test('the simulated call is a separate signal and never a payment event', async 
   assert.equal(envelope.value.input.features.foreground_pause_count, 1, 'the call button is not a payment interaction');
 });
 
+test('a call already on when the transfer starts is recorded from the start', async () => {
+  const h = harness();
+  await h.at(0, { type: 'scenario', scenario: 'coached' }, { type: 'transfer' }, { type: 'agree' });
+  await h.at(5000);
+  const envelope = h.api.buildSnapshot({ session_id: h.guardian.sessionId!, prediction_id: 'x', feature_cutoff_ms: 0 });
+  assert.ok(envelope.ok);
+  assert.equal(envelope.value.simulation_context.call, 'active');
+});
+
+test('focus after returning to the app, without a touch, is a restoration', async () => {
+  const h = harness();
+  await h.at(0, { type: 'transfer' }, { type: 'agree' }, { type: 'pick', to: 'fresh' });
+  h.guardian.focus('recipient', true);
+  await h.at(1000, { type: 'account', value: '1', pasted: false });
+  h.guardian.lifecycle('background');
+  await h.at(3000);
+  h.guardian.lifecycle('active');
+  h.guardian.focus('recipient', false);
+  h.guardian.focus('recipient', false);
+  await h.at(5000);
+  const f = h.snapshot(5000).features;
+  assert.deepEqual([f.user_focus_count, f.restoration_focus_count], [1, 1], 'only the first focus after returning is a restoration');
+  assert.equal(f.background_or_blur_ms, 2000);
+});
+
 test('the frozen model scores each grid point, and the answer reaches the session', async () => {
   const h = harness();
   await h.at(0, { type: 'transfer' }, { type: 'agree' });

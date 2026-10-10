@@ -47,6 +47,8 @@ export interface Collected {
 export class Collector {
   private open = false;
   private amountFocused = false;
+  /** Set on returning to the app; the next focus without a touch is the platform restoring it. */
+  private resumed = false;
 
   get active(): boolean { return this.open; }
 
@@ -67,9 +69,14 @@ export class Collector {
     if (begins) {
       this.open = true;
       this.amountFocused = false;
-      return { start: true, drafts: [transactionDraft(next)], end: null };
+      this.resumed = false;
+      // The call button may already be on from a preset, so its state is recorded at the start.
+      const call = draft('simulated_context', 'simulation_button', { signal: 'call', state: next.call ? 'active' : 'inactive' });
+      return { start: true, drafts: [transactionDraft(next), call], end: null };
     }
     if (!this.open) return none;
+    // A person's action ends the window for a restoration focus; the model's own answers do not.
+    if (action.type !== 'ai') this.resumed = false;
     const drafts: Draft[] = [];
     const finish = (end: Outcome, event?: Draft): Collected => {
       this.open = false;
@@ -107,9 +114,15 @@ export class Collector {
     return { start: false, drafts, end: null };
   }
 
-  /** The account-number field's focus. Origin is user only when a touch or click on the field just came first. */
+  /**
+   * The account-number field's focus. A touch or click on the field just before makes it the user's; the first
+   * focus without one after returning to the app is a restoration; anything else stays unknown.
+   */
   focus(field: Field, fromTouch: boolean): Draft[] {
-    return this.open ? [draft('focus', 'observed_ui', { field_id: field, origin: fromTouch ? 'user' : 'unknown' })] : [];
+    if (!this.open) return [];
+    const origin = fromTouch ? 'user' : this.resumed ? 'restoration' : 'unknown';
+    this.resumed = false;
+    return [draft('focus', 'observed_ui', { field_id: field, origin })];
   }
 
   blur(field: Field): Draft[] {
@@ -118,10 +131,14 @@ export class Collector {
 
   /** App lifecycle and window focus, only while a transfer is monitored. */
   lifecycle(state: 'active' | 'inactive' | 'background'): Draft[] {
-    return this.open ? [draft('app_state', 'observed_lifecycle', { state })] : [];
+    if (!this.open) return [];
+    this.resumed = state === 'active';
+    return [draft('app_state', 'observed_lifecycle', { state })];
   }
 
   windowFocus(focused: boolean): Draft[] {
-    return this.open ? [draft('window_focus', 'observed_lifecycle', { focused })] : [];
+    if (!this.open) return [];
+    this.resumed = focused;
+    return [draft('window_focus', 'observed_lifecycle', { focused })];
   }
 }
