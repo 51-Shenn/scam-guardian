@@ -4,37 +4,14 @@ import test from 'node:test';
 import { augmentSession, featuresAt, generateSession, type ReferenceSession } from '../../reference/ai/prepare_contract_data.mjs';
 import type { DemoEvent } from './contract.ts';
 import { behaviourAt, dueCutoffs, NO_REQUEST, simulationAt, snapshotAt, SNAPSHOT_PERIOD_MS, type Availability } from './features.ts';
+import { toContractEvents } from './reference-events.ts';
 
 const policy = JSON.parse(fs.readFileSync(new URL('../../reference/ai/contextual_policy_v2.json', import.meta.url), 'utf8'));
 const KEYS = Object.keys(snapshotAt([], 0, { editing: true, explicitPaste: true }).features);
 const DELTAS = ['back_count', 'user_focus_count', 'recipient_edit_count', 'amount_edit_count', 'foreground_idle_excess_ms'];
 
-/** Rewrites a reference generator session into contract events, the shape the app's collector emits. */
-function toContract(s: ReferenceSession): DemoEvent[] {
-  let step = 'recipient';
-  return s.events.map((e: any) => {
-    const head = { session_id: s.metadata.sessionId, event_seq: e.seq, event_t_ms: e.tMs, type: e.type };
-    switch (e.type) {
-      case 'session_start': return { ...head, source: 'observed_ui', payload: { step_id: e.stepId } };
-      case 'transaction': return { ...head, source: 'mock_wallet', payload: {
-        amount_minor_units: e.amountMinorUnits, currency: e.currency, is_new_recipient: e.isNewRecipient,
-        available_balance_minor_units: e.availableBalanceMinorUnits, recent_transfer_count: e.recentTransferCount,
-        recipient_history_count: e.recipientHistoryCount, history_window_ms: e.historyWindowMs, context_as_of_ms: e.contextAsOfMs } };
-      case 'edit': return { ...head, source: 'observed_ui', payload: { field_id: e.fieldId, length_delta: e.lengthDelta, input_source: e.inputSource } };
-      case 'focus': return { ...head, source: 'observed_ui', payload: { field_id: e.fieldId, origin: e.origin } };
-      case 'blur': return { ...head, source: 'observed_ui', payload: { field_id: e.fieldId } };
-      case 'navigate': step = e.stepId; return { ...head, source: 'observed_ui', payload: { step_id: e.stepId, direction: e.direction } };
-      case 'help': return { ...head, source: 'observed_ui', payload: { step_id: step } };
-      case 'app_state': return { ...head, source: 'observed_lifecycle', payload: { state: e.state } };
-      case 'window_focus': return { ...head, source: 'observed_lifecycle', payload: { focused: e.focused } };
-      case 'confirm': return { ...head, source: 'observed_ui', payload: {} };
-      default: throw Error(`unmapped reference event ${e.type}`);
-    }
-  }) as DemoEvent[];
-}
-
 function assertParity(s: ReferenceSession, availability: Availability) {
-  const events = toContract(s);
+  const events = toContractEvents(s);
   const pick = (f: Record<string, number | null>) => Object.fromEntries(KEYS.map((k) => [k, f[k]]));
   let cutoffs = 0;
   for (let t = 0; t < s.researchAnnotations.confirmedAtMs; t += SNAPSHOT_PERIOD_MS, cutoffs++) {
