@@ -42,7 +42,7 @@ async function click(text, role = 'button', aria = false) {
   const match = aria ? `e.getAttribute('aria-label')===${JSON.stringify(text)}`
     : role === 'radio' ? `!e.hasAttribute('aria-label') && e.textContent.trim().startsWith(${JSON.stringify(text)})`
       : `e.textContent.trim()===${JSON.stringify(text)}`;
-  const expression = `(()=>{const e=[...document.querySelectorAll(${JSON.stringify(selector)})].find(e=>${match}); if(!e) throw Error('Missing control '+${JSON.stringify(text)}); if(e.disabled || e.getAttribute('aria-disabled')==='true') throw Error('Disabled control'); e.scrollIntoView({block:'nearest'}); const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`;
+  const expression = `(()=>{const e=[...document.querySelectorAll(${JSON.stringify(selector)})].find(e=>(${match}) && !e.closest('[inert], [aria-hidden="true"]') && e.getBoundingClientRect().width>0 && e.getBoundingClientRect().height>0); if(!e) throw Error('Missing control '+${JSON.stringify(text)}); if(e.disabled || e.getAttribute('aria-disabled')==='true') throw Error('Disabled control'); e.scrollIntoView({block:'nearest'}); const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`;
   const point = await evaluate(expression);
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, ...point });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, ...point });
@@ -50,7 +50,7 @@ async function click(text, role = 'button', aria = false) {
   await delay(550);
 }
 async function typeAccount() {
-  const point = await evaluate("(()=>{const e=document.querySelector('input[aria-label=\"Account number\"]');if(!e)throw Error('Missing account field');e.scrollIntoView({block:'nearest'});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()");
+  const point = await evaluate("(()=>{const e=[...document.querySelectorAll('input[aria-label=\"Account number\"]')].find(e=>!e.closest('[inert], [aria-hidden=\"true\"]')&&e.getBoundingClientRect().width>0);if(!e)throw Error('Missing account field');e.scrollIntoView({block:'nearest'});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()");
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, ...point });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, ...point });
   await send('Input.insertText', { text: '123412341234' });
@@ -61,6 +61,8 @@ async function shot(name) {
 }
 try {
   await until(async () => { try { return (await fetch('http://127.0.0.1:4184/demo')).ok; } catch { return false; } });
+  assert.equal((await fetch('http://127.0.0.1:4184/')).headers.get('cache-control'), 'no-store');
+  checks.push('Local preview disables browser caching of the exported layout.');
   const portFile = path.join(profile, 'DevToolsActivePort');
   await until(() => fs.existsSync(portFile));
   const [port, endpoint] = fs.readFileSync(portFile, 'utf8').trim().split(/\r?\n/);
@@ -155,6 +157,25 @@ try {
   assert.equal(recompute.status, 0, recompute.stderr);
   checks.push('Real browser download is content-free and independently recomputes from session timestamps.');
   await shot('metrics-desktop.png');
+
+  // Return through the UI so the same provider still holds the completed measurement history.
+  await click('Product page');
+  await until(() => evaluate("document.body.innerText.includes('A pause before the money moves.')"));
+  for (const [width, height] of [[1700, 900], [1200, 760], [860, 780], [390, 844]]) {
+    await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
+    await delay(600);
+    assert.equal(await evaluate("!document.body.innerText.includes('Guardian read-out') && !document.body.innerText.includes('Warning measurements')"), true, 'The landing hero must not contain the growing live monitoring panel.');
+    assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true, `Landing overflow at ${width}`);
+    const card = await evaluate("(()=>{const e=document.querySelector('[aria-label=\"Normal: No interruption. Open in the demo\"]');const r=e.getBoundingClientRect();return {top:r.top,left:r.left,right:r.right};})()");
+    assert.ok(card.top >= 64 && card.left >= -1 && card.right <= width + 1, JSON.stringify({ width, card }));
+    await shot(`landing-${width}.png`);
+    checks.push(`Landing uses a bounded scenario card after completed sessions, with no header or horizontal overflow at ${width}x${height}.`);
+  }
+  await send('Emulation.clearDeviceMetricsOverride');
+  await click('Open the banking demo', 'button', true);
+  await until(() => evaluate("document.body.innerText.includes('Warning measurements')"));
+  assert.equal(await evaluate("document.body.innerText.includes('(1/2 legitimate sessions)')"), true, 'Navigation must preserve the measurement history.');
+  checks.push('Returning from landing preserves the current measurement history.');
 
   // This verifies a narrow web viewport, not mobile-device emulation or an Android runtime.
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: false });

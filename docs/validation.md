@@ -1,5 +1,11 @@
 # Verification
 
+## Landing preview overflow and stale browser tab — 10 October 2026
+
+The user's screenshot showed the earlier hero containing the full Guardian read-out, whose growing session summary extended above the header. Current main uses the bounded four-scenario card; the local preview was confirmed to serve that newer bundle. An already-open tab can continue running the old bundle until refreshed. The preview now sends `Cache-Control: no-store`; only the verified local preview process on port 4173 was restarted, and HTTP 200/no-store was checked. Existing app-run measurements are not automatically migrated across a refresh: export them first.
+
+Isolated Edge run `run-1791647699051` passes **26 checks**, including landing at 1700×900, 1200×760, 860×780 and 390×844 after three completed/cancelled sessions. The hero has no monitoring/measurement panel, the scenario controls stay below the header and within the viewport, and returning to the demo preserves session history. The real-click helper now excludes inert and hidden previews so it cannot click a decorative landing phone instead of the active bank app. All 79 domain tests, lint/type checking and Android/web exports pass. Physical Android layout remains untested.
+
 ## Integrated main and MT02 setup — 10 October 2026
 
 Merged teammate main `f704248` with the model/measurement work without overwriting either history. Preserved the grouped signal table, product preview and help sizing; retained pre-confirmation warnings, independent-check action, local metrics, model explanations and scrollable access to the longer Guardian panel. The status labels remain textual rather than confidence bars.

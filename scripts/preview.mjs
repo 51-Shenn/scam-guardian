@@ -1,3 +1,4 @@
+/** Serve the local static preview without browser caching so refreshed tabs receive the current exported layout. */
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
@@ -12,6 +13,9 @@ createServer(async (request, response) => {
     try { if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html'); }
     catch { if (!extname(file)) file += '.html'; }
     const bytes = await readFile(file);
-    response.writeHead(200, { 'Content-Type': mime[extname(file)] ?? 'application/octet-stream' }).end(bytes);
+    response.writeHead(200, {
+      'Content-Type': mime[extname(file)] ?? 'application/octet-stream',
+      'Cache-Control': 'no-store',
+    }).end(bytes);
   } catch { response.writeHead(404).end('Not found'); }
 }).listen(port, '127.0.0.1', () => console.log(`Preview: http://127.0.0.1:${port}`));
