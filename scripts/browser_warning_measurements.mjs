@@ -55,6 +55,8 @@ async function typeAccount() {
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, ...point });
   await send('Input.insertText', { text: '123412341234' });
 }
+const readOut = "([...document.querySelectorAll('.glass')].find(e=>e.innerText.startsWith('Guardian read-out'))?.innerText ?? '')";
+const matches = (pattern) => evaluate(`${pattern}.test(document.body.innerText)`);
 async function shot(name) {
   const reply = await send('Page.captureScreenshot', { format: 'png' });
   fs.writeFileSync(path.join(out, name), Buffer.from(reply.data, 'base64'));
@@ -81,34 +83,35 @@ try {
   sessionId = (await send('Target.attachToTarget', { targetId: target.targetId, flatten: true }, null)).sessionId;
   await send('Runtime.enable'); await send('Page.enable'); await send('Page.bringToFront');
   await send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: out }, null);
-  await until(() => evaluate("document.body.innerText.includes('Warning measurements')"));
-  checks.push('Exported app loads the measurement panel.');
+  await until(() => evaluate("document.body.innerText.includes('Guardian read-out') && document.body.innerText.includes('False interventions')"));
+  checks.push('Exported app loads the read-out and the run measurements.');
 
   // A known legitimate payment with a simulated call to a new payee exposes a rule false review.
   await click('Coached', 'radio');
   await click('Evaluation label Normal', 'radio', true);
   await click('Transfer'); await click('Agree and turn on');
-  await until(() => evaluate("document.body.innerText.includes('Current:') && !document.body.innerText.includes('first shown warning Not measured')"));
-  assert.equal(await evaluate("[...document.querySelectorAll('[aria-label=\"Evaluation label Normal\"]')].every(e=>e.getAttribute('aria-disabled')==='true')"), true);
+  await until(() => matches('/Raised by rules at \\d/'));
+  // A transfer locks its set-up: the label choices give way to a line that states them.
+  assert.equal(await evaluate("document.querySelectorAll('[aria-label=\"Evaluation label Normal\"]').length === 0 && document.body.innerText.includes('Locked until this transfer ends') && document.body.innerText.includes('Evaluation label: Normal')"), true);
   await shot('early-warning.png');
   checks.push('A recipient-stage warning is shown before Review; annotation is locked.');
   await click('Cancel');
-  await until(() => evaluate("document.body.innerText.includes('(1/1 legitimate sessions)')"));
+  await until(() => matches('/False interventions\\s*1 of 1/'));
   checks.push('Cancelled legitimate warning enters FIR as 1/1, not zero.');
 
   await click('Prepare MT02 · AI warning test');
-  assert.equal(await evaluate("document.body.innerText.includes('Selected request: Coached request with warning bypass') && document.body.innerText.includes('Start simulated call')"), true);
+  assert.equal(await evaluate("document.querySelector('[aria-label=\"Authored request coached\"]').getAttribute('aria-checked')==='true' && document.querySelector('[aria-label=\"Evaluation label Coached-high\"]').getAttribute('aria-checked')==='true' && document.body.innerText.includes('Start simulated call')"), true);
   checks.push('MT02 setup configures coached input and independent label with call off; actual inference still determines warning.');
   await click('Transfer');
   await click('Recipient New recipient', 'radio', true);
-  assert.equal(await evaluate("document.body.innerText.includes('selected, not delivered yet')"), true);
-  assert.equal(await evaluate("document.body.innerText.includes('Policy status · no confidence percentages')"), true);
-  await click('Deliver authored request');
-  await until(() => evaluate("document.body.innerText.includes('Request context: delivered to this transfer')"));
-  await until(() => evaluate("document.body.innerText.includes('The transaction rules did not request a pause') && !document.body.innerText.includes('first shown warning Not measured')"));
+  assert.equal(await evaluate("document.body.innerText.includes('Coached request with warning bypass') && document.body.innerText.includes('Selected, not delivered yet')"), true);
+  await click('Deliver authored request', 'button', true);
+  await until(() => evaluate("document.body.innerText.includes('Delivered to this transfer')"));
+  await until(async () => (await matches('/Raised by AI at \\d/')) && evaluate("document.body.innerText.includes('Rules quiet')"));
+  assert.equal(await evaluate(`${readOut}.includes('Policy category') && !${readOut}.includes('%')`), true);
   if (pitch) {
-    await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired') && document.body.innerText.includes('Reconstructed score')"));
-    assert.equal(await evaluate("document.body.innerText.includes('Warning bypass instructions') && document.body.innerText.includes('Priority: Check before confirmation')"), true);
+    await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired') && document.body.innerText.includes('All terms sum to')"));
+    assert.equal(await evaluate(`${readOut}.includes('Warning bypass instructions') && ${readOut}.includes('Policy priority') && ${readOut}.includes('Check before confirmation')`), true);
     checks.push('Actual first-positive LR contributions and policy category/priority reach the UI.');
   }
   await shot('ai-early-warning.png');
@@ -123,15 +126,17 @@ try {
   await delay(15500);
   await click('Continue with transfer');
   await until(() => evaluate("document.body.innerText.includes('Demo transfer complete')"));
-  assert.equal(await evaluate("document.body.innerText.includes('Median observed warning lead: Not measured')"), false);
-  checks.push('Actual frozen AI warns while transaction rules stay quiet; cool-down and confirmation produce a labelled live lead.');
-  checks.push('Policy uses status labels rather than confidence bars; selected and delivered request context are distinguished.');
-
+  // The run measurements return with the set-up controls once the transfer has ended.
   await click('Done');
+  await until(() => evaluate("document.body.innerText.includes('Median lead')"));
+  assert.equal(await matches('/Median lead\\s*Not measured/'), false);
+  checks.push('Actual frozen AI warns while transaction rules stay quiet; cool-down and confirmation produce a labelled live lead.');
+  checks.push('The read-out shows no percentages; selected and delivered request context are distinguished.');
+
   await click('Normal', 'radio');
   await click('Authored request routine', 'radio', true);
   await click('Evaluation label Normal', 'radio', true);
-  await click('Transfer'); await click('Deliver authored request'); await click('Next');
+  await click('Transfer'); await click('Deliver authored request', 'button', true); await click('Next');
   await click('5'); await click('0');
   await delay(5500);
   await until(() => evaluate("document.body.innerText.includes('No warning currently')"));
@@ -139,6 +144,7 @@ try {
   await until(() => evaluate("document.body.innerText.includes('Demo transfer complete')"));
   checks.push('A routine authored request completes without a warning, using actual local inference.');
 
+  await click('Done');
   await click('Download metrics JSON');
   const exported = path.join(out, 'scam-guardian-warning-metrics.json');
   await until(() => fs.existsSync(exported));
@@ -164,7 +170,7 @@ try {
   for (const [width, height] of [[1700, 900], [1320, 820], [1200, 760], [860, 780], [390, 844]]) {
     await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     await delay(600);
-    assert.equal(await evaluate("!document.body.innerText.includes('Guardian read-out') && !document.body.innerText.includes('Warning measurements')"), true, 'The landing hero must not contain the growing live monitoring panel.');
+    assert.equal(await evaluate("!document.body.innerText.includes('Guardian read-out') && !document.body.innerText.includes('False interventions')"), true, 'The landing hero must not contain the live monitoring panel.');
     assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true, `Landing overflow at ${width}`);
     const card = await evaluate("(()=>{const e=document.querySelector('[aria-label=\"Normal: No interruption. Open in the demo\"]').closest('.glass');const r=e.getBoundingClientRect();return {top:r.top,left:r.left,right:r.right};})()");
     assert.ok(card.top >= 64 && card.left >= -1 && card.right <= width + 1, JSON.stringify({ width, card }));
@@ -176,30 +182,30 @@ try {
   }
   await send('Emulation.clearDeviceMetricsOverride');
   await click('Open the banking demo', 'button', true);
-  await until(() => evaluate("document.body.innerText.includes('Warning measurements')"));
-  assert.equal(await evaluate("document.body.innerText.includes('(1/2 legitimate sessions)')"), true, 'Navigation must preserve the measurement history.');
+  await until(() => evaluate("document.body.innerText.includes('False interventions')"));
+  assert.equal(await matches('/False interventions\\s*1 of 2/'), true, 'Navigation must preserve the measurement history.');
   checks.push('Returning from landing preserves the current measurement history.');
 
   // This verifies a narrow web viewport, not mobile-device emulation or an Android runtime.
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: false });
   await until(() => evaluate("[...document.querySelectorAll('[role=\"tab\"]')].some(e=>e.textContent.trim()==='Guardian')"));
   await click('Guardian', 'tab');
-  await until(() => evaluate("document.body.innerText.includes('Warning measurements')"));
+  await until(() => matches('/False interventions\\s*1 of 2/'));
   await shot('metrics-narrow.png');
   assert.equal(errors.length, 0, JSON.stringify(errors));
   checks.push('Narrow web Guardian tab exposes the same metrics without JavaScript exceptions.');
   if (pitch) {
     // The presenter flow ends with cancellation, not an invented confirmation lead.
     await send('Emulation.clearDeviceMetricsOverride');
-    await until(() => evaluate("[...document.querySelectorAll('[role=\"button\"]')].some(e=>e.textContent.trim()==='Done')"));
-    await click('Done');
+    await until(() => evaluate("[...document.querySelectorAll('[role=\"radio\"]')].some(e=>e.textContent.trim()==='Normal')"));
     await click('Normal', 'radio'); await click('Authored request coached', 'radio', true);
     await click('Evaluation label Coached-high', 'radio', true); await click('Transfer');
-    await click('Recipient New recipient', 'radio', true); await click('Deliver authored request');
+    await click('Recipient New recipient', 'radio', true); await click('Deliver authored request', 'button', true);
     await until(() => evaluate("document.body.innerText.includes('Why the first AI review fired')"));
     await typeAccount(); await click('Next'); await click('5'); await click('0'); await click('Review');
     await click('Open independent-check guide'); await click('Cancel this transfer');
-    await until(() => evaluate("document.body.innerText.includes('Last: Coached-high · cancelled')"));
+    // Cancelling returns the set-up controls, and the read-out keeps the last transfer's AI review.
+    await until(() => evaluate("document.body.innerText.includes('Monitoring inactive') && document.body.innerText.includes('Last transfer: Review recommended')"));
     const presenterDir = path.join(out, 'presenter');
     fs.mkdirSync(presenterDir, { recursive: true });
     await send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: presenterDir }, null);

@@ -65,7 +65,7 @@ Both separate `Normal_or_Struggling` from `Coached`. Struggling is never a reaso
 - A latched review adds the 15-second pause, with the reason "Pause and verify this payment through a contact you already trust". The read-out shows whether the rules, the AI or both raised it. The AI never overrides a stronger rule response.
 - If the bundle cannot be used, the read-out says the AI is unavailable. That is never treated as a safe result, and the rules still apply.
 - When the logistic regression raised the review, the app shows the actual feature contributions behind that score, which rebuild it exactly. The XGBoost model has no such breakdown here.
-- The category, priority and suggested next step under "Decision support" come from a written display policy in `src/domain/decision-support.ts`. They are not learned outputs.
+- The policy category and priority in the read-out, and the suggested next step in the bank app's warning, come from a written display policy in `src/domain/decision-support.ts`. They are not learned outputs.
 
 **What the model does not see**
 
@@ -73,9 +73,9 @@ The simulated call, the simulated app switch, motion, the amount and the recipie
 
 **See it in the demo**
 
-1. On `/demo`, pick "Coached request with warning bypass" under **Authored request** in the Guardian panel.
-2. Press **Transfer**, choose the new recipient, then press **Deliver authored request**.
-3. Stay on the recipient step. The review appears at the next 5-second check, with **AI** shown as its origin.
+1. On `/demo`, pick **Coached** (the coached request with warning bypass) under **Authored request** in the controls card.
+2. Press **Transfer**, choose the new recipient, then press **Deliver**.
+3. Stay on the recipient step. The review appears at the next 5-second check, with **Raised by AI** beside the heading and the terms behind the score drawn as bars.
 
 Without a delivered request, behaviour alone has not triggered a review on transfers made in this app: five app-shaped transfers scored on device stayed under 0.72.
 
@@ -120,12 +120,12 @@ The product page at `/` only shows the bank app. Pressing the phone, or one of t
 
 `/demo` shows three layouts: the Guardian read-out, Rohani's phone with the bank app, and Aina's phone as the trusted contact. On a wide screen they sit side by side and always fit the window. On a phone, a switch at the top moves between them.
 
-Enable Guardian on the bank app's home screen. Family-alert consent is separate. Pick a preset under "Try these", then start a transfer. The table at the top says what each one does.
+Enable Guardian on the bank app's home screen. Family-alert consent is separate. Pick a preset under "Scenario preset", then start a transfer. The table at the top says what each one does.
 
 A preset only sets the starting signals. Three of them can be changed by hand at any time:
 
 - **Start simulated call** starts or ends the call.
-- **Simulate app switch** shows a simulated other app and times how long it stays in front. The read-out shows this as "App switch". Neither the rules nor the model use it.
+- **Simulate app switch** shows a simulated other app and times how long it stays in front. During a monitored transfer the read-out shows this as "Simulated app switch". Neither the rules nor the model use it.
 - A new recipient's account number is typed or pasted into the account field on the recipient step.
 
 ## Verify and preview the application

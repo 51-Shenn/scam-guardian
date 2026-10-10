@@ -1,5 +1,29 @@
 # Verification
 
+## Read-out as charts, controls that look pressed, and the landing card over the phone — 11 October 2026
+
+Checked on 11 October 2026 on branch `feat/readout-charts`. The user asked for the demo's left cards to be trimmed for pitching, to use charts in place of text, and to be less cluttered; then for controls that look pressable, larger type and padding, and the two cards stacked together. They also pointed out that the landing hero no longer had the glass card over the phone.
+
+What changed:
+
+- The read-out is a report with nothing to press: heading, policy category and priority, the signals during a monitored transfer (amount on a track against the 3x line, back steps and help taps as pips), the AI score on a track against its review line, and after an AI review the three largest terms towards it and the largest against it as bars from a centre line. The reasons list, the decision-support text block, the request-context lines, the long caveats and the measurements block left the read-out. The full measurement tiles are on **Pitch evidence → Live proof**; the exclusions and retention counts are in the note there.
+- The controls card holds the scenario preset, authored request, evaluation label, two run counters, **Prepare MT02 · AI warning test** and the metrics export, each as a bordered, raised tile, with icons on the actions. A transfer locks its set-up, so during one the card states the set-up in a line and keeps only **Deliver**.
+- The console is 500 wide and the stage is as tall as the phone and its caption, 817, not 848. Console text is 13 to 15 px at natural size.
+- The landing scenario card laps 28 px over the phone again. The browser check that forbade any overlap now allows up to 28 px.
+- The demo balance is RM 12,500 in place of RM 2,500. Neither frozen model has a balance or amount-value feature, so scoring is unchanged.
+
+Checks:
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79 domain tests passed, after two balance figures and one over-balance amount in `session.test.ts` were updated.
+- `npm run export:platforms`: Android Hermes and static web exports passed.
+- `node scripts/browser_warning_measurements.mjs --pitch` in headless Edge: **27 acceptance checks** passed, run `run-1791652033679`. The script's text assertions were rewritten for the new wording; it now also asserts that the read-out contains no percent sign and that the label choices are gone during a transfer.
+- Console height at natural size, against a stage of 817, measured in headless Edge at 1440x900: idle 660; a rule-raised Coached transfer 599; the AI review with its contribution bars during a transfer 785, the tallest state; Home after that transfer 572; Struggling 643. The same figures at 1366x700 and 1920x1000, with the page no taller or wider than the window.
+- At 1024x768 the page measured 1028 wide. The stage fits; the overflow is in the header row of five buttons and is not part of this work.
+- Narrow web at 390x844: the Guardian tab shows the same cards with full-height touch targets, checked from idle to a rule-raised review. No horizontal overflow.
+- Landing at 1440x900: the card's right edge is 28 px past the phone's left edge; no horizontal overflow.
+- The three class tones were run through a palette validator. Bronze against pine, the pair used for the contribution bars, passes colour-blind and normal-vision separation; the bars also differ by direction and carry signed values. Pine against indigo is close (14.7 against a floor of 15), so the read-out never relies on those two tones alone.
+- Not checked: a physical Android device or emulator, the Vercel deployment, and reduced-motion behaviour, which this work does not touch.
+
 ## Follow-up: scenario card and phone separation
 
 The refreshed page still intentionally overlapped the scenario card with the phone. User rejected that layout. Removed the negative margin and stacking override, reserved the full 340-pixel card width plus a 24-pixel gap, and included that gap when deciding whether three columns fit. Narrower layouts retain the card below the copy. The headline's available-width calculation now accounts for the gap.

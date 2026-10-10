@@ -24,7 +24,7 @@ Active, abandoned and unlabelled sessions do not enter FIR or the coached lead m
 
 ## Manual check and three-minute demo
 
-Use the existing demo route and find **Warning measurements · simulated** in Guardian read-out. The measurement label is independent of the preset: select the preset first, then the intended label, before pressing Transfer. Set authored request **Unavailable** for Cases 1–6 below (the separate rubric flow uses explicit requests). Turn Guardian on via consent. Do not reload between runs. Export at the end; memory is not durable storage. On desktop the left panel scrolls; on Android/narrow web use the Guardian tab for operator controls and return to Bank app for the visible warning.
+Use the existing demo route and find the Evaluation label and the run's two counters in the controls card under the Guardian read-out, at Home. The measurement label is independent of the preset: select the preset first, then the intended label, before pressing Transfer. Set authored request **None** for Cases 1–6 below (the separate rubric flow uses explicit requests). Turn Guardian on via consent. Do not reload between runs. Export at the end; memory is not durable storage. On desktop the left console fits the window; on Android/narrow web use the Guardian tab for operator controls and return to Bank app for the visible warning.
 
 | Case | Every selection/input | Steps and purpose |
 | --- | --- | --- |

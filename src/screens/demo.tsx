@@ -21,16 +21,16 @@ const views = [['bank', 'Bank app'], ['guardian', 'Guardian'], ['family', 'Ainaâ
 type ViewName = (typeof views)[number][0];
 const caption = 'font-body text-sm text-soft';
 
-// Natural size of the wide layout: read-out panel, Rohani's phone, Aina's phone, with the same gap between each.
-// Wide enough that the read-out and the presets together stay within the phone's height in every state.
-const PANEL = 400;
+// Natural size of the wide layout: the console, Rohani's phone, Aina's phone, with the same gap between each.
+// The console is wide enough that the read-out and the controls together stay within the phone's height in every state.
+const PANEL = 500;
 const PHONE = 0.8;
 const FAMILY = 0.7;
 const STAGE = {
   panel: PANEL, gap: 84, phone: PHONE, family: FAMILY,
   width: PANEL + 84 * 2 + Math.round(FRAME.width * (PHONE + FAMILY)),
-  // The phone and its caption, or the panel in its tallest state, whichever is taller.
-  height: Math.max(Math.round(FRAME.height * PHONE) + 30, 848),
+  // The phone and its caption. The console starts level with the caption and stays within this height in every state.
+  height: Math.round(FRAME.height * PHONE) + 30,
 };
 
 export default function DemoScreen() {
@@ -125,7 +125,7 @@ export default function DemoScreen() {
     <View className="flex-1 items-center justify-center pb-8">
       <View style={{ width: STAGE.width * fit, height: STAGE.height * fit }}>
         <View className="flex-row items-center" style={{ width: STAGE.width, height: STAGE.height, gap: STAGE.gap, transform: [{ scale: fit }], transformOrigin: 'top left' }}>
-          <ScrollView style={{ width: STAGE.panel, height: STAGE.height }} contentContainerClassName="gap-3 pb-3" showsVerticalScrollIndicator>
+          <ScrollView style={{ width: STAGE.panel, height: STAGE.height }} contentContainerClassName="gap-3" showsVerticalScrollIndicator>
             <ReadOut dense /><Presets dense />
           </ScrollView>
           <View className="items-center gap-2.5">

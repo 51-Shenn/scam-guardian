@@ -1,34 +1,69 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { TagIcon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
-import type { EvaluationLabel } from '@/domain/measurement';
-import { MetricsExport } from './metrics-export';
+import type { EvaluationLabel, WarningOrigin } from '@/domain/measurement';
+import { Meter } from './charts';
+import { Label, Segmented } from './controls';
+import { body, caption, figures } from './text';
+import { fill } from './tones';
 
 const labels: EvaluationLabel[] = [null, 'Normal', 'Struggling', 'Coached-medium', 'Coached-high'];
-const seconds = (ms: number | null) => ms === null ? 'Not measured' : `${(ms / 1000).toFixed(2)} s`;
+const seconds = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
+const by: Record<WarningOrigin, string> = { ai: 'by the AI', rule: 'by the rules', combined: 'by rules and AI' };
+const burden = (rate: number | null) => rate === null ? 'No labelled legitimate sessions yet' : `${(rate * 100).toFixed(1)}% of legitimate sessions were warned`;
 
-/** Operator annotations and observed metrics. These controls never become model features. */
+/** The operator's own label for the next transfer. An annotation for the measurements: it never becomes a model feature. */
+export function EvaluationControl({ dense }: { dense?: boolean }) {
+  const { measurement: active, evaluationLabel, annotate } = useSession();
+  return <View className="gap-2">
+    <Label icon={TagIcon} note={active ? 'Locked during a transfer' : 'Your annotation, not a model input'}>Evaluation label</Label>
+    <Segmented dense={dense} value={evaluationLabel} onChange={annotate} disabled={active !== null}
+      options={labels.map((label) => ({ value: label, label: label ?? 'None', accessibilityLabel: `Evaluation label ${label ?? 'Unlabelled'}` }))} />
+  </View>;
+}
+
+/** The run's two headline measurements on one line, beside the label that feeds them. */
+export function RunSummary() {
+  const { report } = useSession();
+  const stats = report.summary;
+  return <View className="flex-row flex-wrap items-center gap-x-3 gap-y-1">
+    <View className="min-w-[200px] flex-1 flex-row items-center gap-2">
+      <Text className={caption}>False interventions</Text>
+      <Text className={`${body} text-ink`} style={figures}>{stats.falseInterventionSessions} of {stats.legitimateSessions}</Text>
+      <View className="flex-1"><Meter value={stats.falseInterventionRate} tone={fill.Coached} label={burden(stats.falseInterventionRate)} /></View>
+    </View>
+    <View className="flex-row items-center gap-2 border-l border-line pl-3">
+      <Text className={caption}>Median lead</Text>
+      <Text className={`${body} text-ink`} style={figures}>{stats.medianObservedLeadMs === null ? 'Not measured' : seconds(stats.medianObservedLeadMs)}</Text>
+    </View>
+  </View>;
+}
+
+/** What this app run has measured: the burden on legitimate sessions, the lead a warning gave, and the latest transfer. */
 export function WarningMetrics() {
-  const { report, measurement: active, evaluationLabel, annotate } = useSession();
+  const { report, measurement: active } = useSession();
   const stats = report.summary;
   const last = report.sessions.at(-1);
-  return <View className="mt-3.5 gap-2 rounded-xl border border-line bg-white/70 p-3">
-    <Text accessibilityRole="header" className="font-body text-[15px] text-ink">Warning measurements · simulated</Text>
-    <Text className="font-body text-xs leading-4 text-soft">Choose the intended scenario label before starting. Labels are separate from predictions.</Text>
-    <View accessibilityRole="radiogroup" className="flex-row flex-wrap gap-1.5">
-      {labels.map((label) => <Pressable key={label ?? 'unlabelled'} accessibilityRole="radio"
-        accessibilityLabel={`Evaluation label ${label ?? 'Unlabelled'}`}
-        accessibilityState={{ checked: label === evaluationLabel, disabled: active !== null }} disabled={active !== null}
-        onPress={() => annotate(label)} className={`min-h-11 justify-center rounded-xl px-2.5 ${label === evaluationLabel ? 'bg-ink' : 'bg-white'} ${active ? 'opacity-50' : ''}`}>
-        <Text className={`font-body text-xs ${label === evaluationLabel ? 'text-white' : 'text-ink'}`}>{label ?? 'Unlabelled'}</Text>
-      </Pressable>)}
+  const value = 'font-body text-xl leading-7 text-ink';
+  const column = 'min-w-[150px] flex-1 gap-0.5';
+  const warned = active ? active.firstWarningMs : last ? last.firstWarningMs : null;
+  const origin = active ? active.warningOrigin : last ? last.warningOrigin : null;
+  return <View className="flex-row flex-wrap gap-x-6 gap-y-4 rounded-2xl bg-white p-5">
+    <View className={column}>
+      <Text className={caption}>False interventions</Text>
+      <Text className={value} style={figures}>{stats.falseInterventionSessions} of {stats.legitimateSessions}</Text>
+      <Meter value={stats.falseInterventionRate} tone={fill.Coached} label={burden(stats.falseInterventionRate)} />
+      <Text className={caption}>legitimate sessions warned</Text>
     </View>
-    {active && <Text className="font-body text-xs leading-4 text-ink">Current: first AI positive {seconds(active.firstPositiveMs)} · first shown warning {seconds(active.firstWarningMs)} ({active.warningOrigin ?? 'none'}).</Text>}
-    <Text className="font-body text-sm leading-5 text-ink">False-intervention rate: {stats.falseInterventionRate === null ? 'Not measured' : `${(stats.falseInterventionRate * 100).toFixed(1)}%`} ({stats.falseInterventionSessions}/{stats.legitimateSessions} legitimate sessions)</Text>
-    <Text className="font-body text-sm leading-5 text-ink">Median observed warning lead: {seconds(stats.medianObservedLeadMs)} ({stats.observedLeadSampleCount}/{stats.confirmedCoachedSessions} confirmed coached sessions).</Text>
-    <Text className="font-body text-xs leading-4 text-soft">Observed lead includes the 15-second pause and user delay. Unbiased shadow lead is not measured. Warnings from rules and AI both count.</Text>
-    <Text className="font-body text-xs leading-4 text-ink">Before-review interval: {seconds(stats.medianWarningToReviewMs)}. Confirmed coached sessions without a warning: {stats.confirmedCoachedWithoutWarning}.</Text>
-    {last && <Text className="font-body text-xs leading-4 text-ink">Last: {last.label ?? 'Unlabelled'} · {last.outcome} · warning {seconds(last.firstWarningMs)} · confirmation {seconds(last.confirmationMs)} · lead {seconds(last.observedLeadMs)}.</Text>}
-    <Text className="font-body text-xs leading-4 text-soft">{report.retention.retainedSessions}/20 sessions kept in this app run; {report.retention.evictedSessions} older sessions evicted. Excluded: {stats.abandonedSessions} abandoned, {stats.unlabelledSessions} unlabelled (may overlap). {stats.sessionsWithoutSuccessfulPrediction} evaluated sessions had no successful AI prediction. Export before reloading.</Text>
-    <MetricsExport json={JSON.stringify(report, null, 2)} />
+    <View className={column}>
+      <Text className={caption}>Median warning lead</Text>
+      <Text className={value} style={figures}>{stats.medianObservedLeadMs === null ? 'Not measured' : seconds(stats.medianObservedLeadMs)}</Text>
+      <Text className={caption} style={figures}>{stats.observedLeadSampleCount} of {stats.confirmedCoachedSessions} confirmed coached sessions</Text>
+    </View>
+    <View className={column}>
+      <Text className={caption}>{active ? 'This transfer' : 'Last transfer'}</Text>
+      <Text className={value} style={figures}>{!active && !last ? 'None yet' : warned === null ? (active ? 'No warning yet' : 'No warning') : `Warned at ${seconds(warned)}`}</Text>
+      <Text className={caption}>{active ? (origin ? by[origin] : 'First warning shown') : last ? `${last.label ?? 'Unlabelled'}, ${last.outcome}` : 'Start a transfer in the demo'}</Text>
+    </View>
   </View>;
 }

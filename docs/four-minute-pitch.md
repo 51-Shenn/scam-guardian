@@ -7,7 +7,7 @@ Audience: Predictive Model Track judges. This is a working simulation prototype,
 - On Vercel, open `/demo` and `/evidence` on the deployment's own HTTPS origin. For a local preview, serve the exported app with `node scripts/preview.mjs dist 4173` and open `http://127.0.0.1:4173/demo` and `http://127.0.0.1:4173/evidence`. For live counters navigate within the demo using **Pitch evidence**, rather than the separate tab; different tabs have different app-run memory.
 - Use a desktop window about 1440 × 1000 or larger. Close unrelated tabs and enable the presentation display before rehearsal. Test the real venue screen; this is not a physical Android validation.
 - Reset once before the presentation; do not reload between cases. Reset restores controls but intentionally retains prior ended measurement sessions in this app run. Start a fresh tab if you need a new empty measurement report, and export older records first.
-- Scroll the Guardian panel to find controls beforehand. Its independent scrollbar is intentional. Locate Authored request, Evaluation label, Decision support and Warning measurements.
+- The Guardian console fits the window beside the phones; nothing in it scrolls. At Home its lower card holds the set-up: Scenario preset, Authored request, Evaluation label, **Prepare MT02 · AI warning test** and **Download metrics JSON**. A transfer locks that set-up, so during one the card states it in a line and keeps only **Deliver**. The read-out above shows the policy category and priority, the signals, the AI score against its review line and, after an AI review, the contribution bars.
 - Call off, app switching returned, family preview off. Use dummy account `123412341234` and RM 50 only. Labels are operator annotations, not predictions. Do not use the Coached preset for the AI-contribution case: that would activate transaction rules.
 - Have the evidence tab and screenshots ready as fallback. The guide below is about 360 spoken words; allow the remaining time for clicks, five-second model prefixes and short pauses. Rehearse with a stopwatch; automated functional checks are not proof of your speaking speed.
 
@@ -38,7 +38,7 @@ Case A fields, all explicit:
 | Family preview | Off |
 | Guardian consent | Agree and turn on, if requested |
 
-Actions: **Transfer → Agree and turn on** if asked → **Deliver authored request → Next → 5 → 0**. Wait for a scored five-second prefix. **Review → Confirm transfer → Done**. If a warning appears, report it; never overwrite the label to hide it.
+Actions: **Transfer → Agree and turn on** if asked → **Deliver → Next → 5 → 0**. Wait for a scored five-second prefix. **Review → Confirm transfer → Done**. If a warning appears, report it; never overwrite the label to hide it.
 
 Say:
 
@@ -63,7 +63,7 @@ Case B fields, all explicit:
 | Family preview | Off |
 | Guardian | On |
 
-Actions: select the fields that are available before starting → **Transfer → New recipient → Deliver authored request**. Stay at recipient until actual AI review appears; normally the next five-second prefix plus timer response. Show the banner and **AI** origin. Type the dummy account → **Next → 5 → 0 → Review → Open independent-check guide → Cancel this transfer**.
+Actions: select the fields that are available before starting → **Transfer → New recipient → Deliver**. Stay at recipient until actual AI review appears; normally the next five-second prefix plus timer response. Show the banner and **AI** origin. Type the dummy account → **Next → 5 → 0 → Review → Open independent-check guide → Cancel this transfer**.
 
 Say:
 
@@ -73,7 +73,7 @@ Purpose: Detect / Categorize / Prioritize / Explain. This cancellation is your s
 
 ### 2:10–2:45 · Explainability and trust
 
-Scroll the Guardian panel to **Decision support → Why the first AI review fired**. Point at actual contributions and the reconstructed logit. Do not read the arithmetic aloud or call the score a percentage.
+In the read-out, point at **Why the first AI review fired**: each bar is an actual contribution, with their sum and the review line beneath. It stays on screen after you cancel, under **Last transfer**. Do not read the arithmetic aloud or call the score a percentage.
 
 Say:
 
@@ -108,7 +108,7 @@ Stop at four minutes. Do not add an unplanned fourth case or argue that software
 | Routine payment is warned | Keep Normal annotation, cancel or finish as appropriate, show burden counter, say this is a false review in the authored scenario. |
 | AI has not returned | Wait for the next prefix. If unavailable, state that explicitly; show the recorded acceptance evidence as a recorded run, not a live detection. |
 | No warning within the allocated minute | Do not force the Coached preset and credit the result to AI. Move to the evidence page and report the live miss. |
-| Panel is below the visible area | Scroll inside Guardian; the bank warning remains in the fixed footer. On narrow web use the Guardian tab. |
+| Console looks cut off | It is sized to the window beside the phones; maximise the window. On narrow web use the Guardian tab, which scrolls. The bank warning remains in the fixed footer. |
 | Venue network fails | The scorer is bundled locally. Use the prepared local preview. Do not claim the Expo development server is a production deployment. |
 | Browser fails | Show the captured browser acceptance images and disclose that they are recorded evidence. |
 
