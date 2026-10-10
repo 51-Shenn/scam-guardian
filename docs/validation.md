@@ -1,5 +1,15 @@
 # Verification
 
+## Console level with the phone's top, and glass top actions — 11 October 2026
+
+The user asked for the left cards to line up with the head of the phone, and for a glass background on the buttons at the top of `/demo`. The console now starts 30 below the stage's top, the height of the phone's caption and its gap, so the read-out's top edge is the phone frame's top edge. To keep room, the cards' padding went from 20 to 18 and the gaps between their sections from 12 to 10. The secondary actions at the top use the same frosted glass as the cards; an active signal's button stays solid crimson. Android draws that glass as near-opaque white with the same shadow.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- Headless Edge at 1440x900: the read-out's top and the phone frame's top are both at 101 in all seven captured states. The tallest state, the AI review with its bars, ends at 845 against the phone's 868; console height 763 of 787 available.
+- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed.
+- Checked by eye on a capture of the AI review at 1440x900.
+- Not checked: the glass buttons over the flow art in motion, Android.
+
 ## Round icon buttons, and no Pitch evidence button — 11 October 2026
 
 The user sent a capture of the two icon-only buttons drawn as narrow slivers, and asked for them to be round and for Pitch evidence to go. I could not reproduce the slivers: in headless Edge they measured 42 by 42. Their size is now set inline with no shrinking, so neither a crowded row nor a stale stylesheet can narrow them. The Pitch evidence button is removed from both layouts of `/demo`. The page itself stays at `/evidence`; opened there it is a separate app run, so its Live proof chapter no longer shows the demo's counters. Those are on the controls card at Home and in the export.

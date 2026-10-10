@@ -35,8 +35,8 @@ const raisedBy = { rule: 'rules', ai: 'AI', combined: 'rules and AI' };
 // The amount track runs to twice the line the hold rule draws, at three times the usual amount.
 const AMOUNT_LINE = 3;
 const seconds = (ms: number) => `${Math.floor(ms / 1000)} s`;
-const card = 'gap-3 p-5';
-const section = 'border-t border-line pt-3';
+const card = 'gap-2.5 p-[18px]';
+const section = 'border-t border-line pt-2.5';
 
 /** A signal's value. One that points towards a class carries that class's tone, as a dot and the text shade; the rest stay plain. */
 function Value({ children, tone }: { children: string; tone?: Tone }) {
@@ -74,7 +74,7 @@ export function ReadOut({ className = '' }: PanelProps) {
   ];
   const over = signals.amountRatio > AMOUNT_LINE;
   return <Glass radius={26} className={`${card} ${className}`}>
-    <View aria-live="polite" className="gap-3">
+    <View aria-live="polite" className="gap-2.5">
       <View>
         <Label icon={ShieldCheckIcon} note={<View className="flex-row items-center gap-1.5">
           <View className={`h-2 w-2 rounded-full ${session.consent ? fill.Normal : 'bg-[#b3a4a9]'}`} />

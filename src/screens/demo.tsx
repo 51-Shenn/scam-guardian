@@ -25,12 +25,14 @@ const caption = 'font-body text-sm text-soft';
 // The console is wide enough that the read-out and the controls together stay within the phone's height in every state.
 const PANEL = 500;
 const PHONE = 0.8;
+// A phone's caption and the gap under it. The console starts this far down, level with the top of Rohani's phone.
+const CAPTION = 30;
 const FAMILY = 0.7;
 const STAGE = {
   panel: PANEL, gap: 84, phone: PHONE, family: FAMILY,
   width: PANEL + 84 * 2 + Math.round(FRAME.width * (PHONE + FAMILY)),
-  // The phone and its caption. The console starts level with the caption and stays within this height in every state.
-  height: Math.round(FRAME.height * PHONE) + 30,
+  // The phone and its caption. The console starts level with the phone's top and stays within the phone's height in every state.
+  height: Math.round(FRAME.height * PHONE) + CAPTION,
 };
 
 export default function DemoScreen() {
@@ -97,10 +99,10 @@ export default function DemoScreen() {
         {shown === 'bank' && <BankApp top={12} bottom={bottom} onExit={leave} />}
         {shown === 'guardian' && <ScrollView className="flex-1" contentContainerClassName="gap-3 px-3 pt-1" contentContainerStyle={{ paddingBottom: bottom + 12 }}>
           <View className="flex-row gap-2">
-            <View className="flex-1"><Action small secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
-            <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
+            <View className="flex-1"><Action small glass secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
+            <View><Action small glass secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
           </View>
-          <Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} />
+          <Action small glass secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -116,17 +118,17 @@ export default function DemoScreen() {
     <View className="mx-auto h-[72px] w-full max-w-[1480px] flex-row items-center justify-between gap-6 px-10">
       <Wordmark onPress={() => router.replace('/')} />
       <View className="flex-row gap-2.5">
-        <View><Action small secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
-        <View><Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} /></View>
+        <View><Action small glass secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
+        <View><Action small glass secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} /></View>
         {/* Reset and home are stated in full by their icons. The two signals keep their words, because they must say they are simulated. */}
-        <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
-        <View><Action small secondary icon={HouseIcon} iconOnly label="Product page" onPress={leave} /></View>
+        <View><Action small glass secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
+        <View><Action small glass secondary icon={HouseIcon} iconOnly label="Product page" onPress={leave} /></View>
       </View>
     </View>
     <View className="flex-1 items-center justify-center pb-8">
       <View style={{ width: STAGE.width * fit, height: STAGE.height * fit }}>
         <View className="flex-row items-center" style={{ width: STAGE.width, height: STAGE.height, gap: STAGE.gap, transform: [{ scale: fit }], transformOrigin: 'top left' }}>
-          <ScrollView style={{ width: STAGE.panel, height: STAGE.height }} contentContainerClassName="gap-3" showsVerticalScrollIndicator>
+          <ScrollView style={{ width: STAGE.panel, height: STAGE.height }} contentContainerClassName="gap-3" contentContainerStyle={{ paddingTop: CAPTION }} showsVerticalScrollIndicator>
             <ReadOut dense /><Presets dense />
           </ScrollView>
           <View className="items-center gap-2.5">

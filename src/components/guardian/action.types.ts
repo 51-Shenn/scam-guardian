@@ -12,4 +12,6 @@ export interface ActionProps {
   icon?: Icon;
   /** Shows the icon alone, for an action the icon states in full. The label stays as the accessible name and, on web, the tooltip. */
   iconOnly?: boolean;
+  /** Frosted glass in place of the plain outline, for a secondary action that sits over the page art. */
+  glass?: boolean;
 }
