@@ -49,7 +49,7 @@ export default function Landing() {
   };
 
   const scale = !viewport ? 0 : wide ? Math.min(viewport.height * 0.84, 840) / FRAME.height : Math.min(340, viewport.width - 56) / FRAME.width;
-  const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' ? 'light' : 'dark'} callActive={session.call}>
+  const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' && !session.away ? 'light' : 'dark'} callActive={session.call}>
     <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={wide} />
   </PhoneFrame>;
 
@@ -148,7 +148,7 @@ export default function Landing() {
 
     <View className="border-t border-line">
       <View className={`${section} py-12`}>
-        <Text className="max-w-[620px] font-body text-[14.5px] leading-6 text-soft">Prototype for Dormathon 2026. Mock money, simulated call and paste signals, demonstration rules in place of a trained model, and a family alert that stays on this screen as a preview. Not connected to a bank.</Text>
+        <Text className="max-w-[620px] font-body text-[14.5px] leading-6 text-soft">Prototype for Dormathon 2026. Mock money, simulated call, paste and app-switch signals, demonstration rules in place of a trained model, and a family alert that stays on this screen as a preview. Not connected to a bank.</Text>
       </View>
     </View>
   </ScrollView>;

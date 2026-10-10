@@ -5,6 +5,7 @@ import { Glass } from '@/components/glass/glass';
 import { AmountStep } from './amount';
 import { Backdrop } from './backdrop';
 import { Home } from './home';
+import { OtherApp } from './other-app';
 import { RecipientStep } from './recipient';
 import { ReviewStep } from './review';
 import { useSession } from './session';
@@ -32,6 +33,7 @@ export function BankApp({ top, bottom, onExit, interactive = true }: BankAppProp
     timer.current = setTimeout(() => setToast(false), 1800);
   };
   const { step } = session;
+  if (session.away) return <OtherApp top={top} bottom={bottom} />;
   // A push for forward steps; a plain fade for the two resting screens.
   const entering = step === 'home' || step === 'success' ? FadeIn.duration(250) : FadeInRight.duration(380).easing(Easing.bezier(0.16, 1, 0.3, 1));
   return <View className="flex-1 bg-b-surface">

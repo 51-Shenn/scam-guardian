@@ -1,5 +1,29 @@
 # Verification
 
+## App switching
+
+Checked on 10 October 2026 after adding the simulated switch to another app.
+
+**Project gates**
+
+- `npm run lint`: passed.
+- `npm run typecheck`: no errors in `src/`. The same four errors remain in `tools/collectability-harness/`.
+- `npm test`: 25 of 25 passed. New cases: the count rises only during a transfer session, coming back is not another switch, the next transfer starts the count again, a preset returns to the bank app, and a pause keeps running while the bank app is left.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- `/demo` at 1440x900, 1366x700 and 1024x768: document no taller or wider than the window, no console errors. The read-out panel keeps its earlier height in the Coached, high state.
+- At 1440: "Open another app" on the home screen shows the stand-in and the count stays 0. During the recipient step the count goes to 1, the button inside the phone returns to the same step, and a second switch reads 2.
+- At 1440, Coached, high: leaving during the pause and coming back shows the pause sheet again.
+- At 412x900: the button on the Guardian view moves to the bank view and shows the stand-in; "Return to bank app" brings the bank app back.
+- `/` at 1440 and 1920: no overflow, and the console there is unchanged.
+
+**Not verified**
+
+- Android on a device or emulator, including the hardware back button returning from the stand-in. The Android export passing is a bundling check only.
+- Keyboard-only operation, screen readers, and browsers other than Chromium.
+
 ## Banking app, glass and three-layout demo
 
 Checked on 10 October 2026 after replacing the e-wallet with the bank app.

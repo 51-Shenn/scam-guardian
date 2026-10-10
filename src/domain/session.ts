@@ -48,16 +48,20 @@ export interface Session {
   sheet: SheetName | null;
   error: string | null;
   hidden: boolean;
+  /** Another app is in front of the bank app. A demo signal, switched by hand. */
+  away: boolean;
+  /** Times the bank app was left during this transfer session. What was opened is never known. */
+  switches: number;
 }
 export const initialSession: Session = {
   step: 'home', scenario: 'normal', consent: false, family: false, asked: false, pendingStart: false, balance: 2500,
-  amount: '50', to: 'aina', entry: null, call: false, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false,
+  amount: '50', to: 'aina', entry: null, call: false, help: 0, back: 0, deadline: null, sheet: null, error: null, hidden: false, away: false, switches: 0,
 };
 
 export type Action =
   | { type: 'scenario'; scenario: Scenario }
   | { type: 'transfer' } | { type: 'openConsent' } | { type: 'toggleFamily' } | { type: 'agree' } | { type: 'decline' } | { type: 'closeSheet' }
-  | { type: 'toggleCall'; now: number } | { type: 'reset' }
+  | { type: 'toggleCall'; now: number } | { type: 'toggleAway' } | { type: 'reset' }
   | { type: 'pick'; to: RecipientId } | { type: 'entry'; entry: Entry } | { type: 'next' }
   | { type: 'key'; key: string } | { type: 'setAmount'; amount: string }
   | { type: 'review'; now: number } | { type: 'confirm'; now: number }
@@ -79,9 +83,11 @@ export interface Derived {
   alert: boolean;
 }
 
+const transferring = (step: Step) => step === 'recipient' || step === 'amount' || step === 'review';
+
 export function derive(session: Session, now: number): Derived {
   const fixture = fixtures[session.scenario];
-  const active = session.step === 'recipient' || session.step === 'amount' || session.step === 'review';
+  const active = transferring(session.step);
   const fresh = recipients[session.to].fresh;
   const signals: Signals = {
     callActive: session.call, newRecipient: fresh, pasted: fresh && session.entry === 'pasted',
@@ -108,7 +114,7 @@ const home = (session: Session): Session => ({ ...session, step: 'home', deadlin
 function start(session: Session): Session {
   const fixture = fixtures[session.scenario];
   const entry = fixture.to !== 'fresh' ? null : fixture.paste ? 'pasted' : 'typed';
-  return { ...session, step: 'recipient', amount: fixture.amount, to: fixture.to, entry, help: 0, back: 0, deadline: null, error: null, sheet: null, pendingStart: false };
+  return { ...session, step: 'recipient', amount: fixture.amount, to: fixture.to, entry, help: 0, back: 0, switches: 0, deadline: null, error: null, sheet: null, pendingStart: false };
 }
 
 /** Starts the cool-down the first time a transfer under review needs one. */
@@ -125,8 +131,9 @@ function typeKey(amount: string, key: string): string {
 
 export function reduce(session: Session, action: Action): Session {
   switch (action.type) {
-    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call };
+    case 'scenario': return { ...home(session), scenario: action.scenario, call: fixtures[action.scenario].call, away: false };
     case 'toggleCall': return hold({ ...session, call: !session.call }, action.now);
+    case 'toggleAway': return session.away ? { ...session, away: false } : { ...session, away: true, switches: session.switches + (transferring(session.step) ? 1 : 0) };
     case 'reset': return initialSession;
     case 'transfer': return session.asked ? start(session) : { ...session, sheet: 'consent', pendingStart: true };
     case 'openConsent': return { ...session, sheet: 'consent', pendingStart: false };
