@@ -16,6 +16,12 @@
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
 </p>
 
+## Pitch deck
+
+PDF: [ScamGuardianPitchDeck_ThreePeasInAPod_TaylorsUniversity](ThreePeasInAPod_Taylors.pdf)
+
+## What Scam Guardian does
+
 Scam Guardian demonstrates help for a person finding the transfer hard and a verification pause for a person who may be following someone else's instructions. Display categories come from demonstration policy, not a validated three-class detector.
 
 This repository is a prototype for Dormathon 2026, Track 1, "Predict Early, Decide Better": an Expo application for Android and web with a product page and an interactive mock banking app. No real money moves.
