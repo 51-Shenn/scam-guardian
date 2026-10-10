@@ -15,3 +15,6 @@ src/domain/features.ts text eol=crlf
 src/domain/collector.ts text eol=crlf
 src/domain/risk.ts text eol=crlf
 data/processed/pitch-evidence-v1/** -text
+scripts/diagnose_frozen_model.mjs text eol=lf
+docs/frozen-model-diagnosis-plan.md text eol=lf
+data/processed/frozen-model-diagnosis-v1/** -text

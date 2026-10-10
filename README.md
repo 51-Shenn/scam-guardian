@@ -67,6 +67,8 @@ Help works immediately. Invalid amounts cannot proceed. Back navigation preserve
 
 ## Project map
 
+Frozen-model investigation: [executed diagnosis](docs/frozen-model-diagnosis.md) retains all ten challenge misses, a behavior-only control, paired results and uncertainty caveats. [Independent fresh-test instructions](docs/fresh-test-authoring.md) and [40 blank CSV slots](docs/fresh-test-template.csv) are ready for teammates; collection/scoring are not yet executed. Model weights, thresholds and UI are unchanged.
+
 - `src/app/`: Expo Router landing and demo routes.
 - `src/screens/`: responsive shared Android/web screens.
 - `src/components/bank/`: the mock banking app and its transfer flow.
