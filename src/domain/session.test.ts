@@ -130,23 +130,6 @@ test('a call that starts during review begins the cool-down instead of locking t
   assert.equal(run(called, { type: 'toggleCall', now: 3000 }).deadline, 2000 + COOL_DOWN_MS, 'ending the call does not end the pause');
 });
 
-test('leaving the bank app is counted only during a transfer session', () => {
-  const browsing = run(initialSession, { type: 'toggleAway' });
-  assert.deepEqual([browsing.away, browsing.switches], [true, 0], 'browsing is outside the session');
-  const amount = run(consented('normal'), { type: 'next' }, { type: 'toggleAway' });
-  assert.deepEqual([amount.away, amount.switches, amount.step], [true, 1, 'amount']);
-  const twice = run(amount, { type: 'toggleAway' }, { type: 'toggleAway' }, { type: 'toggleAway' });
-  assert.deepEqual([twice.away, twice.switches], [false, 2], 'coming back is not another switch');
-  assert.equal(run(twice, { type: 'cancel' }, { type: 'transfer' }).switches, 0, 'the next transfer starts the count again');
-  assert.equal(run(amount, { type: 'scenario', scenario: 'coached' }).away, false, 'a preset returns to the bank app');
-});
-
-test('the pause keeps running while the bank app is left', () => {
-  const review = run(consented('coached'), { type: 'next' }, { type: 'review', now: 1000 });
-  const left = run(review, { type: 'toggleAway' });
-  assert.deepEqual([left.deadline, left.sheet, left.step], [1000 + COOL_DOWN_MS, 'pause', 'review']);
-});
-
 test('reset returns the demo to its first state', () => {
   assert.deepEqual(run(consented('coached'), { type: 'next' }, { type: 'review', now: 0 }, { type: 'reset' }), initialSession);
 });

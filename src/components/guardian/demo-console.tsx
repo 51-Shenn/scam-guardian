@@ -38,7 +38,7 @@ function PresetChoice({ detailed }: { detailed?: boolean }) {
   </View>;
 }
 
-function ReadOutBody({ compact, switches }: { compact?: boolean; switches?: boolean }) {
+function ReadOutBody({ compact }: { compact?: boolean }) {
   const { session, view } = useSession();
   const { signals, decision, monitoring, active } = view;
   const chosen = monitoring ? decision.classification : null;
@@ -50,8 +50,6 @@ function ReadOutBody({ compact, switches }: { compact?: boolean; switches?: bool
     ['Back steps', String(signals.backPresses)],
     ['Help taps', String(signals.helpTaps)],
   ];
-  // Only the demo screen can leave the bank app, so only its read-out counts it.
-  if (switches) rows.push(['App switches', String(session.switches)]);
   return <View aria-live="polite">
     <View className="flex-row items-baseline justify-between gap-2">
       <Text className={small}>Guardian read-out</Text>
@@ -75,8 +73,7 @@ function ReadOutBody({ compact, switches }: { compact?: boolean; switches?: bool
     </View>)}
 
     {!compact && <View className="mt-3.5 flex-row flex-wrap gap-1.5">
-      {/* Two to a row. With the app-switch count, the three counts share the last row, so the panel keeps its height. */}
-      {rows.map(([label, value], index) => <View key={label} className={`grow rounded-xl bg-white/70 px-2.5 py-1 ${switches && index >= 4 ? 'basis-[30%]' : 'basis-[45%]'}`}>
+      {rows.map(([label, value]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
         <Text className="font-body text-[11.5px] text-soft">{label}</Text>
         <Text className="font-body text-[13px] text-ink">{value}</Text>
       </View>)}
@@ -87,7 +84,7 @@ function ReadOutBody({ compact, switches }: { compact?: boolean; switches?: bool
 
 /** Guardian's view of the current transfer session. */
 export function ReadOut({ className = '' }: PanelProps) {
-  return <Glass radius={26} className={`p-4 ${className}`}><ReadOutBody switches /></Glass>;
+  return <Glass radius={26} className={`p-4 ${className}`}><ReadOutBody /></Glass>;
 }
 
 /** The presets with what each one sets up. */

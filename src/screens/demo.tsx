@@ -35,28 +35,24 @@ export default function DemoScreen() {
   const insets = useSafeAreaInsets();
   const { session, view, dispatch } = useSession();
   const [shown, setShown] = useState<ViewName>('bank');
-  const { step, sheet, call, away } = session;
+  const { step, sheet, call } = session;
 
   // Android back returns to the bank app, then walks the transfer backwards, before it leaves the screen.
   useEffect(() => {
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       if (shown !== 'bank') { setShown('bank'); return true; }
-      if (away) { dispatch({ type: 'toggleAway' }); return true; }
       if (sheet) { dispatch({ type: 'closeSheet' }); return true; }
       if (step === 'home') return false;
       dispatch(step === 'success' ? { type: 'done' } : { type: 'back' });
       return true;
     });
     return () => subscription.remove();
-  }, [shown, away, step, sheet, dispatch]);
+  }, [shown, step, sheet, dispatch]);
 
   const leave = () => (router.canGoBack() ? router.back() : router.replace('/'));
   const toggleCall = () => dispatch({ type: 'toggleCall', now: Date.now() });
-  // Leaving and returning both show the result, so the narrow layout moves to the bank app.
-  const toggleAway = () => { dispatch({ type: 'toggleAway' }); setShown('bank'); };
   const reset = () => { dispatch({ type: 'reset' }); setShown('bank'); };
   const callLabel = call ? 'End simulated call' : 'Start simulated call';
-  const awayLabel = away ? 'Return to bank app' : 'Open another app';
   if (!viewport) return <View className="flex-1 bg-page" />;
 
   // Narrow web and Android: the device is the phone, so there is no frame. A switch at the top moves between the three views.
@@ -89,7 +85,6 @@ export default function DemoScreen() {
             <View className="flex-1"><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
             <View><Action small secondary label="Reset demo" onPress={reset} /></View>
           </View>
-          <Action small secondary={!away} label={awayLabel} onPress={toggleAway} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -106,7 +101,6 @@ export default function DemoScreen() {
       <Wordmark onPress={() => router.replace('/')} />
       <View className="flex-row gap-2.5">
         <View><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
-        <View><Action small secondary={!away} label={awayLabel} onPress={toggleAway} /></View>
         <View><Action small secondary label="Reset demo" onPress={reset} /></View>
         <View><Action small secondary label="Product page" onPress={leave} /></View>
       </View>
@@ -117,7 +111,7 @@ export default function DemoScreen() {
           <View className="gap-3" style={{ width: STAGE.panel }}><ReadOut /><Presets /></View>
           <View className="items-center gap-2.5">
             <Text className={caption}>Rohani&apos;s phone</Text>
-            <PhoneFrame scale={STAGE.phone} chrome={step === 'home' && !away ? 'light' : 'dark'} callActive={call}>
+            <PhoneFrame scale={STAGE.phone} chrome={step === 'home' ? 'light' : 'dark'} callActive={call}>
               <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} />
             </PhoneFrame>
           </View>
