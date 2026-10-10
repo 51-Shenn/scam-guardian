@@ -1,5 +1,14 @@
 # Verification
 
+## Icons on the demo's top actions — 11 October 2026
+
+The user asked for icons on the action buttons at the top of `/demo`, and for the text to go where an icon states the action in full. Reset demo and Product page are now icon-only: a counter-clockwise arrow and a house, each with its name as the accessible name and, on web, the tooltip. The simulated call, the simulated app switch and Pitch evidence keep their words beside an icon: the two signals must say they are simulated, and no icon states "pitch evidence" by itself. The narrow layout's Guardian tab has the same buttons.
+
+- `npm run lint`, `npm run typecheck`: passed. `npm test`: 79 of 79. `npm run export:platforms`: both bundles written.
+- `node scripts/browser_warning_measurements.mjs --pitch`: 27 acceptance checks passed, run `run-1791652965621`. The script now finds Product page by its accessible name.
+- Checked by eye on captures at 1440x900, during a rule-raised review, and at 390x844 idle.
+- Not checked: the tooltips on hover, Android.
+
 ## Lock figure tour settles between steps — 11 October 2026
 
 The user said the canal lock was not smooth. Measured on the exported page in headless Edge at 1440x900, sampling the drawing every frame: frames arrived 16.7 ms apart with none over 34 ms, so nothing was dropping. The cause was the pace set in `lock-figure.web.tsx`. A step came every 700 ms, which is how long the gates take to swing, so each movement began the moment the last one ended and the drawing was moving in 93% of frames, with rests of about 150 ms. The start of each swing is abrupt because the drawing eases out only.

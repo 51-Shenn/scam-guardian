@@ -165,7 +165,7 @@ try {
   await shot('metrics-desktop.png');
 
   // Return through the UI so the same provider still holds the completed measurement history.
-  await click('Product page');
+  await click('Product page', 'button', true);
   await until(() => evaluate("document.body.innerText.includes('A pause before the money moves.')"));
   for (const [width, height] of [[1700, 900], [1320, 820], [1200, 760], [860, 780], [390, 844]]) {
     await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });

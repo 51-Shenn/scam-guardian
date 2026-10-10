@@ -1,5 +1,6 @@
 // The only module that imports Phosphor. Deep imports avoid bundling the full icon set.
 export { AppWindowIcon } from 'phosphor-react-native/src/icons/AppWindow';
+export { ArrowCounterClockwiseIcon } from 'phosphor-react-native/src/icons/ArrowCounterClockwise';
 export { ArrowDownLeftIcon } from 'phosphor-react-native/src/icons/ArrowDownLeft';
 export { ArrowRightIcon } from 'phosphor-react-native/src/icons/ArrowRight';
 export { ArrowsLeftRightIcon } from 'phosphor-react-native/src/icons/ArrowsLeftRight';
@@ -38,6 +39,7 @@ export { MicrophoneSlashIcon } from 'phosphor-react-native/src/icons/MicrophoneS
 export { PaperPlaneTiltIcon } from 'phosphor-react-native/src/icons/PaperPlaneTilt';
 export { PhoneCallIcon } from 'phosphor-react-native/src/icons/PhoneCall';
 export { PhoneSlashIcon } from 'phosphor-react-native/src/icons/PhoneSlash';
+export { PresentationChartIcon } from 'phosphor-react-native/src/icons/PresentationChart';
 export { PulseIcon } from 'phosphor-react-native/src/icons/Pulse';
 export { QrCodeIcon } from 'phosphor-react-native/src/icons/QrCode';
 export { ReceiptIcon } from 'phosphor-react-native/src/icons/Receipt';

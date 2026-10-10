@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BankApp } from '@/components/bank/bank-app';
-import { AppWindowIcon, PhoneCallIcon } from '@/components/bank/icons';
+import { AppWindowIcon, ArrowCounterClockwiseIcon, ArrowUUpLeftIcon, HouseIcon, PhoneCallIcon, PhoneSlashIcon, PresentationChartIcon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
 import { Action } from '@/components/guardian/action';
@@ -56,9 +56,11 @@ export default function DemoScreen() {
   const toggleCall = () => dispatch({ type: 'toggleCall', now: Date.now() });
   const reset = () => { dispatch({ type: 'reset' }); setShown('bank'); };
   const callLabel = call ? 'End simulated call' : 'Start simulated call';
+  const callIcon = call ? PhoneSlashIcon : PhoneCallIcon;
   // A demo signal only: the bank app stays usable, and the device's real app state is recorded separately.
   const toggleAway = () => dispatch({ type: 'toggleAway', now: Date.now() });
   const awayLabel = away ? 'Return to bank app' : 'Simulate app switch';
+  const awayIcon = away ? ArrowUUpLeftIcon : AppWindowIcon;
   if (!viewport) return <View className="flex-1 bg-page" />;
 
   // Narrow web and Android: the device is the phone, so there is no frame. A switch at the top moves between the three views.
@@ -95,11 +97,11 @@ export default function DemoScreen() {
         {shown === 'bank' && <BankApp top={12} bottom={bottom} onExit={leave} />}
         {shown === 'guardian' && <ScrollView className="flex-1" contentContainerClassName="gap-3 px-3 pt-1" contentContainerStyle={{ paddingBottom: bottom + 12 }}>
           <View className="flex-row gap-2">
-            <View className="flex-1"><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
-            <View><Action small secondary label="Reset demo" onPress={reset} /></View>
+            <View className="flex-1"><Action small secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
+            <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
           </View>
-          <Action small secondary={!away} label={awayLabel} onPress={toggleAway} />
-          <Action small secondary label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} />
+          <Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} />
+          <Action small secondary icon={PresentationChartIcon} label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} />
           <ReadOut />
           <Presets />
         </ScrollView>}
@@ -115,11 +117,12 @@ export default function DemoScreen() {
     <View className="mx-auto h-[72px] w-full max-w-[1480px] flex-row items-center justify-between gap-6 px-10">
       <Wordmark onPress={() => router.replace('/')} />
       <View className="flex-row gap-2.5">
-        <View><Action small secondary={!call} label={callLabel} onPress={toggleCall} /></View>
-        <View><Action small secondary={!away} label={awayLabel} onPress={toggleAway} /></View>
-        <View><Action small secondary label="Reset demo" onPress={reset} /></View>
-        <View><Action small secondary label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} /></View>
-        <View><Action small secondary label="Product page" onPress={leave} /></View>
+        <View><Action small secondary={!call} icon={callIcon} label={callLabel} onPress={toggleCall} /></View>
+        <View><Action small secondary={!away} icon={awayIcon} label={awayLabel} onPress={toggleAway} /></View>
+        <View><Action small secondary icon={PresentationChartIcon} label="Pitch evidence" disabled={view.active} onPress={() => router.push('/evidence')} /></View>
+        {/* Reset and home are stated in full by their icons. The two signals keep their words, because they must say they are simulated. */}
+        <View><Action small secondary icon={ArrowCounterClockwiseIcon} iconOnly label="Reset demo" onPress={reset} /></View>
+        <View><Action small secondary icon={HouseIcon} iconOnly label="Product page" onPress={leave} /></View>
       </View>
     </View>
     <View className="flex-1 items-center justify-center pb-8">
