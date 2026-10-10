@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { useSession } from '@/components/bank/session';
 import { Glass } from '@/components/glass/glass';
-import { fixtures, scenarios } from '@/domain/session';
+import { fixtures, scenarios, type AiView } from '@/domain/session';
 import type { Decision } from '@/domain/risk';
 
 interface PanelProps { className?: string }
@@ -17,10 +17,11 @@ const ink = { Normal: 'text-ink', Struggling: 'text-[#2457c5]', Coached: 'text-b
 const responses: Record<Decision['response'], string> = {
   continue: 'No interruption.',
   guide: 'Switch to Simple mode and guide one step at a time.',
-  cooldown: 'Pause for 30 seconds and ask whether someone is directing this.',
+  cooldown: 'Pause for 15 seconds: ask whether someone is directing this, and verify through a trusted contact.',
   hold: 'Pause, ask, and prepare the family alert. The person still decides.',
 };
 const small = 'font-body text-[13px] text-soft';
+const seconds = (ms: number) => `${Math.floor(ms / 1000)} s`;
 
 /** The four presets. A choice sets the simulated call and what the next transfer starts with. */
 function PresetChoice({ detailed }: { detailed?: boolean }) {
@@ -44,8 +45,9 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
   const chosen = monitoring ? decision.classification : null;
   const rows: [string, string][] = [
     ['Call', session.call ? 'Active (simulated)' : 'None'],
+    ['App switch', session.away ? `Away ${seconds(view.awayMs)} (simulated)` : view.awayMs ? `Back · ${seconds(view.awayMs)} away` : 'In bank app'],
     ['Recipient', active ? (signals.newRecipient ? 'New' : 'Saved') : 'Not chosen'],
-    ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted (simulated)' : session.entry ? 'Typed' : 'Not entered'],
+    ['Account number', !active || !signals.newRecipient ? 'Not entered' : session.entry === 'pasted' ? 'Pasted' : session.entry ? 'Typed' : 'Not entered'],
     ['Amount', active ? `${signals.amountRatio.toFixed(1)}x usual` : 'Not entered'],
     ['Back steps', String(signals.backPresses)],
     ['Help taps', String(signals.helpTaps)],
@@ -72,13 +74,38 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
       <Text className="flex-1 font-body text-sm leading-5 text-ink">{reason}</Text>
     </View>)}
 
+    <AiReview />
+
     {!compact && <View className="mt-3.5 flex-row flex-wrap gap-1.5">
       {rows.map(([label, value]) => <View key={label} className="grow basis-[45%] rounded-xl bg-white/70 px-2.5 py-1">
         <Text className="font-body text-[11.5px] text-soft">{label}</Text>
         <Text className="font-body text-[13px] text-ink">{value}</Text>
       </View>)}
     </View>}
-    <Text className="mt-2.5 font-body text-xs leading-4 text-soft">Demo rules on simulated signals, not model output.</Text>
+    <Text className="mt-2.5 font-body text-xs leading-4 text-soft">Classification by demo rules on simulated signals. The AI review is the on-device model.</Text>
+  </View>;
+}
+
+const aiText: Record<AiView['status'], string> = {
+  off: 'Off while Guardian is off.',
+  waiting: 'Checks every 5 seconds during the transfer.',
+  unavailable: 'AI unavailable. The demo rules still apply.',
+  clear: 'No additional AI review.',
+  review: 'Review recommended: pause and verify.',
+};
+
+/** The on-device model's binary review. Its score is uncalibrated, so it is never shown as a percentage. */
+function AiReview() {
+  const { session } = useSession();
+  const { status, score, threshold, cutoff } = session.ai;
+  return <View className="mt-3.5 gap-1 rounded-xl bg-white/70 px-3 py-2.5">
+    <View className="flex-row items-baseline justify-between gap-2">
+      <Text className="font-body text-[13px] text-soft">AI review (on device)</Text>
+      {cutoff !== null && <Text className="font-body text-[11.5px] text-soft" style={{ fontVariant: ['tabular-nums'] }}>at {cutoff / 1000} s</Text>}
+    </View>
+    <Text className={`font-body text-[15px] leading-5 ${status === 'review' ? 'text-b-amber' : 'text-ink'}`}>{aiText[status]}</Text>
+    {score !== null && threshold !== null && <Text className="font-body text-[13px] text-ink" style={{ fontVariant: ['tabular-nums'] }}>Score {score.toFixed(2)} · review at {threshold.toFixed(2)}</Text>}
+    <Text className="font-body text-[11.5px] leading-4 text-soft">Trained on simulated sessions; not a scam probability. Not yet retrained for full account numbers.</Text>
   </View>;
 }
 

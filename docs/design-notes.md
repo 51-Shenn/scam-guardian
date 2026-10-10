@@ -34,4 +34,4 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 ## Studies
 
-The three self-contained v2 studies (Current, Signal, Tide) and their chooser were removed once Current was built. They remain in git history under `design/v2/`. They shared one vanilla-JS wallet whose rules mirrored `src/domain/risk.ts`, with a 10-second pause for quick comparison. The app uses 30 seconds.
+The three self-contained v2 studies (Current, Signal, Tide) and their chooser were removed once Current was built. They remain in git history under `design/v2/`. They shared one vanilla-JS wallet whose rules mirrored `src/domain/risk.ts`, with a 10-second pause for quick comparison. The app uses 15 seconds.

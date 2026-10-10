@@ -5,6 +5,7 @@ import { Glass } from '@/components/glass/glass';
 import { AmountStep } from './amount';
 import { Backdrop } from './backdrop';
 import { Home } from './home';
+import { OtherApp } from './other-app';
 import { RecipientStep } from './recipient';
 import { ReviewStep } from './review';
 import { useSession } from './session';
@@ -46,6 +47,8 @@ export function BankApp({ top, bottom, onExit, interactive = true }: BankAppProp
     </Animated.View>
     {session.sheet === 'consent' && <ConsentSheet bottom={bottom} />}
     {session.sheet === 'pause' && <PauseSheet bottom={bottom} />}
+    {/* The simulated switch to another app covers the bank app until Rohani comes back. */}
+    {session.away && <OtherApp top={top} bottom={bottom} />}
     {toast && <Animated.View entering={FadeIn.duration(200)} role="status" style={{ position: 'absolute', zIndex: 20, alignSelf: 'center', bottom: bottom + 92 }}>
       <Glass tone="dark" radius={20} className="px-4 py-2.5"><Text className="font-body text-sm text-white">Not part of this demo</Text></Glass>
     </Animated.View>}

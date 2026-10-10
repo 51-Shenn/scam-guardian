@@ -14,7 +14,7 @@ This repository is a prototype for Dormathon 2026, Track 1, "Predict Early, Deci
 | --- | --- | --- |
 | Normal | Saved recipient, usual amount | No interruption |
 | Struggling | Three back steps or two help taps | Simple mode: larger controls, one instruction at a time |
-| Coached | Call active and a new recipient | A 30-second pause that asks whether someone is directing the transfer |
+| Coached | Call active and a new recipient | A 15-second pause that asks whether someone is directing the transfer |
 | Coached, high | The above, plus a pasted account number or more than 3x the usual amount | The same pause, and a request for the trusted contact to call |
 
 After the pause the person can still continue. Guardian adds time and support; it never blocks someone's own money.
@@ -22,10 +22,12 @@ After the pause the person can still continue. Guardian adds time and support; i
 ## What is real and what is simulated
 
 - **Money, account and recipients:** made up. No real money moves and no bank is connected.
-- **Call, paste and app-switch signals:** set by buttons in the demo. Nothing is read from the device, the clipboard or other apps.
-- **Classification:** deterministic demonstration rules in `src/domain/risk.ts`. There is no trained model and no probability is shown.
+- **Call and app-switch signals:** set by buttons in the demo. Nothing is read from the device's call state or from other apps.
+- **Account number:** a real field taking 10 to 16 digits, typed or pasted. Guardian records how it was entered and the length of each change. The digits never leave the field.
+- **Classification:** Normal, Struggling and Coached come from deterministic demonstration rules in `src/domain/risk.ts`.
+- **AI review:** a frozen on-device model from the AI team (`src/domain/model/`) scores the transfer every 5 seconds and can add a pause. It was trained on simulated sessions and its score is not a scam probability. It has not yet been retrained for full account numbers, so for now the demo's pauses come from the rules. See `reference/ai/README.md`.
 - **Family alert:** a preview on a second phone drawn on the same screen. Nothing is sent to another device.
-- **Working as shown:** the consent step, the separate trusted-contact consent, amount validation, Simple mode and the 30-second pause. The pause length is provisional, not a calibrated risk policy.
+- **Working as shown:** the consent step, the separate trusted-contact consent, amount validation, Simple mode and the 15-second pause. The pause length is provisional, not a calibrated risk policy.
 
 ## Run
 
@@ -47,14 +49,14 @@ Enable Guardian on the bank app's home screen. Family-alert consent is separate.
 
 - Normal: saved recipient, RM50, no interruption.
 - Struggling: step-by-step guidance and larger controls.
-- Coached: simulated call and new recipient, 30-second pause.
-- Coached, high: a pasted account number as well, 30-second pause and an alert on Aina's phone if consented. That phone is a picture on the same screen; nothing is sent to another device.
+- Coached: simulated call and new recipient, 15-second pause.
+- Coached, high: a pasted account number as well, 15-second pause and an alert on Aina's phone if consented. That phone is a picture on the same screen; nothing is sent to another device.
 
 A preset only sets the starting signals. Three of them can be changed by hand at any time:
 
 - **Start simulated call** starts or ends the call.
-- **Open another app** puts a blank stand-in for another app in front of the bank app. Leaving during a transfer is counted in the read-out as "App switches". No rule uses the count yet, and the pause keeps running while the bank app is left.
-- A new recipient's account number is typed or pasted with the two buttons on the recipient step.
+- **Simulate app switch** shows a simulated other app and times how long it stays in front. The read-out shows this as "App switch". Neither the rules nor the model use it.
+- A new recipient's account number is typed or pasted into the account field on the recipient step.
 
 Help works immediately. Invalid amounts cannot proceed. Back navigation preserves the pause deadline. Cancellation ends monitoring.
 
@@ -70,7 +72,7 @@ node scripts/preview.mjs
 
 The application preview runs at `http://127.0.0.1:4173`, with the demo at `/demo`. Both Android and web bundles go into ignored `dist/`. These exports verify compilation, not APK assembly or device behavior.
 
-`npm run typecheck` reports four errors in `tools/collectability-harness/`, which has its own dependencies that are not installed at the root. `src/` has none. What was checked, and what was not, is recorded in `docs/validation.md`.
+`npm run typecheck` leaves out `tools/`, because the collectability harness has its own dependencies. What was checked, and what was not, is recorded in `docs/validation.md`.
 
 ## Design
 
@@ -86,10 +88,11 @@ The static Android art is generated: `node scripts/build-native-art.mjs` writes 
 
 - `src/app/`: Expo Router landing and demo routes.
 - `src/screens/`: responsive shared Android/web screens.
-- `src/components/bank/`: the mock banking app, its transfer flow and the stand-in for another app.
+- `src/components/bank/`: the mock banking app, its transfer flow, the account-number field and the simulated other app.
 - `src/components/glass/`: the frosted glass surface, as CSS backdrop blur on web and a translucent sheen on Android.
 - `src/components/guardian/`: the read-out, the family phone, the phone frame, web beUI controls and platform art.
-- `src/domain/`: the session reducer, deterministic risk rules, validation and tests.
+- `src/domain/`: the session reducer, demonstration risk rules, the signal collector, feature extraction, the on-device model bundle and tests.
+- `reference/ai/`: the AI team's handoff files, kept byte for byte and used by the tests.
 - `tools/collectability-harness/`: a separate Expo app that tests which behavioural fields can be collected. It is a test tool with its own `package.json`, not part of the product build.
 - `design/`: the Hairline artifact and its source.
 - `docs/implementation-plan.md`: research source, scope, remaining decisions and later integration work.
