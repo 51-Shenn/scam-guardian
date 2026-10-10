@@ -17,7 +17,7 @@ const ink = { Normal: 'text-ink', Struggling: 'text-[#2457c5]', Coached: 'text-b
 const responses: Record<Decision['response'], string> = {
   continue: 'No interruption.',
   guide: 'Switch to Simple mode and guide one step at a time.',
-  cooldown: 'Pause for 30 seconds: ask whether someone is directing this, and verify through a trusted contact.',
+  cooldown: 'Pause for 15 seconds: ask whether someone is directing this, and verify through a trusted contact.',
   hold: 'Pause, ask, and prepare the family alert. The person still decides.',
 };
 const small = 'font-body text-[13px] text-soft';

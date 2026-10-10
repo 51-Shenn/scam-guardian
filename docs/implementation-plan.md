@@ -13,7 +13,7 @@ Source: [Dormathon 2026 Scam Guardian Research Brief](https://docs.google.com/do
 
 ## Current slice
 
-Product page with a live bank app in a phone frame, a demo console, privacy explanation and the canal-lock figure. On desktop web the bank app is interactive in the frame; on narrow web and Android the frame is a preview that opens the demo full screen. The demo route shows the Guardian read-out, the bank app and the trusted contact's phone together. The transfer experience is shared: Home, Choose recipient, Enter amount on a keypad, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 30-second cool-down, cancellation, and a clearly labelled family-alert preview on a second phone drawn on the same screen. The simulated call can be switched at any time and a new recipient's account number is typed or pasted by hand; presets set the starting signals. No real money moves.
+Product page with a live bank app in a phone frame, a demo console, privacy explanation and the canal-lock figure. On desktop web the bank app is interactive in the frame; on narrow web and Android the frame is a preview that opens the demo full screen. The demo route shows the Guardian read-out, the bank app and the trusted contact's phone together. The transfer experience is shared: Home, Choose recipient, Enter amount on a keypad, Review/Confirm, Success. It uses mock balance and recipients, local consent, simple mode, deterministic demonstration rules, a real 15-second cool-down, cancellation, and a clearly labelled family-alert preview on a second phone drawn on the same screen. The simulated call can be switched at any time and a new recipient's account number is typed or pasted by hand; presets set the starting signals. No real money moves.
 
 Demo rules illustrate the brief's hard-rule example: call active + new recipient + (paste flag OR amount greater than 3x usual) pauses a coached transfer. Back presses/help taps enable simple mode. A call and new recipient without the hard-rule combination demonstrate medium risk. No trained probabilities are shown.
 
@@ -32,7 +32,7 @@ The product page and demo render at desktop width, narrow web width, and native 
 
 - Is the 24-hour event deadline still the delivery constraint? What Android device and Expo Go/development-build environment will be used?
 - English first for this design study; when must BM and Chinese translations be complete and reviewed? Font fallback for Chinese needs device QA.
-- The brief references thresholds in an absent Section 3. What are calibrated medium/high model thresholds and how long does high-risk holding last? The current demo uses a uniform 30-second pause, not claimed calibrated policy.
+- The brief references thresholds in an absent Section 3. What are calibrated medium/high model thresholds and how long does high-risk holding last? The current demo uses a uniform 15-second pause, not claimed calibrated policy.
 - Are trained weights available? The proposal mentions both approximately 90 role-play sessions and 10 people x 3 sessions (30); confirm the evaluation sample count before reporting results.
 - How should missing/denied Android permissions degrade? How should cellular, VoIP, and trusted-family calls be distinguished without collecting caller identity?
 - What exact mechanism should deliver family alerts to another device, and who owns consent and contact verification?

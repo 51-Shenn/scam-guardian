@@ -32,7 +32,7 @@ test('a normal transfer completes without a pause', () => {
 test('a coached transfer pauses for the full cool-down and cannot be confirmed early', () => {
   const review = coachedReview(1000);
   assert.deepEqual([review.step, review.deadline, review.sheet], ['review', 1000 + COOL_DOWN_MS, 'pause']);
-  assert.equal(derive(review, 1000).remaining, 30);
+  assert.equal(derive(review, 1000).remaining, 15);
   assert.equal(derive(review, 1000).locked, true);
   assert.equal(derive(review, 1000).origin, 'rule');
   assert.equal(run(review, { type: 'confirm', now: 1000 + COOL_DOWN_MS - 1 }), review);
@@ -101,8 +101,8 @@ test('changing scenario cancels the transfer and clears the pause', () => {
 
 test('remaining time and ring fraction are clamped', () => {
   const review = coachedReview(1000);
-  assert.deepEqual([derive(review, 0).remaining, derive(review, 0).fraction], [30, 1]);
-  assert.deepEqual([derive(review, 16000).remaining, derive(review, 16000).fraction], [15, 0.5]);
+  assert.deepEqual([derive(review, 0).remaining, derive(review, 0).fraction], [15, 1]);
+  assert.deepEqual([derive(review, 8500).remaining, derive(review, 8500).fraction], [8, 0.5]);
   assert.deepEqual([derive(review, 99000).remaining, derive(review, 99000).fraction, derive(review, 99000).locked], [0, 0, false]);
 });
 

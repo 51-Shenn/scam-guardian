@@ -6,7 +6,7 @@ export type SheetName = 'consent' | 'pause';
 /** How the new recipient's account number arrived. Only this flag leaves the field, never the number or the clipboard. */
 export type Entry = 'typed' | 'pasted';
 
-export const COOL_DOWN_MS = 30000;
+export const COOL_DOWN_MS = 15000;
 export const USUAL_AMOUNT = 50;
 /** Malaysian bank account numbers run from 10 to 16 digits. */
 export const ACCOUNT_MIN_DIGITS = 10;

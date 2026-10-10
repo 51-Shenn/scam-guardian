@@ -42,8 +42,8 @@ Enable Guardian on the bank app's home screen. Family-alert consent is separate.
 
 - Normal: saved recipient, RM50, no interruption.
 - Struggling: step-by-step guidance and larger controls.
-- Coached: simulated call and new recipient, 30-second pause.
-- Coached, high: a pasted account number as well, 30-second pause and an alert on Aina's phone if consented. That phone is a picture on the same screen; nothing is sent to another device.
+- Coached: simulated call and new recipient, 15-second pause.
+- Coached, high: a pasted account number as well, 15-second pause and an alert on Aina's phone if consented. That phone is a picture on the same screen; nothing is sent to another device.
 
 A preset only sets the starting signals. The simulated call can be started or ended at any time, and a new recipient's account number can be typed or pasted by hand.
 
