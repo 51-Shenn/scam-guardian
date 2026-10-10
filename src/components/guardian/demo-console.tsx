@@ -11,8 +11,9 @@ interface DemoConsoleProps extends PanelProps {
 }
 
 const classes: Decision['classification'][] = ['Normal', 'Struggling', 'Coached'];
-const fill = { Normal: 'bg-[#12905a]', Struggling: 'bg-accent', Coached: 'bg-[#b45309]' };
-const ink = { Normal: 'text-ink', Struggling: 'text-accent', Coached: 'text-b-amber' };
+// Class colours are data, not brand: red would read as an accusation, and Struggling calls for help instead.
+const fill = { Normal: 'bg-[#12905a]', Struggling: 'bg-[#2457c5]', Coached: 'bg-[#b45309]' };
+const ink = { Normal: 'text-ink', Struggling: 'text-[#2457c5]', Coached: 'text-b-amber' };
 const responses: Record<Decision['response'], string> = {
   continue: 'No interruption.',
   guide: 'Switch to Simple mode and guide one step at a time.',
@@ -61,13 +62,13 @@ function ReadOutBody({ compact }: { compact?: boolean }) {
     <View className="mt-3.5 gap-2">
       {classes.map((name) => <View key={name} accessibilityLabel={`${name}${name === chosen ? ', selected' : ''}`} className="flex-row items-center gap-2.5">
         <Text className={`w-[78px] font-body text-sm ${name === chosen ? 'text-ink' : 'text-soft'}`}>{name}</Text>
-        <View className="h-2 flex-1 overflow-hidden rounded-full bg-[#dfe5f1]">{name === chosen && <View className={`h-2 rounded-full ${fill[name]}`} />}</View>
+        <View className="h-2 flex-1 overflow-hidden rounded-full bg-[#eadfe2]">{name === chosen && <View className={`h-2 rounded-full ${fill[name]}`} />}</View>
       </View>)}
     </View>
 
     <Text className={`mt-3.5 ${small}`}>Reasons</Text>
     {decision.reasons.map((reason) => <View key={reason} className="mt-1 flex-row items-center gap-2">
-      <View className={`h-1.5 w-1.5 rounded-full ${chosen ? fill[chosen] : 'bg-[#9aa6bd]'}`} />
+      <View className={`h-1.5 w-1.5 rounded-full ${chosen ? fill[chosen] : 'bg-[#b3a4a9]'}`} />
       <Text className="flex-1 font-body text-sm leading-5 text-ink">{reason}</Text>
     </View>)}
 

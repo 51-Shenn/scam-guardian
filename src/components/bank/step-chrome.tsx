@@ -30,11 +30,11 @@ export function Tag({ label, icon }: { label: string; icon?: ReactNode }) {
   </View>;
 }
 
-/** Simple mode: one instruction for the current step. Guardian's voice, so Guardian's colour. */
+/** Simple mode: one instruction for the current step. */
 export function Guide({ children }: { children: string }) {
-  return <View className="flex-row gap-3 rounded-[20px] bg-b-guard px-4 py-3.5">
-    <LightbulbIcon size={24} color={B.guard} />
-    <Text className="flex-1 font-body text-[17px] leading-6 text-[#0b2a7a]">{children}</Text>
+  return <View className="flex-row gap-3 rounded-[20px] bg-b-tint px-4 py-3.5">
+    <LightbulbIcon size={24} color={B.red} />
+    <Text className="flex-1 font-body text-[17px] leading-6 text-[#6d0a1b]">{children}</Text>
   </View>;
 }
 
@@ -43,7 +43,7 @@ export function StepFooter({ label, onPress, disabled, bottom }: { label: string
   return <View className="gap-2 px-5 pt-2.5" style={{ paddingBottom: bottom + 10 }}>
     <BankButton label={label} onPress={onPress} disabled={disabled} large={view.simple} />
     <View className="flex-row justify-between">
-      <BankButton variant="quiet" large={view.simple} label="Help me with this step" icon={<LifebuoyIcon size={18} color={B.guard} />} onPress={() => dispatch({ type: 'help' })} />
+      <BankButton variant="quiet" large={view.simple} label="Help me with this step" icon={<LifebuoyIcon size={18} color={B.red} />} onPress={() => dispatch({ type: 'help' })} />
       <BankButton variant="quiet" large={view.simple} label="Cancel" onPress={() => dispatch({ type: 'cancel' })} />
     </View>
   </View>;

@@ -60,8 +60,8 @@ export function Home({ top, bottom, onSoon, onExit }: HomeProps) {
           <Text className="font-body text-[40px] leading-[46px] tracking-[-0.8px] text-white" style={{ fontVariant: ['tabular-nums'] }}>{session.hidden ? 'RM ••••' : money(session.balance)}</Text>
           <Pressable accessibilityRole="button" accessibilityLabel={`Guardian is ${session.consent ? 'on' : 'off'}. Change`} onPress={() => dispatch({ type: 'openConsent' })}
             className={`mt-4 h-[38px] flex-row items-center gap-1.5 self-start rounded-full px-3.5 active:scale-[0.96] ${onRed} ${session.consent ? 'bg-white' : 'border border-white/50 bg-white/10'}`}>
-            <ShieldCheckIcon size={18} color={session.consent ? B.guard : '#ffffff'} weight={session.consent ? 'fill' : 'regular'} />
-            <Text className={`font-body text-[15px] ${session.consent ? 'text-accent' : 'text-white'}`}>Guardian {session.consent ? 'on' : 'off'}</Text>
+            <ShieldCheckIcon size={18} color={session.consent ? B.red : '#ffffff'} weight={session.consent ? 'fill' : 'regular'} />
+            <Text className={`font-body text-[15px] ${session.consent ? 'text-b-red' : 'text-white'}`}>Guardian {session.consent ? 'on' : 'off'}</Text>
           </Pressable>
         </Glass>
       </View>

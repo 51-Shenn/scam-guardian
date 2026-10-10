@@ -110,12 +110,12 @@ export default function Landing() {
       <Reveal><Text accessibilityRole="header" className={h2}>Your decision. Your privacy.</Text></Reveal>
       <View className="mt-10 gap-4 wide:mt-14 wide:flex-row">
         <Reveal className="wide:flex-[1.25]">
-          <View className={`flex-1 bg-[#e9eefa] ${cell}`}>
+          <View className={`flex-1 bg-[#f8e9ec] ${cell}`}>
             <Text accessibilityRole="header" className={`${h3} text-ink`}>What Guardian never collects</Text>
             <Text className="mt-3 font-body text-base leading-[26px] text-soft">The design works from a summary of the transfer session, kept on the device.</Text>
             <View className="mt-10 flex-row flex-wrap gap-3 wide:mt-auto wide:pt-12">
               {never.map(([Glyph, label]) => <View key={label} className="grow basis-[45%] gap-5 rounded-[14px] bg-white p-4">
-                <Glyph size={28} color="#1447e6" /><Text className="font-body text-base text-ink">{label}</Text>
+                <Glyph size={28} color="#c8102e" /><Text className="font-body text-base text-ink">{label}</Text>
               </View>)}
             </View>
           </View>

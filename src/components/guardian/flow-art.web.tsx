@@ -48,7 +48,7 @@ export function FlowArt({ paused }: FlowArtProps) {
         }
         const x = particle.x + vx * 1.25, y = particle.y + vy * 1.25;
         const fade = Math.min(1, particle.age / 30, (particle.life - particle.age) / 30);
-        context.strokeStyle = `rgba(20,71,230,${(still ? 0.05 : 0.2) * fade})`;
+        context.strokeStyle = `rgba(200,16,46,${(still ? 0.05 : 0.2) * fade})`;
         context.beginPath();
         context.moveTo(particle.x, particle.y);
         context.lineTo(x, y);

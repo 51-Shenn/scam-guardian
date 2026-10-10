@@ -49,7 +49,7 @@ function Island({ live }: { live: boolean }) {
 }
 
 export function PhoneFrame({ scale, chrome, lock, callActive, children }: PhoneFrameProps) {
-  const tint = chrome === 'light' ? '#ffffff' : '#0e1b33';
+  const tint = chrome === 'light' ? '#ffffff' : '#22141a';
   return <View style={{ width: FRAME.width * scale, height: FRAME.height * scale }}>
     <View style={{ width: FRAME.width, height: FRAME.height, transform: [{ scale }], transformOrigin: 'top left' }}>
       <View aria-hidden style={[key, { left: -4, top: 168, height: 38 }]} />

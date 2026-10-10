@@ -10,7 +10,7 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 ## Current
 
-- Palette: page `#f4f7fc`, ink `#0c1a33`, one accent, cobalt `#1447e6`. The bank app has its own product palette: crimson `#c8102e`, garnet `#8a0b20`, amber for pause states. Guardian's own surfaces inside it (consent, Simple mode guidance, alert preview) stay cobalt, so the Guardian layer reads as separate from the bank's chrome.
+- Palette: page `#faf6f6`, ink `#22141a`, one accent, crimson `#c8102e`. On 10 October 2026 the user asked for the whole product to take the bank app's red, replacing the cobalt accent: page art, logo, buttons, Guardian's surfaces inside the bank app, and the trusted contact's lock screen. The bank app adds garnet `#8a0b20`. Amber still marks pause states, so a pause never looks like the brand colour. In the read-out, the three classes keep green, blue and amber as data colours: red would read as an accusation, and Struggling calls for help instead.
 - Type: Hedvig Letters Serif for display, Hedvig Letters Sans for everything else.
 - Shape: pill buttons, 14px controls, 24px surfaces.
 - Art: a flow field of particles over a faint 44px grid. It slows while a transfer is paused, so the page tells the same story as the bank app. Android shows the field drawn once and dims it during a pause.
@@ -24,7 +24,7 @@ The user's explicit light theme, Expo, Tailwind and grid/particle requirements o
 
 - The actual web action wraps the official beUI base button from `starc007/ui-components`, retrieved 9 October 2026. Source: https://github.com/starc007/ui-components/blob/main/components/motion/button/base.tsx. Original button source stays in `src/components/beui/base.web.tsx`; MIT notice is retained in `docs/vendor/beui-LICENSE.txt`. Supporting motion tokens are taken from the official documentation; the hover capability hook uses an SSR-safe subscription.
 - The web switch is the official beUI source, unmodified, from commit `9deb728` of `starc007/ui-components` (`components/motion/switch.tsx`), kept in `src/components/beui/switch.web.tsx` under the same MIT notice.
-- Android landing actions are plain React Native pressables styled to the same pill as the beUI web button. A Material button was tried and dropped: it derives its own tone from a seed colour and cannot show the exact cobalt accent. Inside the bank app, buttons and the amount keypad are shared React Native controls, identical on both platforms.
+- Android landing actions are plain React Native pressables styled to the same pill as the beUI web button. A Material button was tried and dropped: it derives its own tone from a seed colour and cannot show the exact accent. Inside the bank app, buttons and the amount keypad are shared React Native controls, identical on both platforms.
 - Hedvig font packages include their OFL notices. The licence texts also sit in `design/`.
 - The canal-lock figure uses the Hairline skill's unchanged engine and bench. Its standalone bench supports both themes; Scam Guardian links to its light theme. The application itself is light-only. The app shows the drawing alone: on web the embedding component hides the bench's slider, buttons, labels and notes and stops the frame scrolling, and the Android still is captured without them.
 - Hairline rules: 1, 2, 4, 6, 8 and 9. The tour visits the upper, middle and lower chambers, then returns to rest. Static, frame, read-out, console and visual checks passed; see `docs/validation.md` for the restrained-motion note. User feedback on the Play lap is still welcome.

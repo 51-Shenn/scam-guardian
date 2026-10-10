@@ -6,8 +6,8 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 type Glow = readonly [number, number, number, string, number];
 const fields: Record<'hero' | 'calm' | 'night', { base: string; glows: readonly Glow[] }> = {
   hero: { base: '#b90e2a', glows: [[0.96, 0, 0.8, '#f0453f', 0.6], [0.02, 1, 0.85, '#5f0717', 0.9], [0.3, 0.3, 0.5, '#d81f4b', 0.45]] },
-  calm: { base: '#f5f5f8', glows: [[1, 0, 0.62, '#f6bcc7', 0.85], [0, 0.55, 0.6, '#c9d8ff', 0.75], [0.95, 1, 0.5, '#ffdfbd', 0.6]] },
-  night: { base: '#0c1430', glows: [[0.9, 0.08, 0.8, '#2f55d6', 0.75], [0.05, 0.7, 0.7, '#0f6f86', 0.55], [0.7, 1, 0.6, '#5a2a8c', 0.5]] },
+  calm: { base: '#f5f5f8', glows: [[1, 0, 0.62, '#f6bcc7', 0.85], [0, 0.55, 0.6, '#ffd7c8', 0.7], [0.95, 1, 0.5, '#ffdfbd', 0.6]] },
+  night: { base: '#1a0a11', glows: [[0.9, 0.08, 0.8, '#a8122f', 0.8], [0.05, 0.7, 0.7, '#5a1640', 0.6], [0.7, 1, 0.6, '#c2452d', 0.4]] },
 };
 
 /** Fills its parent, behind the content. Drawn once; nothing animates. */

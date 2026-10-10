@@ -19,6 +19,7 @@ Checked on 10 October 2026 after replacing the e-wallet with the bank app.
 - By hand at 1440: call started from the header, new recipient picked, Next disabled until "Type it" is pressed.
 - `/` at 1440, 1180 and 412: no overflow. From 1180 up the console stands clear of the phone with its foot on the frame's bottom line.
 - Glass, class bars and the family phone were checked by eye on captures.
+- After the accent changed from cobalt to the bank's crimson the same day: all four gates and every check above were run again with the same results, and the page art, logo, buttons and lock screen were checked by eye on new captures.
 
 **Not verified**
 

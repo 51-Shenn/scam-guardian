@@ -15,6 +15,6 @@ export default function RootLayout() {
   useEffect(() => { if (loaded || error) SplashScreen.hideAsync(); }, [loaded, error]);
   if (!loaded && !error) return null;
   return <SafeAreaProvider><SessionProvider>
-    <StatusBar style="dark" /><Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F4F7FC' } }} />
+    <StatusBar style="dark" /><Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#FAF6F6' } }} />
   </SessionProvider></SafeAreaProvider>;
 }
