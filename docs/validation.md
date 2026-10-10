@@ -1,5 +1,33 @@
 # Verification
 
+## Signals table on one grid
+
+Checked on 10 October 2026. The first table put the two counts side by side on the Behaviour line, off the grid, and its group names ran into the labels. Every signal now has its own line on one grid: group, label, value. The group column is wider and the rows have more room. To pay for the extra line the stage is 848 tall instead of 817, so the phones are drawn about 4% smaller.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, panel height against 796 available: 716 idle, 754 Coached on the recipient step, 792 in a Coached, high hold with a model score.
+- The longest value, "Away 11 s (simulated)", stays on one line inside the table.
+- No overflow at 1920x1000, 1366x700, 1280x720, 1024x768 or 412x900. No console errors. Checked by eye on a capture of the hold with the app switch on.
+- Not verified: Android.
+
+## Signals as a grouped table
+
+Checked on 10 October 2026. On the wide demo stage the signals are a table in three groups named down the left, Situation, Transaction and Behaviour, with the values in one column next to their labels. The two counts share the Behaviour line. The phone-width layout keeps its tiles.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, panel height against 796 available: 714 idle, 754 Coached on the recipient step, 794 in a Coached, high hold with a model score. That last one has 2 to spare.
+- No overflow at 1920x1000, 1366x700, 1280x720, 1024x768 or 412x900. No console errors. The hold was checked by eye on a capture.
+- Not verified: the longest value, "Away 12 s (simulated)", in the table; Android.
+
+## Colour in the read-out
+
+Checked on 10 October 2026. The read-out and presets were black and grey on white. They now use pine, indigo and bronze for the three classes: the class bars keep a pale wash when not chosen, a signal that points towards a class is marked with a dot and that class's text shade, the AI review has a rule in its state's tone, and each preset has a dot. A first pass with brighter green, blue and amber fills was replaced the same day.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, checked by eye on captures: idle, and a Coached, high hold with a model score.
+- Panel height unchanged: 710 idle, 750 Coached on the recipient step, 790 in the hold, against 796 available. No overflow at 412x900, no console errors.
+- Not verified: contrast measured with a tool, the Struggling tones in a live session (only seen in the legend and the preset), Android.
+
 ## Faster lock figure tour
 
 Checked on 10 October 2026. The page's built-in tour took about eight seconds a lap, and its pace is fixed inside the Hairline engine, which stays unchanged. The figure is now walked from outside, in `lock-figure.web.tsx`, through the pointer events it already answers: the same three chambers and a rest, in about three seconds. This replaces the `?play=1` tour described in the section below.

@@ -4,8 +4,8 @@ import { Glass } from '@/components/glass/glass';
 import { COOL_DOWN_MS, fixtures, scenarios } from '@/domain/session';
 import type { Scenario } from '@/domain/risk';
 
-// Class colours are data, not brand, as in the read-out.
-const dot: Record<Scenario, string> = { normal: 'bg-[#12905a]', struggling: 'bg-[#2457c5]', medium: 'bg-[#b45309]', coached: 'bg-[#b45309]' };
+// Class colours are data, not brand: the read-out's pine, indigo and bronze.
+const dot: Record<Scenario, string> = { normal: 'bg-[#1f6b57]', struggling: 'bg-[#414f8f]', medium: 'bg-[#a3661c]', coached: 'bg-[#a3661c]' };
 const pause = `${COOL_DOWN_MS / 1000}-second pause`;
 const outcome: Record<Scenario, string> = {
   normal: 'No interruption',

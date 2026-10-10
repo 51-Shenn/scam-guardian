@@ -29,7 +29,8 @@ const FAMILY = 0.7;
 const STAGE = {
   panel: PANEL, gap: 84, phone: PHONE, family: FAMILY,
   width: PANEL + 84 * 2 + Math.round(FRAME.width * (PHONE + FAMILY)),
-  height: Math.round(FRAME.height * PHONE) + 30,
+  // The phone and its caption, or the panel in its tallest state, whichever is taller.
+  height: Math.max(Math.round(FRAME.height * PHONE) + 30, 848),
 };
 
 export default function DemoScreen() {
