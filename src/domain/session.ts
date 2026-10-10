@@ -99,7 +99,10 @@ export interface Derived {
   decision: Decision;
   /** What raised the current intervention: the demo rules, the on-device model, or both. */
   origin: 'rule' | 'ai' | 'combined' | null;
+  /** Guidance is showing: one instruction for the current step. */
   simple: boolean;
+  /** Controls are enlarged. Repeated back steps do this; asking for help never changes sizes. */
+  large: boolean;
   paused: boolean;
   locked: boolean;
   remaining: number;
@@ -134,6 +137,7 @@ export function derive(session: Session, now: number): Derived {
     fixture, active, signals, monitoring, decision, origin, paused,
     ready: !fresh || session.account.length >= ACCOUNT_MIN_DIGITS,
     simple: active && (rules.response === 'guide' || session.help > 0),
+    large: monitoring && evaluate({ ...signals, helpTaps: 0 }).response === 'guide',
     locked: paused && (session.deadline === null || !canConfirm(session.deadline, now)),
     remaining: Math.ceil(left / 1000),
     fraction: left / COOL_DOWN_MS,

@@ -13,7 +13,7 @@ This repository is a prototype for Dormathon 2026, Track 1, "Predict Early, Deci
 | Session | In the demo | Response |
 | --- | --- | --- |
 | Normal | Saved recipient, usual amount | No interruption |
-| Struggling | Three back steps or two help taps | Simple mode: larger controls, one instruction at a time |
+| Struggling | Three back steps or two help taps | Simple mode: one instruction at a time, with larger controls after repeated back steps |
 | Coached | Call active and a new recipient | A 15-second pause that asks whether someone is directing the transfer |
 | Coached, high | The above, plus a pasted account number or more than 3x the usual amount | The same pause, and a request for the trusted contact to call |
 
@@ -58,7 +58,7 @@ A preset only sets the starting signals. Three of them can be changed by hand at
 - **Simulate app switch** shows a simulated other app and times how long it stays in front. The read-out shows this as "App switch". Neither the rules nor the model use it.
 - A new recipient's account number is typed or pasted into the account field on the recipient step.
 
-Help works immediately. Invalid amounts cannot proceed. Back navigation preserves the pause deadline. Cancellation ends monitoring.
+Help shows the step's instruction at once and leaves the sizes of the controls as they are. Invalid amounts cannot proceed. Back navigation preserves the pause deadline. Cancellation ends monitoring.
 
 ## Verify and preview the application
 

@@ -27,13 +27,13 @@ export function AmountStep({ top, bottom, keys }: { top: number; bottom: number;
         <Text className="font-body text-sm text-b-muted">Available {money(session.balance)}</Text>
       </View>
       <Text accessibilityRole="alert" className="min-h-[21px] px-5 text-center font-body text-[15px] text-[#a1260d]">{session.error ?? ''}</Text>
-      {!view.simple && <View className="flex-row justify-center gap-2">
+      {!view.large && <View className="flex-row justify-center gap-2">
         {['50', '200', '1200'].map((amount) => <Pressable key={amount} accessibilityRole="button" onPress={() => dispatch({ type: 'setAmount', amount })}
           className="rounded-full active:opacity-70 focus-visible:outline-2 focus-visible:outline-accent">
           <Glass radius={20} className="h-10 justify-center px-4"><Text className="font-body text-[15px] text-b-ink">{money(amount).slice(0, -3)}</Text></Glass>
         </Pressable>)}
       </View>}
-      <Keypad onKey={onKey} large={view.simple} />
+      <Keypad onKey={onKey} large={view.large} />
     </ScrollView>
     <StepFooter label="Review" onPress={() => dispatch({ type: 'review', now: Date.now() })} bottom={bottom} />
   </View>;

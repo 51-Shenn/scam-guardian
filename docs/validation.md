@@ -1,5 +1,16 @@
 # Verification
 
+## Help without enlargement
+
+Checked on 10 October 2026 after separating the guidance from the larger controls. A help tap now shows the step's instruction only; repeated back steps still enlarge the controls.
+
+- `npm test`: 62 of 62 passed. New case: one or two help taps show guidance and leave sizes alone, the Struggling preset still enlarges, and a help tap does not shrink it.
+- `npm run lint` and `npm run typecheck`: the only errors are the two imports of `expo-clipboard`, which was not installed on this machine. The registry download failed a certificate check.
+
+**Not verified**
+
+- `npm run export:platforms`, and any check in a browser or on Android, for the same missing dependency. The change was not seen running.
+
 ## Banking app, glass and three-layout demo
 
 Checked on 10 October 2026 after replacing the e-wallet with the bank app.
