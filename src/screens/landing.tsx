@@ -1,19 +1,19 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Action } from '@/components/guardian/action';
-import { DemoConsole } from '@/components/guardian/demo-console';
 import { FlowArt } from '@/components/guardian/flow-art';
 import { Inert } from '@/components/guardian/inert';
 import { LOCK_HINT, LockFigure } from '@/components/guardian/lock-figure';
 import { PhoneFrame } from '@/components/guardian/phone-frame';
 import { Reveal } from '@/components/guardian/reveal';
+import { ScenarioCard } from '@/components/guardian/scenario-card';
 import { Wordmark } from '@/components/guardian/wordmark';
 import { AppWindowIcon, ClipboardIcon, MicrophoneSlashIcon, PhoneSlashIcon, type Icon } from '@/components/bank/icons';
 import { useSession } from '@/components/bank/session';
 import { BankApp } from '@/components/bank/bank-app';
-import { FRAME, WIDE, XWIDE } from '@/constants/layout';
+import { FRAME, WIDE } from '@/constants/layout';
 import type { Scenario } from '@/domain/risk';
 import { useViewport } from '@/hooks/use-viewport';
 
@@ -30,28 +30,41 @@ const intro = 'mt-5 max-w-[560px] font-body text-lg leading-[29px] text-soft';
 const h3 = 'font-display text-[28px] leading-8 tracking-[-0.5px]';
 const cell = 'rounded-3xl p-[26px] wide:p-[34px]';
 const link = 'rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent';
+// What the scenario card adds to the phone's width when it stands beside it: 340 wide, less the 28 it laps over the frame.
+const CARD = 312;
 
 export default function Landing() {
   const viewport = useViewport();
   const insets = useSafeAreaInsets();
   const { session, view, dispatch } = useSession();
   const scroll = useRef<ScrollView>(null);
+  const [copy, setCopy] = useState(0);
   const anchors = useRef({ how: 0, privacy: 0 });
   const wide = !!viewport && viewport.width >= WIDE;
-  const overlap = !!viewport && viewport.width >= XWIDE;
 
   const openDemo = () => router.push('/demo');
   const jump = (y: number) => scroll.current?.scrollTo({ y, animated: true });
-  // On desktop the bank app is already on the page, so a scenario plays in place. Elsewhere it opens the demo.
+  // The page only shows the bank app. A scenario is played in the demo, with its preset already chosen.
   const play = (scenario: Scenario) => {
     dispatch({ type: 'scenario', scenario });
-    if (wide) jump(0); else openDemo();
+    openDemo();
   };
 
   const scale = !viewport ? 0 : wide ? Math.min(viewport.height * 0.84, 840) / FRAME.height : Math.min(340, viewport.width - 56) / FRAME.width;
+  // Width left for the copy once the phone has its place. The card stands beside the phone only while the copy keeps enough of it.
+  const room = !viewport ? 0 : wide ? Math.min(viewport.width, 1320) - 80 - 64 - FRAME.width * scale : viewport.width - 40;
+  const beside = wide && room - CARD >= 440;
+  // The headline always sets in two lines: its longer line is a little under eight times the type size.
+  // The copy's measured width is used once it is known, because a scrollbar takes some of the estimate.
+  const type = Math.max(28, Math.min(wide ? 78 : 44, Math.floor(Math.min(copy || (beside ? room - CARD : room), 640) / 8)));
   const phone = <PhoneFrame scale={scale} chrome={session.step === 'home' ? 'light' : 'dark'} callActive={session.call}>
-    <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={wide} />
+    <BankApp top={FRAME.statusBar} bottom={FRAME.homeIndicator} interactive={false} />
   </PhoneFrame>;
+  // The frame is a picture of the bank app at every width, with one press target over it that opens the demo.
+  const preview = <>
+    <Inert>{phone}</Inert>
+    <Pressable accessibilityRole="button" accessibilityLabel="Open the banking demo" onPress={openDemo} className="absolute inset-0 rounded-[56px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent" />
+  </>;
 
   return <ScrollView ref={scroll} className="flex-1 bg-page" contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
     <View className="overflow-hidden">
@@ -65,26 +78,23 @@ export default function Landing() {
         </View>
 
         <View className="pb-12 pt-7 wide:flex-row wide:items-center wide:gap-16 wide:pt-0" style={wide && viewport ? { minHeight: viewport.height - 72 } : undefined}>
-          <View className="wide:flex-1 wide:pb-10">
-            <Text accessibilityRole="header" className="max-w-[640px] font-display [text-wrap:balance] text-[44px] leading-[46px] tracking-[-1.5px] text-ink wide:text-[62px] wide:leading-[64px] wide:tracking-[-2.2px] xwide:text-[78px] xwide:leading-[80px] xwide:tracking-[-2.7px]">A pause before the money moves.</Text>
+          <View onLayout={(event) => setCopy(event.nativeEvent.layout.width)} className="wide:flex-1 wide:pb-10">
+            <Text accessibilityRole="header" className="max-w-[640px] font-display [text-wrap:balance] text-ink" style={{ fontSize: type, lineHeight: type + 2, letterSpacing: -0.035 * type }}>A pause before the money moves.</Text>
             <Text className="mt-6 max-w-[420px] font-body text-[17px] leading-[27px] text-soft wide:text-[19px] wide:leading-[30px]">Scam Guardian helps when a transfer gets confusing, and makes room to think when someone else may be directing it.</Text>
             <View className="mt-8 flex-row flex-wrap gap-3">
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action label="Try the demo" onPress={openDemo} /></View>
               <View className="min-w-[150px] flex-1 wide:max-w-[200px]"><Action secondary label="How it works" onPress={() => jump(anchors.current.how)} /></View>
             </View>
-            {!overlap && <DemoConsole compact={!wide} className="mt-8 wide:max-w-[320px]" />}
+            {!beside && <ScenarioCard onPick={play} className="mt-8 wide:max-w-[320px]" />}
           </View>
 
-          {/* The console stands clear of the phone, with its foot on the same line as the frame's. */}
-          {viewport && wide && <View style={{ paddingLeft: overlap ? 304 : 0 }}>
-            {phone}
-            {overlap && <DemoConsole className="absolute bottom-0 left-0 w-[264px]" />}
+          {/* The card is centred on the phone and laps over its edge, so the frosted glass has the bank app to blur. */}
+          {viewport && wide && <View className="flex-row items-center">
+            {beside && <ScenarioCard onPick={play} className="z-10 -mr-7 w-[340px]" />}
+            <View>{preview}</View>
           </View>}
-          {/* Narrow web and Android: the frame is a picture of the bank app, with one press target over it. */}
-          {viewport && !wide && <View className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">
-            <Inert>{phone}</Inert>
-            <Pressable accessibilityRole="button" accessibilityLabel="Open the banking demo full screen" onPress={openDemo} className="absolute inset-0" />
-          </View>}
+          {/* Narrow web and Android: the frame is cropped to its upper part. */}
+          {viewport && !wide && <View className="-mx-5 mt-9 h-[430px] items-center overflow-hidden pt-4">{preview}</View>}
         </View>
       </View>
     </View>

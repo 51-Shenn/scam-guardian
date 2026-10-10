@@ -63,6 +63,16 @@ test('struggling switches to simple mode; a help tap does so in any scenario', (
   assert.equal(derive(initialSession, 0).simple, false, 'never on the home screen');
 });
 
+test('asking for help brings guidance without enlarging the controls', () => {
+  assert.equal(derive(consented('struggling'), 0).large, true, 'repeated back steps enlarge');
+  const once = derive(run(consented('normal'), { type: 'help' }), 0);
+  assert.deepEqual([once.simple, once.large], [true, false]);
+  const twice = derive(run(consented('normal'), { type: 'help' }, { type: 'help' }), 0);
+  assert.deepEqual([twice.decision.classification, twice.simple, twice.large], ['Struggling', true, false]);
+  assert.equal(derive(run(consented('struggling'), { type: 'help' }), 0).large, true, 'help does not shrink them either');
+  assert.equal(derive(consented('coached'), 0).large, false);
+});
+
 test('the family alert preview needs separate consent and a hold', () => {
   const withFamily = (scenario: Session['scenario'], amount: string, account: Action) =>
     toReview(run(initialSession, { type: 'scenario', scenario }, { type: 'transfer' }, { type: 'toggleFamily' }, { type: 'agree' }), amount, 0, account);

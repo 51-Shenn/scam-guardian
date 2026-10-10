@@ -22,11 +22,13 @@ type ViewName = (typeof views)[number][0];
 const caption = 'font-body text-sm text-soft';
 
 // Natural size of the wide layout: read-out panel, Rohani's phone, Aina's phone, with the same gap between each.
+// Wide enough that the read-out and the presets together stay within the phone's height in every state.
+const PANEL = 400;
 const PHONE = 0.8;
 const FAMILY = 0.7;
 const STAGE = {
-  panel: 340, gap: 84, phone: PHONE, family: FAMILY,
-  width: 340 + 84 * 2 + Math.round(FRAME.width * (PHONE + FAMILY)),
+  panel: PANEL, gap: 84, phone: PHONE, family: FAMILY,
+  width: PANEL + 84 * 2 + Math.round(FRAME.width * (PHONE + FAMILY)),
   height: Math.round(FRAME.height * PHONE) + 30,
 };
 
@@ -120,7 +122,7 @@ export default function DemoScreen() {
     <View className="flex-1 items-center justify-center pb-8">
       <View style={{ width: STAGE.width * fit, height: STAGE.height * fit }}>
         <View className="flex-row items-center" style={{ width: STAGE.width, height: STAGE.height, gap: STAGE.gap, transform: [{ scale: fit }], transformOrigin: 'top left' }}>
-          <View className="gap-3" style={{ width: STAGE.panel }}><ReadOut /><Presets /></View>
+          <View className="gap-3" style={{ width: STAGE.panel }}><ReadOut dense /><Presets dense /></View>
           <View className="items-center gap-2.5">
             <Text className={caption}>Rohani&apos;s phone</Text>
             <PhoneFrame scale={STAGE.phone} chrome={step === 'home' ? 'light' : 'dark'} callActive={call}>

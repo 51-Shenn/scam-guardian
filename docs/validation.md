@@ -1,5 +1,94 @@
 # Verification
 
+## Faster lock figure tour
+
+Checked on 10 October 2026. The page's built-in tour took about eight seconds a lap, and its pace is fixed inside the Hairline engine, which stays unchanged. The figure is now walked from outside, in `lock-figure.web.tsx`, through the pointer events it already answers: the same three chambers and a rest, in about three seconds. This replaces the `?play=1` tour described in the section below.
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed. `npm run export:platforms`: both bundles written.
+- Chromium at 1440x900, figure on screen, no pointer: 9 steps and 3 rests in 9 seconds, and all 12 captures taken half a second apart differed.
+- A real pointer on the figure: no steps in 4 seconds. After it left: the tour ran again.
+- Figure scrolled out of view: no steps in 4 seconds. Scrolled back: the tour ran again.
+- Reduced motion emulated: no steps in 4 seconds and 8 identical captures.
+- 412x900: 6 steps and 2 rests in 6 seconds, no horizontal overflow. No console errors.
+- Not verified: a hidden browser tab, touch input, browsers other than Chromium. Android shows a still image.
+
+## Lock figure plays by itself, and a two-line headline
+
+Checked on 10 October 2026. The lock figure now starts the Hairline page's own tour on load (`?play=1`), so the gates move without a pointer; a real pointer still takes over and the tour resumes after it leaves. The product page's headline is sized from the measured width of the copy, so it sets in two lines at every width.
+
+**Project gates**
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- Lock figure at 1440x900 with no pointer on the page: 12 of 16 captures of the figure taken half a second apart differed. At 412x900: 6 of 10. The bench controls stay hidden.
+- Lock figure with reduced motion emulated: 12 captures in a row were identical.
+- Headline, two lines at each of 1920x1000, 1440x900, 1366x768, 1280x900, 1280x720, 1180x800, 1024x768, 900x700, 860x900, 412x900, 360x740 and 320x640, at sizes from 33 to 78. No horizontal overflow, no console errors.
+- The scenario card stands beside the phone at 1920x1000, 1440x900, 1366x768, 1280x900 and 1280x720, and under the copy at the narrower sizes. That now depends on the room the copy keeps, not on a fixed width.
+
+**Not verified**
+
+- Whether the tour stops while the figure is scrolled out of view. The engine has an observer for that; it was not measured here.
+- Android: the figure is a still image there, so nothing plays. The headline size on Android was not seen on a device.
+
+## Product page as a preview, and the demo stage's height
+
+Checked on 10 October 2026. The product page no longer runs the demo: the phone is a picture that opens `/demo`, and a glass card of the four scenarios laps over the phone's edge and opens `/demo` with that preset. On `/demo` the read-out and the presets are set tighter and the panel is 400 wide instead of 340, so both stay within the phone's height.
+
+**Project gates**
+
+- `npm run lint`: passed, after deleting a stale `.expo/cache/eslint` that still reported `expo-clipboard` as missing. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- `/` at 1440x900, 1920x1000, 1280x720, 1024x768 and 412x900: no horizontal overflow, no console errors. From 1180 wide the card is centred on the phone, 340 wide, and overlaps it by 28; below that it sits under the copy.
+- `/` at 1440: pressing the phone where Transfer is opens `/demo` and starts no transfer. Pressing "Coached, high" opens `/demo` with the simulated call already started.
+- `/demo` at 1440x900, 1920x1000, 1366x700, 1280x720 and 1024x768: the page is no taller or wider than the window. Before, it was 32 taller at 1440x900 and the read-out started 8 from the top of the page, over the header.
+- `/demo` at 1440x900, panel height against a stage of 796: idle 710, Coached on the recipient step 748, Coached, high at review with three reasons and a model score 788.
+- `/demo` at 412x900: the Guardian view keeps the roomier read-out and presets. No horizontal overflow.
+
+**Not verified**
+
+- A hold with the model's own review added as a fourth reason, which would make the panel about 20 taller than the stage. The model does not reach its threshold on app-shaped transfers yet.
+- Android on a device or emulator, keyboard-only operation, screen readers, and browsers other than Chromium.
+
+## Product page console
+
+Checked on 10 October 2026 after tightening the console beside the phone. It keeps its place and all of its content: the presets, the read-out, the three classes on one line, the reasons, the AI review, one line per signal, and the note.
+
+**Project gates**
+
+- `npm run lint`: passed. `npm run typecheck`: no errors. `npm test`: 62 of 62 passed.
+- `npm run export:platforms`: Android Hermes bundle and static web export both written.
+- These also cover the help change below, which could not be built when it was made.
+
+**Web, exported build served locally, Chromium driven over the DevTools protocol**
+
+- `/` at 1440x900 and 1920x1000: the console is 651 tall, down from 831, with its foot on the frame's bottom line. Before, its top was 9 from the top of the page at 1440, over the header.
+- `/` at 1440x900 with the Coached, high preset on the recipient step after the first model check: 710 tall, down from 881, which had run off the top of the page.
+- `/` at 1280x720: the console is taller than the phone there, so the row grows by a few points and the console starts directly under the header. Before, it started 154 above the top of the page.
+- `/` at 1024x768: the console under the copy is 617 tall, down from 783.
+- `/` at 412x900: unchanged. No horizontal overflow at any width, no console errors.
+- `/demo` at 1440x900 and 1366x700: the read-out there is not changed by this work. It measured 32 and 16 taller than the window; that came with the AI review and is still open.
+
+**Not verified**
+
+- Android on a device or emulator, keyboard-only operation, screen readers, and browsers other than Chromium.
+
+## Help without enlargement
+
+Checked on 10 October 2026 after separating the guidance from the larger controls. A help tap now shows the step's instruction only; repeated back steps still enlarge the controls.
+
+- `npm test`: 62 of 62 passed. New case: one or two help taps show guidance and leave sizes alone, the Struggling preset still enlarges, and a help tap does not shrink it.
+- `npm run lint` and `npm run typecheck`: the only errors are the two imports of `expo-clipboard`, which was not installed on this machine. The registry download failed a certificate check.
+
+**Not verified**
+
+- `npm run export:platforms`, and any check in a browser or on Android, for the same missing dependency. The change was not seen running.
+
 ## Banking app, glass and three-layout demo
 
 Checked on 10 October 2026 after replacing the e-wallet with the bank app.
