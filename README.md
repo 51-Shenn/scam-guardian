@@ -20,6 +20,18 @@
 
 PDF: [ScamGuardianPitchDeck_ThreePeasInAPod_TaylorsUniversity](ThreePeasInAPod_Taylors.pdf)
 
+## App screenshots
+
+<p align="center">
+  <img src="docs/landing.png" alt="Scam Guardian product page: the headline beside the four scenarios and the bank app" width="720">
+</p>
+<p align="center"><em>The product page.</em></p>
+
+<p align="center">
+  <img src="docs/demo.png" alt="Scam Guardian demo: the Guardian read-out and controls beside the bank app and the trusted contact's phone" width="720">
+</p>
+<p align="center"><em>The demo: Guardian's read-out, the bank app, and the trusted contact's phone.</em></p>
+
 ## What Scam Guardian does
 
 Scam Guardian demonstrates help for a person finding the transfer hard and a verification pause for a person who may be following someone else's instructions. Display categories come from demonstration policy, not a validated three-class detector.
